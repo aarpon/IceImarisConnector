@@ -7,7 +7,7 @@
 %
 % SYNOPSIS
 %
-%   conn = IceImarisConnector( vImarisApplication, startCountingAt )
+%   conn = IceImarisConnector( vImarisApplication, indexingStart )
 %
 % INPUT
 %
@@ -37,7 +37,7 @@
 %                        you will use conn.GetDataVolume(0, 0).
 %                        It you are come confortable with 1-based indexing,
 %                        i.e. you prefer using conn.GetDataVolume(1, 1), 
-%                        make sure to set indexingStart to 1!
+%                        you can set indexingStart to 1.
 %
 %                        Whatever you choose, be consistent!
 %

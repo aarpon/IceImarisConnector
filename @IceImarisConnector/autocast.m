@@ -44,50 +44,50 @@ function derivedType = autocast( this, IDataItem )
 % Check for type and cast (types expected to be used more frequently are
 % checked first)
 
-if this.mImarisApplication.mFactory.IsSpots( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToSpots( IDataIem )
+if this.mImarisApplication.GetFactory.IsSpots( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToSpots( IDataItem )
    
-elseif this.mImarisApplication.mFactory.IsSurfaces( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToSurfaces( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsSurfaces( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToSurfaces( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsVolume( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToVolume( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsVolume( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToVolume( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsFrame( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToFrame( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsFrame( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToFrame( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsLightSource( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToLightSource( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsLightSource( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToLightSource( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsDataSet( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToDataSet( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsDataSet( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToDataSet( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsSurpassCamera( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToSurpassCamera( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsSurpassCamera( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToSurpassCamera( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsFilaments( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToFilaments( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsFilaments( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToFilaments( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsClippingPlane( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToClippingPlane( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsClippingPlane( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToClippingPlane( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsApplication( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToApplication( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsApplication( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToApplication( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsMeasurementPoints( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToMeasurementPoints( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsMeasurementPoints( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToMeasurementPoints( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsDataContainer( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToDataContainer( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsDataContainer( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToDataContainer( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsCells( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToCells( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsCells( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToCells( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsFactory( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToFactory( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsFactory( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToFactory( IDataItem )
 
-elseif this.mImarisApplication.mFactory.IsImageProcessing( IDataIem )
-    derivedType = this.mImarisApplication.mFactory.ToImageProcessing( IDataIem )
+elseif this.mImarisApplication.GetFactory.IsImageProcessing( IDataItem )
+    derivedType = this.mImarisApplication.GetFactory.ToImageProcessing( IDataItem )
     
 else
     derivedType = IDataItem;

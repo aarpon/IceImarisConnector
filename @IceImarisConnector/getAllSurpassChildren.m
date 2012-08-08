@@ -92,7 +92,7 @@ getChildrenAtLevel( this.mImarisApplication.GetSurpassScene, recursive );
                 end
             else
                 currentChildNumber = currentChildNumber + 1;
-                children{ currentChildNumber } = autocast( child );
+                children{ currentChildNumber } = this.autocast( child );
             end
             
         end
