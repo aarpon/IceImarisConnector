@@ -28,7 +28,7 @@
 %                        on whether you prefer to index arrays in 
 %                        IceImarisConnector starting at 0 or 1. 
 %                        
-%                        All indexing in by ICE starts at 0; in contrast, 
+%                        All indexing in ICE starts at 0; in contrast, 
 %                        MATLAB indexing starts at 1.
 %                        To keep consistentcy, indexing in IceImarisConnector
 %                        is also 0-based (i.e. indexingStart defaults to 0).
@@ -208,6 +208,9 @@ classdef IceImarisConnector < handle
     
     methods ( Access = public )
         
+        % autocast
+        castObject = autocast( this, obj )
+                    
         % close Imaris
         closeImaris( this, varargin )
         
@@ -274,10 +277,6 @@ classdef IceImarisConnector < handle
             version = 'master';
         end
         
-        % RGBA conversion
-        rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
-        rgbaVector = mapRgbaScalarToVector( rgbaScalar )
-        
     end
     
     methods ( Access = private )
@@ -288,9 +287,6 @@ classdef IceImarisConnector < handle
         % startImarisServer
         [ success, errorMessage ] = startImarisServer( this )
         
-        % autocast
-        castObject = autocast( this, obj )
-            
     end
     
 end

@@ -7,7 +7,7 @@ function derivedType = autocast( this, IDataItem )
 % 
 % SYNOPSIS
 % 
-%   derivedType = conn.indexingStart( IDataItem )
+%   derivedType = conn.autocast( IDataItem )
 % 
 % INPUT
 % 
@@ -44,7 +44,12 @@ function derivedType = autocast( this, IDataItem )
 % Check for type and cast (types expected to be used more frequently are
 % checked first)
 
-if this.mImarisApplication.GetFactory.IsLightSource( IDataItem )
+derivedType = [ ];
+
+if isempty( IDataItem )
+	return;
+
+elseif this.mImarisApplication.GetFactory.IsLightSource( IDataItem )
     derivedType = this.mImarisApplication.GetFactory.ToLightSource( IDataItem );
 
 elseif this.mImarisApplication.GetFactory.IsFrame( IDataItem )
@@ -92,9 +97,4 @@ elseif this.mImarisApplication.GetFactory.IsImageProcessing( IDataItem )
 else
     derivedType = IDataItem;
 
-end
-
-% This check should be unnecessary
-if isempty( derivedType )
-    error( 'Type casting failed!' )
 end
