@@ -61,7 +61,7 @@ if this.isAlive( ) == 0
 end
 
 if nargin == 3
-    iDataset = this.mImarisApplication.GetDataSet;
+    iDataset = this.mImarisApplication.GetDataSet( );
 else
     % Is the passed dataset a valid DataSet?
     if ~this.mImarisApplication.GetFactory.IsDataSet( iDataset )
@@ -70,7 +70,7 @@ else
 end
 
 % Check whether we have some voxels in the dataset
-if iDataset.GetSizeX == 0
+if isempty( iDataset ) || iDataset.GetSizeX == 0
     return
 end
 

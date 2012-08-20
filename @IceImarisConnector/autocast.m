@@ -11,11 +11,25 @@ function derivedType = autocast( this, IDataItem )
 % 
 % INPUT
 % 
-%   IDataItem: one of ...
+%   IDataItem: an Imaris::IDataItem object
 % 
 % OUTPUT
 % 
-%   derivedType : one of...
+%   derivedType : one of the Imaris::IDataItem subclasses:
+%                                 - Imaris::IClippingPlane
+%                                 - Imaris::IDataContainer
+%                                 - Imaris::IFilaments
+%                                 - Imaris::IFrame
+%                                 - Imaris::IDataSet
+%                                 - Imaris::IICells
+%                                 - Imaris::ILightSource
+%                                 - Imaris::IMeasurementPoints
+%                                 - Imaris::ISpots
+%                                 - Imaris::ISurfaces
+%                                 - Imaris::IVolume
+%                                 - Imaris::ISurpassCamera
+%                                 - Imaris::IImageProcessing
+%                                 - Imaris::IFactory
 
 % AUTHORS
 %

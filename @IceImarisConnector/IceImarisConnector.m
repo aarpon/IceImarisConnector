@@ -212,7 +212,7 @@ classdef IceImarisConnector < handle
         castObject = autocast( this, obj )
                     
         % close Imaris
-        closeImaris( this, varargin )
+        success = closeImaris( this, varargin )
         
         % display
         display( this )        
