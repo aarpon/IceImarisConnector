@@ -49,6 +49,6 @@ if this.isAlive() == 0
 end
 
 % Get current selection
-selection = autocast( conn.mImarisApplication.mSurpassSelection );
+selection = this.autocast( this.mImarisApplication.GetSurpassSelection );
 
 end
