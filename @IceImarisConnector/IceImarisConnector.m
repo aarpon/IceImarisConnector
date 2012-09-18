@@ -218,7 +218,7 @@ classdef IceImarisConnector < handle
         display( this )        
 
         % getAllSurpassChildren
-        children = getAllSurpassChildren( this, recursive )
+        children = getAllSurpassChildren( this, recursive, filter )
 
         % getDataVolume
         stack = getDataVolume( this, channel, timepoint, iDataset )
