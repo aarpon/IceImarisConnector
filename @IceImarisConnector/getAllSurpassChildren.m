@@ -16,7 +16,9 @@ function children = getAllSurpassChildren( this, recursive, filter )
 %   recursive: { 0 | 1 } If 1, folders will be scanned recursively;
 %                        if 0, only objects at root level will be inspected.
 %
-%   filter   : (optional) One of:
+%   filter   : (optional) Filters the children by type. Only the 
+%                         surpass children of the specified type are
+%                         returned; filter is one of:
 %
 %                           'Cells'
 %                           'ClippingPlane'
