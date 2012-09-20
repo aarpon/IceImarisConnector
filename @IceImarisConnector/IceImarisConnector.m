@@ -274,9 +274,15 @@ classdef IceImarisConnector < handle
         
         % getVersion
         function version = getVersion( )
-            version = 'master';
+            version = 'devel';
         end
-        
+
+        % mapRgbaScalarToVector
+        rgbaVector = mapRgbaScalarToVector( rgbaScalar )
+
+        % mapRgbaVectorToScalar
+        rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
+               
     end
     
     methods ( Access = private )

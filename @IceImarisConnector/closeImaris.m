@@ -1,4 +1,4 @@
-function success = closeImaris( this, quiet)
+function success = closeImaris( this, quiet )
 % IceImarisConnector:  closeImaris (public method)
 %
 % DESCRIPTION
@@ -13,8 +13,8 @@ function success = closeImaris( this, quiet)
 %
 % INPUT
 %
-%   quiet : (Optional) If 1, Imaris won't pop-up a save-dialogue
-%           Default: 0
+%   quiet : (Optional) If 1, Imaris won't pop-up a save dialog and close
+%                      silently. Default: 0
 %
 % OUTPUT
 % 
