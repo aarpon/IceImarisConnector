@@ -5,6 +5,20 @@ function rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
 %
 %   This method maps an 1-by-4, (0..1) RGBA vector to an uint32 scalar
 %
+% SYNOPSIS
+%
+%   rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
+%
+% INPUT
+%
+%   rgbaVector: 1-by-4 array with [R G B A] indicating (R)ed, (G)reen,
+%               (B)lue, and (A)lpha (=transparency; 0 is opaque).
+%               All values are between 0 and 1.
+%
+% OUTPUT
+%
+%   rgbaScalar: uint32 scalar number coding for RGBA (for Imaris use)
+%
 % IMPORTANT REMARK
 %
 %   
@@ -34,20 +48,6 @@ function rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
 % SEE ALSO
 %
 %   mapRgbaVectorToScalar
-%
-% SYNOPSIS
-%
-%   rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
-%
-% INPUT
-%
-%   rgbaVector: 1-by-4 array with [R G B A] indicating (R)ed, (G)reen,
-%               (B)lue, and (A)lpha (=transparency; 0 is opaque).
-%               All values are between 0 and 1.
-%
-% OUTPUT
-%
-%   rgbaScalar: uint32 scalar number coding for RGBA (for Imaris use)
 
 % AUTHORS
 %
