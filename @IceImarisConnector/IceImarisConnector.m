@@ -211,6 +211,9 @@ classdef IceImarisConnector < handle
         % autocast
         castObject = autocast(this, obj)
                     
+        % createAndSetSpots(this, coords, timeIndices, radii, name, color)
+        createAndSetSpots(this, coords, timeIndices, radii, name, color)
+        
         % close Imaris
         success = closeImaris(this, varargin)
         
