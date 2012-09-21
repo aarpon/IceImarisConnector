@@ -75,11 +75,11 @@ end
 
 % Get the dataset class
 switch char(iDataSet.GetType())
-    case 'eTypeUInt8',   outDatatype = 'uint8';
-    case 'eTypeUInt16',  outDatatype = 'uint16';
-    case 'eTypeFloat',   outDatatype = 'single';
+    case 'eTypeUInt8',  outDatatype = 'uint8';
+    case 'eTypeUInt16', outDatatype = 'uint16';
+    case 'eTypeFloat',  outDatatype = 'single';
     otherwise,
-        error('Bad value for mDataSet.mType');
+        error('Bad value for iDataSet.GetType().');
 end
 
 % Check that the input and output datatypes match
@@ -107,7 +107,7 @@ switch char(iDataSet.GetType())
     case 'eTypeFloat',
         iDataSet.SetDataVolumeAs1DArrayFloats(stack(:), channel, timepoint);
     otherwise,
-        error('Bad value for type');
+        error('Bad value for iDataSet.GetType().');
 end
 
 end

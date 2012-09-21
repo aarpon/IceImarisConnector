@@ -52,7 +52,7 @@ function success = startImaris(this, userControl)
 success = 0;
 if isempty(strfind(computer, 'PCWIN')) && ...
         isempty(strfind(computer, 'MAC'))
-    disp('IceImarisConnector can only work on Windows and Mac OS X');
+    disp('IceImarisConnector can only work on Windows and Mac OS X.');
     return
 end
 
@@ -62,7 +62,7 @@ if nargin == 1
 end
 
 if ~ismember(userControl, [0 1])
-    error('userControl must be either 0 or 1');
+    error('userControl must be either 0 or 1.');
 end
 
 % Store the userControl

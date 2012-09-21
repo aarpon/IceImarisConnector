@@ -16,7 +16,7 @@ function stack = getDataVolume(this, channel, timepoint, iDataset)
 %   timepoint: timepoint number (0/1-based depending on indexing start)
 %   dataset  : (optional) get the data volume from the passed IDataset
 %               object instead of current one; if omitted, current dataset
-%               (i.e. this.mImarisApplication.mDataset) will be used.
+%               (i.e. this.mImarisApplication.GetDataSet()) will be used.
 %               This is useful for instance when masking channels.
 % 
 % OUTPUT
@@ -88,7 +88,7 @@ switch char(iDataset.GetType())
     case 'eTypeUInt16',  datatype = 'uint16';
     case 'eTypeFloat',   datatype = 'single';
     otherwise,
-        error('Bad value for IDataSet::GetType()');
+        error('Bad value for IDataSet::GetType().');
 end
 
 % Allocate memory
@@ -114,7 +114,7 @@ switch char(iDataset.GetType())
             channel - this.mIndexingStart, ...
             timepoint - this.mIndexingStart);
     otherwise,
-        error('Bad value for type');
+        error('Bad value for iDataset.GetType().');
 end
 
 end

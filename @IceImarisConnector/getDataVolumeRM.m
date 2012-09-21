@@ -16,7 +16,7 @@ function stack = getDataVolumeRM(this, channel, timepoint, iDataset)
 %   timepoint: timepoint number (0/1-based depending on indexing start)
 %   dataset  : (optional) get the data volume from the passed IDataset
 %               object instead of current one; if omitted, current dataset
-%               (i.e. this.mImarisApplication.mDataset) will be used.
+%               (i.e. this.mImarisApplication.GetDataSet()) will be used.
 %               This is useful for instance when masking channels.
 % 
 % OUTPUT
