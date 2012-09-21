@@ -7,7 +7,7 @@ function createAndSetSpots(this, coords, timeIndices, radii, name, color)
 % 
 % SYNOPSIS
 % 
-%   createAndSetSpots(coords, radii, timeIndices, name, color)
+%   createAndSetSpots(coords, timeIndices, radii, name, color)
 % 
 % INPUT
 % 
