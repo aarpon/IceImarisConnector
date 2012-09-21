@@ -222,6 +222,9 @@ classdef IceImarisConnector < handle
 
         % getDataVolume
         stack = getDataVolume(this, channel, timepoint, iDataset)
+
+        % getDataVolume
+        stack = getDataVolumeRM(this, channel, timepoint, iDataset)
         
         % getExtends
         extends = getExtends(this)

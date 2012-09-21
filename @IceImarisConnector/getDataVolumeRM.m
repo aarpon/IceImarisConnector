@@ -45,6 +45,11 @@ function stack = getDataVolumeRM(this, channel, timepoint, iDataset)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+if nargin < 3 || nargin > 4
+    % The this parameter is hidden
+    error('2 or 3 input parameters expected.');
+end
+
 % Initialize stack
 stack = [];
 
@@ -53,14 +58,13 @@ if this.isAlive() == 0
 end
 
 % We let getDataVolume do the parameter checking
-stack = this.getDataVolume(channel, timepoint, iDataset);
+if nargin == 3
+    stack = this.getDataVolume(channel, timepoint);
+else
+    stack = this.getDataVolume(channel, timepoint, iDataset);
+end
 
 % Now we permute the stack
 stack = permute(stack, [2 1 3]);
-
-if nargin < 3 || nargin > 4
-    % The this parameter is hidden
-    error('2 or 3 input parameters expected.');
-end
 
 end
