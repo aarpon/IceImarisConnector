@@ -1,4 +1,4 @@
-function extends = getExtends( this )
+function extends = getExtends(this)
 % IceImarisConnector:  getExtends (public method)
 %
 % DESCRIPTION
@@ -7,7 +7,7 @@ function extends = getExtends( this )
 % 
 % SYNOPSIS
 % 
-%   extends = conn.getExtends( )
+%   extends = conn.getExtends()
 % 
 % INPUT
 % 
@@ -15,7 +15,7 @@ function extends = getExtends( this )
 % 
 % OUTPUT
 % 
-%   extends : vector of extends, [ minX maxX minY maxY minZ maxZ ]  
+%   extends : vector of extends, [minX maxX minY maxY minZ maxZ]  
 
 % AUTHORS
 %
@@ -41,7 +41,7 @@ function extends = getExtends( this )
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-extends = [ ];
+extends = [];
 
 % Is Imaris running?
 if this.isAlive() == 0
@@ -49,18 +49,18 @@ if this.isAlive() == 0
 end
 
 % Check whether we have some voxels in the dataset
-if this.mImarisApplication.GetDataSet.GetSizeX == 0
+if this.mImarisApplication.GetDataSet.GetSizeX() == 0
     return
 end
 
 % Return the extends
-extends = [ 
-    this.mImarisApplication.GetDataSet.GetExtendMinX, ...
-    this.mImarisApplication.GetDataSet.GetExtendMaxX, ...
-    this.mImarisApplication.GetDataSet.GetExtendMinY, ...
-    this.mImarisApplication.GetDataSet.GetExtendMaxY, ...
-    this.mImarisApplication.GetDataSet.GetExtendMinZ, ...
-    this.mImarisApplication.GetDataSet.GetExtendMaxZ
-    ];
+extends = [
+    this.mImarisApplication.GetDataSet.GetExtendMinX(), ...
+    this.mImarisApplication.GetDataSet.GetExtendMaxX(), ...
+    this.mImarisApplication.GetDataSet.GetExtendMinY(), ...
+    this.mImarisApplication.GetDataSet.GetExtendMaxY(), ...
+    this.mImarisApplication.GetDataSet.GetExtendMinZ(), ...
+    this.mImarisApplication.GetDataSet.GetExtendMaxZ()
+   ];
 
 end

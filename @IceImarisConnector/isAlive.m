@@ -1,4 +1,4 @@
-function alive = isAlive( this )
+function alive = isAlive(this)
 % IceImarisConnector:  isAlive (public method)
 %
 % DESCRIPTION
@@ -8,7 +8,7 @@ function alive = isAlive( this )
 % 
 % SYNOPSIS
 % 
-%   alive = conn.isAlive( )
+%   alive = conn.isAlive()
 % 
 % INPUT
 % 
@@ -43,11 +43,11 @@ function alive = isAlive( this )
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 alive = false;
-if isempty( this.mImarisApplication )
+if isempty(this.mImarisApplication)
     return
 end
 try
-    this.mImarisApplication.GetVersion;
+    this.mImarisApplication.GetVersion();
     alive = true;
 catch ex %#ok<NASGU>
     % Silent exception

@@ -1,4 +1,4 @@
-function n = indexingStart( this )
+function n = indexingStart(this)
 % IceImarisConnector:  indexingStart (public method)
 % 
 % DESCRIPTION
@@ -7,7 +7,7 @@ function n = indexingStart( this )
 % 
 % SYNOPSIS
 % 
-%   n = conn.indexingStart( )
+%   n = conn.indexingStart()
 % 
 % INPUT
 % 

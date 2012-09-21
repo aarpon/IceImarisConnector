@@ -1,4 +1,4 @@
-function stack = getDataVolume( this, channel, timepoint, iDataset )
+function stack = getDataVolume(this, channel, timepoint, iDataset)
 % IceImarisConnector:  getDataVolume (public method)
 % 
 % DESCRIPTION
@@ -7,8 +7,8 @@ function stack = getDataVolume( this, channel, timepoint, iDataset )
 % 
 % SYNOPSIS
 % 
-%   (1) stack = conn.getDataVolume( channel, timepoint )
-%   (2) stack = conn.getDataVolume( channel, timepoint, iDataset )
+%   (1) stack = conn.getDataVolume(channel, timepoint)
+%   (2) stack = conn.getDataVolume(channel, timepoint, iDataset)
 % 
 % INPUT
 % 
@@ -22,6 +22,14 @@ function stack = getDataVolume( this, channel, timepoint, iDataset )
 % OUTPUT
 % 
 %   stack    : data volume (3D matrix)
+%
+% REMARK
+%
+%   This function gets the volume as a 1D array and reshapes it in place.
+%   It also performs a type cast to take care of the signed/unsigned int
+%   mismatch when transferring data over Ice. The spped-up compared to
+%   calling the ImarisXT GetDataVolumeBytes() or GetDataVolumeWords() 
+%   methods is of the order of 20x.
 
 % AUTHORS
 %
@@ -50,61 +58,61 @@ function stack = getDataVolume( this, channel, timepoint, iDataset )
 
 if nargin < 3 || nargin > 4
     % The this parameter is hidden
-    error( '2 or 3 input parameters expected.' );
+    error('2 or 3 input parameters expected.');
 end
 
 % Initialize stack
-stack = [ ];
+stack = [];
 
-if this.isAlive( ) == 0
+if this.isAlive() == 0
     return
 end
 
 if nargin == 3
-    iDataset = this.mImarisApplication.GetDataSet( );
+    iDataset = this.mImarisApplication.GetDataSet();
 else
     % Is the passed dataset a valid DataSet?
-    if ~this.mImarisApplication.GetFactory.IsDataSet( iDataset )
-        error( 'Invalid IDataset object.' );
+    if ~this.mImarisApplication.GetFactory.IsDataSet(iDataset)
+        error('Invalid IDataset object.');
     end
 end
 
 % Check whether we have some voxels in the dataset
-if isempty( iDataset ) || iDataset.GetSizeX == 0
+if isempty(iDataset) || iDataset.GetSizeX() == 0
     return
 end
 
 % Get the dataset class
-switch char( iDataset.GetType )
+switch char(iDataset.GetType())
     case 'eTypeUInt8',   datatype = 'uint8';
     case 'eTypeUInt16',  datatype = 'uint16';
     case 'eTypeFloat',   datatype = 'single';
     otherwise,
-        error('Bad value for mDataSet.mType');
+        error('Bad value for IDataSet::GetType()');
 end
 
 % Allocate memory
-stack = zeros( [ iDataset.GetSizeX, iDataset.GetSizeY, iDataset.GetSizeZ ], ...
-    datatype );
+stack = zeros([iDataset.GetSizeX(), iDataset.GetSizeY(), ...
+    iDataset.GetSizeZ()], datatype);
 
 % Get the stack
-switch char( iDataset.GetType )
+switch char(iDataset.GetType())
     case 'eTypeUInt8',   
         % Java does not have unsigned ints
-        arr = iDataset.GetDataVolumeAs1DArrayBytes( ...
+        arr = iDataset.GetDataVolumeAs1DArrayBytes(...
             channel - this.mIndexingStart, ...
-            timepoint - this.mIndexingStart );
-        stack( : ) = typecast( arr, 'uint8' );
+            timepoint - this.mIndexingStart);
+        stack(:) = typecast(arr, 'uint8');
     case 'eTypeUInt16',
         % Java does not have unsigned ints
-        arr = iDataset.GetDataVolumeAs1DArrayShorts( ...
+        arr = iDataset.GetDataVolumeAs1DArrayShorts(...
             channel - this.mIndexingStart, ...
-            timepoint - this.mIndexingStart );
-        stack( : ) = typecast( arr, 'uint16' );
+            timepoint - this.mIndexingStart);
+        stack(:) = typecast(arr, 'uint16');
     case 'eTypeFloat',
-        stack( : ) = iDataset.GetDataVolumeAs1DArrayFloats( ...
+        stack(:) = iDataset.GetDataVolumeAs1DArrayFloats(...
             channel - this.mIndexingStart, ...
-            timepoint - this.mIndexingStart );
+            timepoint - this.mIndexingStart);
     otherwise,
         error('Bad value for type');
 end

@@ -1,4 +1,4 @@
-function setDataVolume( this, stack, channel, timepoint )
+function setDataVolume(this, stack, channel, timepoint)
 % IceImarisConnector:  setDataVolume (public method)
 % 
 % DESCRIPTION
@@ -7,7 +7,7 @@ function setDataVolume( this, stack, channel, timepoint )
 % 
 % SYNOPSIS
 % 
-%   stack = conn.setDataVolume( stack, channel, timepoint )
+%   stack = conn.setDataVolume(stack, channel, timepoint)
 % 
 % INPUT
 % 
@@ -46,18 +46,18 @@ function setDataVolume( this, stack, channel, timepoint )
 
 if nargin ~= 4
     % The this parameter is hidden
-    error( '3 input parameters expected.' );
+    error('3 input parameters expected.');
 end
 
-if this.isAlive( ) == 0
+if this.isAlive() == 0
     return
 end
 
 % Create an alias
-iDataSet = this.mImarisApplication.GetDataSet;
+iDataSet = this.mImarisApplication.GetDataSet();
 
 % Check whether we have some voxels in the dataset
-if iDataSet.GetSizeX == 0
+if iDataSet.GetSizeX() == 0
     return
 end
 
@@ -66,15 +66,15 @@ channel = channel - this.mIndexingStart;
 timepoint = timepoint - this.mIndexingStart;
 
 % Check that the requested channel and timepoint exist
-if channel > ( iDataSet.GetSizeC - 1 )
-    error( 'The requested channel index is out of bounds.' );
+if channel > (iDataSet.GetSizeC() - 1)
+    error('The requested channel index is out of bounds.');
 end
-if timepoint > ( iDataSet.GetSizeT - 1 )
-    error( 'The requested time index is out of bounds.' );
+if timepoint > (iDataSet.GetSizeT() - 1)
+    error('The requested time index is out of bounds.');
 end
 
 % Get the dataset class
-switch char( iDataSet.GetType )
+switch char(iDataSet.GetType())
     case 'eTypeUInt8',   outDatatype = 'uint8';
     case 'eTypeUInt16',  outDatatype = 'uint16';
     case 'eTypeFloat',   outDatatype = 'single';
@@ -83,29 +83,29 @@ switch char( iDataSet.GetType )
 end
 
 % Check that the input and output datatypes match
-if ~isa( stack, outDatatype )
-    error( 'Data type mismatch.' );
+if ~isa(stack, outDatatype)
+    error('Data type mismatch.');
 end
 
 % Check that the size matches
-outSizes = this.getSizes( );
-if ndims( stack ) == 2
-    sizes = [ size( stack ) 1 ];
+outSizes = this.getSizes();
+if ndims(stack) == 2
+    sizes = [size(stack) 1];
 else
-    sizes = size( stack );
+    sizes = size(stack);
 end
-if any( sizes( 1 : 3 ) ~= outSizes( 1 : 3 ) )
-    error( 'Data volume size mismatch.' );
+if any(sizes(1 : 3) ~= outSizes(1 : 3))
+    error('Data volume size mismatch.');
 end
 
 % Set the stack
-switch char( iDataSet.GetType )
+switch char(iDataSet.GetType())
     case 'eTypeUInt8',   
-        iDataSet.SetDataVolumeAs1DArrayBytes( stack( : ), channel, timepoint );
+        iDataSet.SetDataVolumeAs1DArrayBytes(stack(:), channel, timepoint);
     case 'eTypeUInt16',
-        iDataSet.SetDataVolumeAs1DArrayShorts( stack( : ), channel, timepoint );
+        iDataSet.SetDataVolumeAs1DArrayShorts(stack(:), channel, timepoint);
     case 'eTypeFloat',
-        iDataSet.SetDataVolumeAs1DArrayFloats( stack( : ), channel, timepoint );
+        iDataSet.SetDataVolumeAs1DArrayFloats(stack(:), channel, timepoint);
     otherwise,
         error('Bad value for type');
 end

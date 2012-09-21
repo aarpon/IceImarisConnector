@@ -1,4 +1,4 @@
-function success = closeImaris( this, quiet )
+function success = closeImaris(this, quiet)
 % IceImarisConnector:  closeImaris (public method)
 %
 % DESCRIPTION
@@ -9,7 +9,7 @@ function success = closeImaris( this, quiet )
 %
 % SYNOPSIS
 %
-%   success = conn.closeImaris( )
+%   success = conn.closeImaris()
 %
 % INPUT
 %
@@ -61,11 +61,11 @@ try
     if quiet
         this.mImarisApplication.SetVisible(false);
     end
-    this.mImarisApplication.Quit( );
-    this.mImarisApplication = [ ];
+    this.mImarisApplication.Quit();
+    this.mImarisApplication = [];
     success = 1;
 catch ex
-    disp( ex.message );
+    disp(ex.message);
     success = 0;
 end
 

@@ -1,4 +1,4 @@
-function stack = getDataVolumeRM( this, channel, timepoint, iDataset )
+function stack = getDataVolumeRM(this, channel, timepoint, iDataset)
 % Imaris Connector:  getDataVolumeRM (public method)
 % 
 % DESCRIPTION
@@ -7,8 +7,8 @@ function stack = getDataVolumeRM( this, channel, timepoint, iDataset )
 % 
 % SYNOPSIS
 % 
-%   (1) stack = imarisConnector.getDataVolume( channel, timepoint )
-%   (2) stack = imarisConnector.getDataVolume( channel, timepoint, iDataset )
+%   (1) stack = imarisConnector.getDataVolume(channel, timepoint)
+%   (2) stack = imarisConnector.getDataVolume(channel, timepoint, iDataset)
 % 
 % INPUT
 % 
@@ -46,21 +46,21 @@ function stack = getDataVolumeRM( this, channel, timepoint, iDataset )
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 % Initialize stack
-stack = [ ];
+stack = [];
 
-if this.isAlive( ) == 0
+if this.isAlive() == 0
     return
 end
 
 % We let getDataVolume do the parameter checking
-stack = this.getDataVolume( channel, timepoint, iDataset );
+stack = this.getDataVolume(channel, timepoint, iDataset);
 
 % Now we permute the stack
-stack = permute( stack, [ 2 1 3 ] );
+stack = permute(stack, [2 1 3]);
 
 if nargin < 3 || nargin > 4
     % The this parameter is hidden
-    error( '2 or 3 input parameters expected.' );
+    error('2 or 3 input parameters expected.');
 end
 
 end

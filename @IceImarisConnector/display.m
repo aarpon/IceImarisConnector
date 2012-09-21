@@ -1,4 +1,4 @@
-function display( this )
+function display(this)
 % IceImarisConnector:  display (public method)
 %
 % DESCRIPTION
@@ -41,10 +41,10 @@ function display( this )
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if isempty( this.mImarisApplication )
-    disp( 'IceImarisConnector: not connected to an Imaris instance yet.' );
+if isempty(this.mImarisApplication)
+    disp('IceImarisConnector: not connected to an Imaris instance yet.');
 else
-    disp( 'IceImarisConnector: connected to Imaris.' );
+    disp('IceImarisConnector: connected to Imaris.');
 end
 
 end

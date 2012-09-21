@@ -1,4 +1,4 @@
-function [ success, errorMessage ] = startImarisServer( this )
+function [success, errorMessage] = startImarisServer(this)
 % IceImarisConnector:  startImarisServer (private method)
 %
 % DESCRIPTION
@@ -9,7 +9,7 @@ function [ success, errorMessage ] = startImarisServer( this )
 %
 % SYNOPSIS
 %
-%   success = conn.startImarisServer( )
+%   success = conn.startImarisServer()
 %
 % INPUT
 %
@@ -48,9 +48,9 @@ errorMessage = '';
 
 % Imaris only runs on Windows and Mac OS X
 success = 0;
-if isempty( strfind( computer, 'PCWIN' ) ) && ...
-        isempty( strfind( computer, 'MAC' )  )
-    disp( 'IceImarisConnector can only work on Windows and Mac OS X' );
+if isempty(strfind(computer, 'PCWIN')) && ...
+        isempty(strfind(computer, 'MAC'))
+    disp('IceImarisConnector can only work on Windows and Mac OS X');
     return
 end
 
@@ -65,8 +65,8 @@ end
 % success. We set a 10s time out limit
 try
     % Launch ImarisServer
-    [ status, result ] = system( ...
-        [ '"', this.mImarisServerExePath, '" &' ] );
+    [status, result] = system(...
+        ['"', this.mImarisServerExePath, '" &']);
     
     if status == 1
         errorMessage = result;
@@ -105,24 +105,24 @@ end
         isRunning = 0;
         
         % The check will be different on Windows and on Mac OS X
-        if strfind( computer, 'PCWIN' )
+        if strfind(computer, 'PCWIN')
             
-            [ ~, result ] = system( ...
-                'tasklist /NH /FI "IMAGENAME eq ImarisServerIce.exe"' );
-            if strfind( result, 'ImarisServerIce.exe' )
+            [~, result] = system(...
+                'tasklist /NH /FI "IMAGENAME eq ImarisServerIce.exe"');
+            if strfind(result, 'ImarisServerIce.exe')
                 isRunning = 1;
                 return;
             end
             
-        elseif strfind( computer, 'MAC' )
+        elseif strfind(computer, 'MAC')
             
-            [ ~, result ] = system( 'ps aux | grep ImarisServerIce' );
-            if strfind( result, this.mImarisServerExePath )
+            [~, result] = system('ps aux | grep ImarisServerIce');
+            if strfind(result, this.mImarisServerExePath)
                 isRunning = 1;
                 return;
             end
         else
-            error( 'Unsupported platform.' );
+            error('Unsupported platform.');
         end
         
     end

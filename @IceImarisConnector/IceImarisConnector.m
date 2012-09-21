@@ -7,18 +7,18 @@
 %
 % SYNOPSIS
 %
-%   conn = IceImarisConnector( vImarisApplication, indexingStart )
+%   conn = IceImarisConnector(vImarisApplication, indexingStart)
 %
 % INPUT
 %
-%   vImarisApplication : (optional) if omitted (or set to [ ]), an 
+%   vImarisApplication : (optional) if omitted (or set to []), an 
 %                        IceImarisConnector object is created that is 
 %                        not connected to any Imaris instance.
 %
 %                        Imaris can then be started (and connected) using
-%                        the startImaris( ) method, i.e.
+%                        the startImaris() method, i.e.
 %
-%                            conn.startImaris( )
+%                            conn.startImaris()
 %
 %                        Alternatively, vImarisApplication can be an
 %                        Imaris Application ID (as provided by Imaris)
@@ -47,7 +47,7 @@
 %   mImarisApplication. The mImarisApplication property gives access to
 %   the entire Imaris ICE methods. Example:
 %
-%   conn.mImarisApplication.GetSurpassSelection( )
+%   conn.mImarisApplication.GetSurpassSelection()
 %
 %   returns the currently selected object in the Imaris surpass scene.
 %
@@ -82,11 +82,11 @@
 
 classdef IceImarisConnector < handle
         
-    properties ( SetAccess = private, GetAccess = public )
+    properties (SetAccess = private, GetAccess = public)
         mImarisApplication = [];
     end
     
-    properties ( Access = private )
+    properties (Access = private)
         mImarisLib;
         mImarisExePath;
         mImarisServerExePath;
@@ -100,27 +100,27 @@ classdef IceImarisConnector < handle
     methods
         
         % Constructor
-        function this = IceImarisConnector( vImarisApplication, indexingStart )
+        function this = IceImarisConnector(vImarisApplication, indexingStart)
 
             % First, we prepare everything we need
             % Store the Imaris and ImarisLib path
-            [ success, errorMessage ] = findImaris( this );
+            [success, errorMessage] = findImaris(this);
             if ~success
-                error( errorMessage );
+                error(errorMessage);
             end
             
             % Add the ImarisLib.jar package to the java class path
             % (if not there yet)
-            if all( cellfun( ...
-                    @isempty, strfind( javaclasspath, 'ImarisLib.jar' ) ) )
-                javaaddpath( this.mImarisLibPath );
+            if all(cellfun(...
+                    @isempty, strfind(javaclasspath, 'ImarisLib.jar')))
+                javaaddpath(this.mImarisLibPath);
             end
             
             % Create and store an ImarisLib instance
-            this.mImarisLib = ImarisLib( );
+            this.mImarisLib = ImarisLib();
 
             % Assign a random id
-            this.mImarisObjectID = randi( 100000 );
+            this.mImarisObjectID = randi(100000);
 
             % Now we check the (optional) input parameter.
             % We have three cases. If called without parameters, we
@@ -139,7 +139,7 @@ classdef IceImarisConnector < handle
                 
             if nargin > 0 && ~isempty(vImarisApplication)
                 
-                if isa( vImarisApplication, 'IceImarisConnector' )
+                if isa(vImarisApplication, 'IceImarisConnector')
                     
                     % If the input parameter is an IceImarisConnector
                     % object we return the reference. This way, an
@@ -147,36 +147,36 @@ classdef IceImarisConnector < handle
                     % IceImarisConnector object as input parameter
                     this = vImarisApplication;
                     
-                elseif isa( vImarisApplication, 'Imaris.IApplicationPrxHelper')
+                elseif isa(vImarisApplication, 'Imaris.IApplicationPrxHelper')
                     
                     % This is an Imaris application object - se store it
                     this.mImarisApplication = vImarisApplication;
                     
-                elseif isscalar( vImarisApplication )
+                elseif isscalar(vImarisApplication)
 
                     % Check if the application is registered
-                    server = this.mImarisLib.GetServer;
-                    nApps = server.GetNumberOfObjects( );
+                    server = this.mImarisLib.GetServer();
+                    nApps = server.GetNumberOfObjects();
                     if nApps == 0
-                        error( 'There are no registered Imaris applications.' );
+                        error('There are no registered Imaris applications.');
                     end
                     
-                    if server.GetObjectID( vImarisApplication ) == -1
-                        error( 'Invalid Imaris application ID.' );
+                    if server.GetObjectID(vImarisApplication) == -1
+                        error('Invalid Imaris application ID.');
                     end
 
                     this.mImarisApplication = ...
-                        this.mImarisLib.GetApplication( vImarisApplication );
+                        this.mImarisLib.GetApplication(vImarisApplication);
                 
                 else
                 
-                    error( [ 'The passed object is not a Imaris ', ...
-                        'Application ID.' ] );
+                    error(['The passed object is not a Imaris ', ...
+                        'Application ID.']);
    
                 end
             end
             
-            if nargin > 1 && ~isempty( indexingStart )
+            if nargin > 1 && ~isempty(indexingStart)
                 
                 this.mIndexingStart = indexingStart;
                 
@@ -184,18 +184,18 @@ classdef IceImarisConnector < handle
             
             if nargin > 2
                 
-                error( 'Wrong number of input arguments!' );
+                error('Wrong number of input arguments!');
                 
             end
             
         end
        
         % Desctructor
-        function delete( this )
+        function delete(this)
         
             if this.mUserControl == 1
-                if ~isempty( this.mImarisApplication )
-                    this.closeImaris( );
+                if ~isempty(this.mImarisApplication)
+                    this.closeImaris();
                 end
             end
 
@@ -206,92 +206,92 @@ classdef IceImarisConnector < handle
     % External public and static methods
     % =====================================================================
     
-    methods ( Access = public )
+    methods (Access = public)
         
         % autocast
-        castObject = autocast( this, obj )
+        castObject = autocast(this, obj)
                     
         % close Imaris
-        success = closeImaris( this, varargin )
+        success = closeImaris(this, varargin)
         
         % display
-        display( this )        
+        display(this)        
 
         % getAllSurpassChildren
-        children = getAllSurpassChildren( this, recursive, filter )
+        children = getAllSurpassChildren(this, recursive, filter)
 
         % getDataVolume
-        stack = getDataVolume( this, channel, timepoint, iDataset )
+        stack = getDataVolume(this, channel, timepoint, iDataset)
         
         % getExtends
-        extends = getExtends( this )
+        extends = getExtends(this)
 
         % getImarisVersionAsInteger
-        version = getImarisVersionAsInteger( this )
+        version = getImarisVersionAsInteger(this)
         
         % getMatlabDatatype
-        type = getMatlabDatatype( this )
+        type = getMatlabDatatype(this)
         
         % getSizes
-        sizes = getSizes( this )
+        sizes = getSizes(this)
         
         % getSpots
-        spotStruct = getSpots( this )
+        spotStruct = getSpots(this)
         
         % getSurpassScene
-        vSurpassScene = getSurpassScene( this, varargin)
+        vSurpassScene = getSurpassScene(this, varargin)
 
         % getVoxelSizes
-        voxelSizes = getVoxelSizes( this )
+        voxelSizes = getVoxelSizes(this)
         
         % getSurpassCameraRotationMatrix
-        [ R, isI ] = getSurpassCameraRotationMatrix( this )
+        [R, isI] = getSurpassCameraRotationMatrix(this)
         
         % indexingStart
-        n = indexingStart( this )
+        n = indexingStart(this)
         
         % isAlive
-        alive = isAlive( this )
+        alive = isAlive(this)
         
         % mapPositionsUnitsToVoxels
-        varargout = mapPositionsUnitsToVoxels( this, varargin )
+        varargout = mapPositionsUnitsToVoxels(this, varargin)
         
         % mapPositionsVoxelsToUnits
-        varargout = mapPositionsVoxelsToUnits( this, varargin )
+        varargout = mapPositionsVoxelsToUnits(this, varargin)
         
         % setDataVolume
-        setDataVolume( this, stack, channel, timepoint )
+        setDataVolume(this, stack, channel, timepoint)
         
         % setSpots
-        setSpots( this, spotStruct)
+        setSpots(this, spotStruct)
        
         % startImaris
-        success = startImaris( this, userControl )
+        success = startImaris(this, userControl)
 
     end
 
-    methods ( Access = public, Static = true )
+    methods (Access = public, Static = true)
         
         % getVersion
-        function version = getVersion( )
+        function version = getVersion()
             version = 'devel';
         end
 
         % mapRgbaScalarToVector
-        rgbaVector = mapRgbaScalarToVector( rgbaScalar )
+        rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 
         % mapRgbaVectorToScalar
-        rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
+        rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
                
     end
     
-    methods ( Access = private )
+    methods (Access = private)
         
         % findImaris
-        [ imarisPath, errorMessage ] = findImaris( this )
+        [imarisPath, errorMessage] = findImaris(this)
         
         % startImarisServer
-        [ success, errorMessage ] = startImarisServer( this )
+        [success, errorMessage] = startImarisServer(this)
         
     end
     

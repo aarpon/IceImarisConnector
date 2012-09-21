@@ -1,4 +1,4 @@
-function rgbaVector = mapRgbaScalarToVector( rgbaScalar )
+function rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 % IceImarisConnector:  mapRgbaScalarToVector (static public method)
 %
 % DESCRIPTION
@@ -7,7 +7,7 @@ function rgbaVector = mapRgbaScalarToVector( rgbaScalar )
 %
 % SYNOPSIS
 %
-%   rgbaScalar = mapRgbaVectorToScalar( rgbaScalar )
+%   rgbaScalar = mapRgbaVectorToScalar(rgbaScalar)
 %
 % INPUT
 %
@@ -66,23 +66,23 @@ function rgbaVector = mapRgbaScalarToVector( rgbaScalar )
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 % Check input
-if ~isscalar( rgbaScalar )
-    error( 'rgbaScalar must be a scalar.')
+if ~isscalar(rgbaScalar)
+    error('rgbaScalar must be a scalar.')
 end
 
 % Force conversion to uint32 passing through int32.
-rgbaScalar = typecast( int32( rgbaScalar ), 'uint32' );
+rgbaScalar = typecast(int32(rgbaScalar), 'uint32');
 
 % Perform conversion
-rgbaVector = zeros( 1, 4 );
+rgbaVector = zeros(1, 4);
 for i = 1 : 4
     
     % Use bit-operators to extract information
-    rgbaVector(i) = double( ...
-        bitget( rgbaScalar, 8 : -1 : 1 ) ) * 2.^( 7 : -1 : 0 )';
+    rgbaVector(i) = double(...
+        bitget(rgbaScalar, 8 : -1 : 1)) * 2.^(7 : -1 : 0)';
     
     % Shift the scalar by 8 bits
-    rgbaScalar = bitshift( rgbaScalar, -8 );
+    rgbaScalar = bitshift(rgbaScalar, -8);
     
 end
 

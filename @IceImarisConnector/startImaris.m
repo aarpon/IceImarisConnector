@@ -1,4 +1,4 @@
-function success = startImaris( this, userControl )
+function success = startImaris(this, userControl)
 % IceImarisConnector:  startImaris (public method)
 %
 % DESCRIPTION
@@ -9,11 +9,11 @@ function success = startImaris( this, userControl )
 % 
 % SYNOPSIS
 % 
-%   success = conn.startImaris( userControl )
+%   success = conn.startImaris(userControl)
 % 
 % INPUT
 %
-%   userControl : (optional, default = 0 )
+%   userControl : (optional, default = 0)
 %                 The optional parameter userControl sets the fate of
 %                 Imaris when the client is closed: if userControl is 
 %                 true (1), Imaris terminates when the IceImarisConnector
@@ -50,9 +50,9 @@ function success = startImaris( this, userControl )
 
 % Imaris only runs on Windows and Mac OS X
 success = 0;
-if isempty( strfind( computer, 'PCWIN' ) ) && ...
-        isempty( strfind( computer, 'MAC' )  )
-    disp( 'IceImarisConnector can only work on Windows and Mac OS X' );
+if isempty(strfind(computer, 'PCWIN')) && ...
+        isempty(strfind(computer, 'MAC'))
+    disp('IceImarisConnector can only work on Windows and Mac OS X');
     return
 end
 
@@ -61,8 +61,8 @@ if nargin == 1
     userControl = false;
 end
 
-if ~ismember( userControl, [ 0 1 ] )
-    error( 'userControl must be either 0 or 1' );
+if ~ismember(userControl, [0 1])
+    error('userControl must be either 0 or 1');
 end
 
 % Store the userControl
@@ -71,40 +71,40 @@ this.mUserControl = userControl;
 % On Mac OS X, make sure that the Imaris Frameworks folder is at the
 % beginning of the dynamic library path to prevent any conflicts with
 % the Qt libraries loaded by MATLAB
-if ~isempty( strfind( computer, 'MAC' ) )
+if ~isempty(strfind(computer, 'MAC'))
     dylPath = getenv('DYLD_LIBRARY_PATH');
-    ImarisFrameworksPath = [ getenv('IMARISPATH'), filesep, ...
-        'Contents', filesep, 'Frameworks' ];
+    ImarisFrameworksPath = [getenv('IMARISPATH'), filesep, ...
+        'Contents', filesep, 'Frameworks'];
     indx = strfind(dylPath, ImarisFrameworksPath);
     if isempty(indx) || indx ~= 1
         % Prepend
-        dylPath = [ ImarisFrameworksPath, ':', dylPath ];
+        dylPath = [ImarisFrameworksPath, ':', dylPath];
         setenv('DYLD_LIBRARY_PATH', dylPath)
     end
 end
 
 % If an Imaris instance is open, we close it -- no questions asked
-if this.isAlive( ) == 1
-    this.closeImaris( );
+if this.isAlive() == 1
+    this.closeImaris();
 end
 
 % Now we open a new one
 try
     
     % Start ImarisServer
-    [ success, errorMessage ] = this.startImarisServer( );
+    [success, errorMessage] = this.startImarisServer();
     if success == 0
-        disp( errorMessage );
+        disp(errorMessage);
         success = 0;
         return
     end
     
     % Launch Imaris
-    [ status, result ] = system( ...
-        [ '"', this.mImarisExePath, '" id', ...
-        num2str( this.mImarisObjectID ), ' &' ] );
+    [status, result] = system(...
+        ['"', this.mImarisExePath, '" id', ...
+        num2str(this.mImarisObjectID), ' &']);
     if status == 1
-        disp( result );
+        disp(result);
         success = 0;
         return
     end
@@ -120,20 +120,20 @@ try
             % we will get the application. The exception is not
             % automatically casted to a MATLAB exception, se we cannot 
             % really catch it...
-            this.mImarisLib = ImarisLib( );
-            vImaris = this.mImarisLib.GetApplication( this.mImarisObjectID );
+            this.mImarisLib = ImarisLib();
+            vImaris = this.mImarisLib.GetApplication(this.mImarisObjectID);
         catch ex
             % We can't catch the exception...
         end
-        if ~isempty( vImaris ) 
+        if ~isempty(vImaris) 
             break 
         end
         pause(0.1)
     end
     
     % At this point we should have the application
-    if isempty( vImaris ) 
-        disp( 'Could not link to the Imaris application.' );
+    if isempty(vImaris) 
+        disp('Could not link to the Imaris application.');
         success = 0;
         return
     end
@@ -146,7 +146,7 @@ try
     
 catch ex
     
-    disp( ex.message );
+    disp(ex.message);
     success = 0;
     
 end

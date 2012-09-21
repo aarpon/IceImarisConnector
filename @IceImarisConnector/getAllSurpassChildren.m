@@ -1,4 +1,4 @@
-function children = getAllSurpassChildren( this, recursive, filter )
+function children = getAllSurpassChildren(this, recursive, filter)
 % IceImarisConnector:  getAllSurpassChildren (public method)
 %
 % DESCRIPTION
@@ -9,11 +9,11 @@ function children = getAllSurpassChildren( this, recursive, filter )
 % 
 % SYNOPSIS
 % 
-%   children = conn.getAllSurpassChildren( recursive, filter )
+%   children = conn.getAllSurpassChildren(recursive, filter)
 % 
 % INPUT
 % 
-%   recursive: { 0 | 1 } If 1, folders will be scanned recursively;
+%   recursive: {0 | 1} If 1, folders will be scanned recursively;
 %                        if 0, only objects at root level will be inspected.
 %
 %   filter   : (optional) Filters the children by type. Only the 
@@ -62,35 +62,35 @@ function children = getAllSurpassChildren( this, recursive, filter )
 
 % Check input parameters number and values
 if nargin < 2 || nargin > 3
-    error( '1 or 2 input parameters expected.' );
+    error('1 or 2 input parameters expected.');
 end
 
 if nargin == 2
-    filter = [ ];
+    filter = [];
 end
 
-if ~ismember( recursive, [ 0 1 ] )
-    error( 'Bad value for input parameter ''recursive''.' );
+if ~ismember(recursive, [0 1])
+    error('Bad value for input parameter ''recursive''.');
 end
 
-if ~isempty( filter )
-    filterValues = { 'Cells', 'ClippingPlane', 'Dataset', 'Filaments', ...
+if ~isempty(filter)
+    filterValues = {'Cells', 'ClippingPlane', 'Dataset', 'Filaments', ...
         'Frame', 'LightSource', 'MeasurementPoints', 'Spots', ...
-        'Surfaces', 'SurpassCamera', 'Volume' };
-    if ~ismember( filter, filterValues )
-        error( 'Bad value for input parameter ''filter''.' );
+        'Surfaces', 'SurpassCamera', 'Volume'};
+    if ~ismember(filter, filterValues)
+        error('Bad value for input parameter ''filter''.');
     end
 end
 
 % Initialize children
-children = { };
+children = {};
 
 % Check whether we have children in the surpass scene at all
-if isempty( this.mImarisApplication.GetSurpassScene( ) )
+if isempty(this.mImarisApplication.GetSurpassScene())
     return
 end
 
-nChildren = this.mImarisApplication.GetSurpassScene.GetNumberOfChildren( );
+nChildren = this.mImarisApplication.GetSurpassScene().GetNumberOfChildren();
 if nChildren == 0
     return
 end
@@ -100,33 +100,33 @@ currentChildNumber = 0;
 
 % Scan the children recursively. For performance reasons, we use a 
 % separate function for the case where filtering is requested.
-if isempty( filter )
-    getChildrenAtLevel( this.mImarisApplication.GetSurpassScene( ), ...
-        recursive );
+if isempty(filter)
+    getChildrenAtLevel(this.mImarisApplication.GetSurpassScene(), ...
+        recursive);
 else
-    getFilteredChildrenAtLevel( ...
-        this.mImarisApplication.GetSurpassScene( ), recursive, filter );
+    getFilteredChildrenAtLevel(...
+        this.mImarisApplication.GetSurpassScene(), recursive, filter);
 end
 
 % =========================================================================
 
     % Recursive function to scan children of a given container
-    function getChildrenAtLevel( container, recursive )
+    function getChildrenAtLevel(container, recursive)
         
         % This function scans the children recursively
         for i = 1 : container.GetNumberOfChildren()
    
             % Get current child
-            child = container.GetChild( i - 1 );
+            child = container.GetChild(i - 1);
     
             % Is this a folder? If it is, call this function recursively
-            if this.mImarisApplication.GetFactory.IsDataContainer( child )
+            if this.mImarisApplication.GetFactory().IsDataContainer(child)
                 if recursive == 1
-                    getChildrenAtLevel( this.autocast( child ), recursive );
+                    getChildrenAtLevel(this.autocast(child), recursive);
                 end
             else
                 currentChildNumber = currentChildNumber + 1;
-                children{ currentChildNumber } = this.autocast( child );
+                children{currentChildNumber} = this.autocast(child);
             end
             
         end
@@ -136,25 +136,25 @@ end
 % =========================================================================
 
     % Recursive function to scan children of a given container
-    function getFilteredChildrenAtLevel( container, recursive, filter )
+    function getFilteredChildrenAtLevel(container, recursive, filter)
         
         % This function scans the children recursively
         for i = 1 : container.GetNumberOfChildren()
    
             % Get current child
-            child = container.GetChild( i - 1 );
+            child = container.GetChild(i - 1);
     
             % Is this a folder? If it is, call this function recursively
-            if this.mImarisApplication.GetFactory.IsDataContainer( child )
+            if this.mImarisApplication.GetFactory().IsDataContainer(child)
                 if recursive == 1
-                    getFilteredChildrenAtLevel( this.autocast( child ), ...
-                        recursive, filter );
+                    getFilteredChildrenAtLevel(this.autocast(child), ...
+                        recursive, filter);
                 end
             else
-                currentChild = this.autocast( child );
-                if isOfType( currentChild, filter )
+                currentChild = this.autocast(child);
+                if isOfType(currentChild, filter)
                     currentChildNumber = currentChildNumber + 1;
-                    children{ currentChildNumber } = currentChild;
+                    children{currentChildNumber} = currentChild;
                 end
             end
             
@@ -165,34 +165,34 @@ end
 % =========================================================================
 
     % Check whether the object is of type specified by the filter
-    function b = isOfType( child, filter )
+    function b = isOfType(child, filter)
         
         % Test the child
         switch filter
             case 'Cells',
-                b = this.mImarisApplication.GetFactory.IsCells( child );
+                b = this.mImarisApplication.GetFactory().IsCells(child);
             case 'ClippingPlane',
-                b = this.mImarisApplication.GetFactory.IsClippingPlane( child );
+                b = this.mImarisApplication.GetFactory().IsClippingPlane(child);
             case 'Dataset',
-                b = this.mImarisApplication.GetFactory.IsDataset( child );
+                b = this.mImarisApplication.GetFactory().IsDataset(child);
             case 'Filaments',
-                b = this.mImarisApplication.GetFactory.IsFilaments( child );
+                b = this.mImarisApplication.GetFactory().IsFilaments(child);
             case 'Frame',
-                b = this.mImarisApplication.GetFactory.IsFrame( child );
+                b = this.mImarisApplication.GetFactory().IsFrame(child);
             case 'LightSource',
-                b = this.mImarisApplication.GetFactory.IsLightSource( child );
+                b = this.mImarisApplication.GetFactory().IsLightSource(child);
             case 'MeasurementPoints',
-                b = this.mImarisApplication.GetFactory.IsMeasurementPoints( child );
+                b = this.mImarisApplication.GetFactory().IsMeasurementPoints(child);
             case 'Spots',
-                b = this.mImarisApplication.GetFactory.IsSpots( child );
+                b = this.mImarisApplication.GetFactory().IsSpots(child);
             case 'Surfaces',
-                b = this.mImarisApplication.GetFactory.IsSurfaces( child );
+                b = this.mImarisApplication.GetFactory().IsSurfaces(child);
             case 'SurpassCamera',
-                b = this.mImarisApplication.GetFactory.IsSurpassCamera( child );
+                b = this.mImarisApplication.GetFactory().IsSurpassCamera(child);
             case 'Volume',
-                b = this.mImarisApplication.GetFactory.IsVolume( child );
+                b = this.mImarisApplication.GetFactory().IsVolume(child);
             otherwise,
-                error('Bad value for ''filter''.' );
+                error('Bad value for ''filter''.');
         end
                 
     end

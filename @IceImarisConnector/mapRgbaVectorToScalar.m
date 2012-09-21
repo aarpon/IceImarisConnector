@@ -1,4 +1,4 @@
-function rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
+function rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
 % IceImarisConnector:  mapRgbaVectorToScalar (static public method)
 %
 % DESCRIPTION
@@ -7,7 +7,7 @@ function rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
 %
 % SYNOPSIS
 %
-%   rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
+%   rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
 %
 % INPUT
 %
@@ -22,10 +22,10 @@ function rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
 % IMPORTANT REMARK
 %
 %   
-%   The way one calculates the RGBA value from an [ R G B A ] vector (with
+%   The way one calculates the RGBA value from an [R G B A] vector (with
 %   the values of R, G, B, and A all between 0 and 1) is simply:
 %   
-%     uint32( [R G B A] * [ 1 256 256^2 256^3 ] )
+%     uint32([R G B A] * [1 256 256^2 256^3])
 %
 %   (where * is the matrix product). This gives a number between 0 and 
 %   intmax('uint32') = 4294967295.
@@ -75,19 +75,19 @@ function rgbaScalar = mapRgbaVectorToScalar( rgbaVector )
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 % check input
-if ~isvector( rgbaVector ) || length( rgbaVector ) ~= 4 || ...
-        any( rgbaVector < 0) || any( rgbaVector ) > 1
+if ~isvector(rgbaVector) || length(rgbaVector) ~= 4 || ...
+        any(rgbaVector < 0) || any(rgbaVector) > 1
     error('rgbaVector must be 1-by-4 with all elements between 0 and 1')
 end
 
 % Make sure we have a row vector
-rgbaVector = rgbaVector( : )';
+rgbaVector = rgbaVector(:)';
 
 % Need integer values scaled to the range 0-255
-rgbaVector = round( rgbaVector * 255 );
+rgbaVector = round(rgbaVector * 255);
 
 % Combine different components (four bytes) into one integer
-rgbaScalar = uint32( rgbaVector * 256 .^ (0 : 3)' );
+rgbaScalar = uint32(rgbaVector * 256 .^ (0 : 3)');
 
 % Now typecast it to signed int32 to get it right into Imaris
-rgbaScalar = typecast( rgbaScalar, 'int32' );
+rgbaScalar = typecast(rgbaScalar, 'int32');

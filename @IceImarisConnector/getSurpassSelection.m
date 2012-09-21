@@ -1,4 +1,4 @@
-function selection = getSurpassSelection( this )
+function selection = getSurpassSelection(this)
 % IceImarisConnector:  getSurpassSelection (public method)
 %
 % DESCRIPTION
@@ -7,7 +7,7 @@ function selection = getSurpassSelection( this )
 % 
 % SYNOPSIS
 % 
-%   selection = conn.getSurpassSelection( )
+%   selection = conn.getSurpassSelection()
 % 
 % INPUT
 % 
@@ -41,7 +41,7 @@ function selection = getSurpassSelection( this )
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-selection = [ ];
+selection = [];
 
 % Is Imaris running?
 if this.isAlive() == 0
@@ -49,6 +49,6 @@ if this.isAlive() == 0
 end
 
 % Get current selection
-selection = this.autocast( this.mImarisApplication.GetSurpassSelection );
+selection = this.autocast(this.mImarisApplication.GetSurpassSelection());
 
 end

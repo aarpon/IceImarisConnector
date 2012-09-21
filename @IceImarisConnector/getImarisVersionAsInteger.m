@@ -1,4 +1,4 @@
-function version = getImarisVersionAsInteger( this )
+function version = getImarisVersionAsInteger(this)
 % IceImarisConnector:  getImarisVersionAsInteger (public method)
 % 
 % DESCRIPTION
@@ -9,7 +9,7 @@ function version = getImarisVersionAsInteger( this )
 % 
 % SYNOPSIS
 % 
-%   version = IceImarisConnector.getVersionAsInteger( )
+%   version = IceImarisConnector.getVersionAsInteger()
 % 
 % INPUT
 % 
@@ -53,37 +53,37 @@ end
 % Get the version string and extract the major, minor and patch versions
 % The version must be in the form M.N.P
 
-tokens = regexp( char( this.mImarisApplication.GetVersion ), ...
-    '(\d)+\.(\d)+\.+(\d)+', 'tokens' );
-if isempty( tokens )
-    disp( 'Could not get version number!' );
+tokens = regexp(char(this.mImarisApplication.GetVersion()), ...
+    '(\d)+\.(\d)+\.+(\d)+', 'tokens');
+if isempty(tokens)
+    disp('Could not get version number!');
     return
 end
-if numel( tokens{ 1 } ) ~= 3
-    disp( 'Could not get version number!' );
+if numel(tokens{1}) ~= 3
+    disp('Could not get version number!');
     return
 end
     
 % Get the major, minor and patch versions
 try
-    major = str2double( tokens{ 1 }{ 1 } );
+    major = str2double(tokens{1}{1});
 catch e
-    disp( [ 'Could not get major version number! Error message was: ', ...
-        e.message, '\n' ] );
+    disp(['Could not get major version number! Error message was: ', ...
+        e.message, '\n']);
     major = 0;
 end
 try
-    minor = str2double( tokens{ 1 }{ 2 } );
+    minor = str2double(tokens{1}{2});
 catch e
-    disp( [ 'Could not get minor version number! Error message was: ', ...
-        e.message, '\n' ] );
+    disp(['Could not get minor version number! Error message was: ', ...
+        e.message, '\n']);
     minor = 0;
 end
 try 
-    patch = str2double( tokens{ 1 }{ 3 } );
+    patch = str2double(tokens{1}{3});
 catch e
-    disp( [ 'Could not get patch version number! Error message was: ', ...
-        e.message, '\n' ] );
+    disp(['Could not get patch version number! Error message was: ', ...
+        e.message, '\n']);
     patch = 0;
 end
 

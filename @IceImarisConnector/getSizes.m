@@ -1,4 +1,4 @@
-function sizes = getSizes( this )
+function sizes = getSizes(this)
 % IceImarisConnector:  getSizes (public method)
 %
 % DESCRIPTION
@@ -7,7 +7,7 @@ function sizes = getSizes( this )
 % 
 % SYNOPSIS
 % 
-%   sizes = conn.getSizes( )
+%   sizes = conn.getSizes()
 % 
 % INPUT
 % 
@@ -15,7 +15,7 @@ function sizes = getSizes( this )
 % 
 % OUTPUT
 % 
-%   sizes : vector of sizes, [ sizeX sizeY sizeZ sizeC sizeT ]  
+%   sizes : vector of sizes, [sizeX sizeY sizeZ sizeC sizeT]  
 
 % AUTHORS
 %
@@ -47,18 +47,18 @@ if this.isAlive() == 0
 end
 
 % Check whether we have some voxels in the dataset
-if this.mImarisApplication.GetDataSet.GetSizeX == 0
-    sizes = [ ];
+if this.mImarisApplication.GetDataSet.GetSizeX() == 0
+    sizes = [];
     return
 end
 
 % Return the extends
-sizes = [ 
-    this.mImarisApplication.GetDataSet.GetSizeX, ...
-    this.mImarisApplication.GetDataSet.GetSizeY, ...
-    this.mImarisApplication.GetDataSet.GetSizeZ, ...
-    this.mImarisApplication.GetDataSet.GetSizeC, ...
-    this.mImarisApplication.GetDataSet.GetSizeT
-    ];
+sizes = [
+    this.mImarisApplication.GetDataSet.GetSizeX(), ...
+    this.mImarisApplication.GetDataSet.GetSizeY(), ...
+    this.mImarisApplication.GetDataSet.GetSizeZ(), ...
+    this.mImarisApplication.GetDataSet.GetSizeC(), ...
+    this.mImarisApplication.GetDataSet.GetSizeT()
+   ];
 
 end

@@ -1,4 +1,4 @@
-function voxelSizes = getVoxelSizes( this )
+function voxelSizes = getVoxelSizes(this)
 % IceImarisConnector:  getVoxelSizes (public method)
 %
 % DESCRIPTION
@@ -7,7 +7,7 @@ function voxelSizes = getVoxelSizes( this )
 % 
 % SYNOPSIS
 % 
-%   voxelSizes = conn.getVoxelSizes( )
+%   voxelSizes = conn.getVoxelSizes()
 % 
 % INPUT
 % 
@@ -15,7 +15,7 @@ function voxelSizes = getVoxelSizes( this )
 % 
 % OUTPUT
 % 
-%   voxelSizes : vector of voxel sizes, [ voxelX voxelY voxelZ ]  
+%   voxelSizes : vector of voxel sizes, [voxelX voxelY voxelZ]  
 
 % AUTHORS
 %
@@ -42,7 +42,7 @@ function voxelSizes = getVoxelSizes( this )
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 % Initialize voxel sizes
-voxelSizes = [ ];
+voxelSizes = [];
 
 % Is Imaris running?
 if this.isAlive() == 0
@@ -50,29 +50,29 @@ if this.isAlive() == 0
 end
 
 % Check whether we have a dataset at all
-if this.mImarisApplication.GetDataSet.GetSizeX == 0
+if this.mImarisApplication.GetDataSet.GetSizeX() == 0
     return;
 end
 
 % We do, so let's calculate the voxel size
-voxelSizes = [ 0 0 0 ];
+voxelSizes = [0 0 0];
 
 % Voxel size X
-voxelSizes( 1 ) = ...
-    ( this.mImarisApplication.GetDataSet.GetExtendMaxX - ...
-    this.mImarisApplication.GetDataSet.GetExtendMinX ) / ...
-    this.mImarisApplication.GetDataSet.GetSizeX;
+voxelSizes(1) = ...
+    (this.mImarisApplication.GetDataSet.GetExtendMaxX() - ...
+    this.mImarisApplication.GetDataSet.GetExtendMinX()) / ...
+    this.mImarisApplication.GetDataSet.GetSizeX();
 
 % Voxel size Y
-voxelSizes( 2 ) = ...
-    ( this.mImarisApplication.GetDataSet.GetExtendMaxY - ...
-    this.mImarisApplication.GetDataSet.GetExtendMinY ) / ...
-    this.mImarisApplication.GetDataSet.GetSizeY;
+voxelSizes(2) = ...
+    (this.mImarisApplication.GetDataSet.GetExtendMaxY() - ...
+    this.mImarisApplication.GetDataSet.GetExtendMinY()) / ...
+    this.mImarisApplication.GetDataSet.GetSizeY();
 
 % Voxel size Z
-voxelSizes( 3 ) = ...
-    ( this.mImarisApplication.GetDataSet.GetExtendMaxZ - ...
-    this.mImarisApplication.GetDataSet.GetExtendMinZ ) / ...
-    this.mImarisApplication.GetDataSet.GetSizeZ;
+voxelSizes(3) = ...
+    (this.mImarisApplication.GetDataSet.GetExtendMaxZ() - ...
+    this.mImarisApplication.GetDataSet.GetExtendMinZ()) / ...
+    this.mImarisApplication.GetDataSet.GetSizeZ();
 
 end

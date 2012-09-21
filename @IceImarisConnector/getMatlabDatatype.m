@@ -1,14 +1,14 @@
-function type = getMatlabDatatype( this )
+function type = getMatlabDatatype(this)
 % IceImarisConnector:  getMatlabDatatype (public method)
 %
 % DESCRIPTION
 % 
 %   This method returns the datatype of the dataset as a MATLAB type 
-%   (e.g. one of 'uint8', 'uint16', 'single' ).
+%   (e.g. one of 'uint8', 'uint16', 'single').
 % 
 % SYNOPSIS
 % 
-%   type = conn.getMatlabDatatype( )
+%   type = conn.getMatlabDatatype()
 % 
 % INPUT
 % 
@@ -50,7 +50,7 @@ if this.isAlive() == 0
 end
 
 % Which datatype?
-switch char( this.mImarisApplication.GetDataSet.GetType )
+switch char(this.mImarisApplication.GetDataSet.GetType())
     case 'eTypeUInt8',
         type  = 'uint8';
     case 'eTypeUInt16',

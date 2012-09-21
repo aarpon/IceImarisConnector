@@ -1,4 +1,4 @@
-function [ status, errorMessage ] = findImaris( this )
+function [status, errorMessage] = findImaris(this)
 % IceImarisConnector:  findImaris (private method)
 %
 % DESCRIPTION
@@ -8,7 +8,7 @@ function [ status, errorMessage ] = findImaris( this )
 %
 % SYNOPSIS
 %
-%   [ status, errorMessage ] = imarisPath = conn.findImaris( )
+%   [status, errorMessage] = imarisPath = conn.findImaris()
 %
 % INPUT
 %
@@ -52,7 +52,7 @@ status = 0;
 errorMessage = '';
 
 % Try to get the environment variable IMARISPATH
-imarisPath = getenv( 'IMARISPATH' );
+imarisPath = getenv('IMARISPATH');
 
 % Set the paths
 this.mImarisExePath = '';
@@ -60,7 +60,7 @@ this.mImarisServerExePath = '';
 this.mImarisLibPath = '';
 
 % Is the variable defined?
-if isempty( imarisPath )
+if isempty(imarisPath)
     % jonas - 4/2012 be a little more robust
     % installation defaults to C: on Windows, /Applications on Mac
     if ispc
@@ -76,8 +76,8 @@ if isempty( imarisPath )
     if exist(tmp,'dir')
         d = dir(fullfile(tmp,'Imaris*'));
         % Make sure to ignore the Scene Viewer
-        svi = strfind( {d.name}, 'Scene Viewer' );
-        d( ~cellfun( @isempty, svi ) ) = [ ];
+        svi = strfind({d.name}, 'Scene Viewer');
+        d(~cellfun(@isempty, svi)) = [];
         % Use latest version
         switch length(d)
             case 0
@@ -109,54 +109,54 @@ if isempty( imarisPath )
 end
 
 % Does it point to an existing directory?
-if ~exist( imarisPath, 'dir' )
-    errorMessage = [ 'The content of the IMARISPATH environment ', ...
-        'variable does not point to a valid directory.' ];
+if ~exist(imarisPath, 'dir')
+    errorMessage = ['The content of the IMARISPATH environment ', ...
+        'variable does not point to a valid directory.'];
     return;
 end
 
 % Set the path to the Imaris executable
-if strfind( computer, 'PCWIN' )
-    exePath = fullfile( imarisPath, 'Imaris.exe' );
-elseif strfind( computer, 'MAC' )
-    exePath = fullfile( imarisPath, 'Contents', 'MacOS', 'Imaris' );
+if strfind(computer, 'PCWIN')
+    exePath = fullfile(imarisPath, 'Imaris.exe');
+elseif strfind(computer, 'MAC')
+    exePath = fullfile(imarisPath, 'Contents', 'MacOS', 'Imaris');
 else
-    errorMessage = [ 'IceImarisConnector can only be used on Windows ', ...
-        'and Mac OS X.' ];
+    errorMessage = ['IceImarisConnector can only be used on Windows ', ...
+        'and Mac OS X.'];
     return
 end
 
 % Set the path to the ImarisServer executable
-if strfind( computer, 'PCWIN' )
-    serverExePath = fullfile( imarisPath, 'ImarisServerIce.exe' );
-elseif strfind( computer, 'MAC' )
-    serverExePath = fullfile( imarisPath, 'Contents', 'MacOS', 'ImarisServerIce' );
+if strfind(computer, 'PCWIN')
+    serverExePath = fullfile(imarisPath, 'ImarisServerIce.exe');
+elseif strfind(computer, 'MAC')
+    serverExePath = fullfile(imarisPath, 'Contents', 'MacOS', 'ImarisServerIce');
 else
-    errorMessage = [ 'IceImarisConnector can only be used on Windows ', ...
-        'and Mac OS X.' ];
+    errorMessage = ['IceImarisConnector can only be used on Windows ', ...
+        'and Mac OS X.'];
     return
 end
 
 % Check whether the exectable Imaris file exists
-if ~exist( exePath, 'file' )
+if ~exist(exePath, 'file')
     errorMessage = 'Could not find the Imaris executable.';
     return;
 end
 
 % Set the path to the ImarisLib library
-if strfind( computer, 'PCWIN' )
-    libPath = fullfile( imarisPath, 'XT', 'matlab', 'ImarisLib.jar' );
-elseif strfind( computer, 'MAC' )
-    libPath = fullfile( imarisPath, 'Contents', 'SharedSupport', ...
-        'XT', 'matlab', 'ImarisLib.jar' );
+if strfind(computer, 'PCWIN')
+    libPath = fullfile(imarisPath, 'XT', 'matlab', 'ImarisLib.jar');
+elseif strfind(computer, 'MAC')
+    libPath = fullfile(imarisPath, 'Contents', 'SharedSupport', ...
+        'XT', 'matlab', 'ImarisLib.jar');
 else
-    errorMessage = [ 'IceImarisConnector can only be used on Windows ', ...
-        'and Mac OS X.' ];
+    errorMessage = ['IceImarisConnector can only be used on Windows ', ...
+        'and Mac OS X.'];
     return
 end
 
 % Check whether the ImarisLib jar package exists
-if ~exist( libPath, 'file' )
+if ~exist(libPath, 'file')
     errorMessage = 'Could not find the Imaris executable.';
     return;
 end
