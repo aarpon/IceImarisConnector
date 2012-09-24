@@ -1,4 +1,4 @@
-function voxelSizes = getVoxelSizes(this)
+function [voxelSizeX voxelSizeY voxelSizeZ] = getVoxelSizes(this)
 % IceImarisConnector:  getVoxelSizes (public method)
 %
 % DESCRIPTION
@@ -6,16 +6,22 @@ function voxelSizes = getVoxelSizes(this)
 %   This method returns the X, Y, and Z voxel sizes of the dataset.
 % 
 % SYNOPSIS
-% 
-%   voxelSizes = conn.getVoxelSizes()
+%
+%   [1]                         voxelSizes = conn.getVoxelSizes()
+%   [2] [voxelSizeX voxelSizeY voxelSizeZ] = conn.getVoxelSizes()   
 % 
 % INPUT
 % 
 %   None
 % 
 % OUTPUT
+%
+%   [1] voxelSizes : vector of voxel sizes, [voxelSizeX voxelSizeY voxelSizeZ]  
 % 
-%   voxelSizes : vector of voxel sizes, [voxelX voxelY voxelZ]  
+%   [2] voxelSizeX : voxel size in X direction
+%       voxelSizeY : voxel size in Y direction
+%       voxelSizeZ : voxel size in Z direction
+%
 
 % AUTHORS
 %
@@ -42,7 +48,7 @@ function voxelSizes = getVoxelSizes(this)
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 % Initialize voxel sizes
-voxelSizes = [];
+voxelSizeX = 0; voxelSizeY = 0; voxelSizeZ = 0;
 
 % Is Imaris running?
 if this.isAlive() == 0
@@ -50,29 +56,39 @@ if this.isAlive() == 0
 end
 
 % Check whether we have a dataset at all
-if this.mImarisApplication.GetDataSet.GetSizeX() == 0
+if isempty(this.mImarisApplication.GetDataSet())
     return;
 end
 
-% We do, so let's calculate the voxel size
-voxelSizes = [0 0 0];
-
 % Voxel size X
-voxelSizes(1) = ...
-    (this.mImarisApplication.GetDataSet.GetExtendMaxX() - ...
-    this.mImarisApplication.GetDataSet.GetExtendMinX()) / ...
-    this.mImarisApplication.GetDataSet.GetSizeX();
+vX = ...
+    (this.mImarisApplication.GetDataSet().GetExtendMaxX() - ...
+    this.mImarisApplication.GetDataSet().GetExtendMinX()) / ...
+    this.mImarisApplication.GetDataSet().GetSizeX();
 
 % Voxel size Y
-voxelSizes(2) = ...
-    (this.mImarisApplication.GetDataSet.GetExtendMaxY() - ...
-    this.mImarisApplication.GetDataSet.GetExtendMinY()) / ...
-    this.mImarisApplication.GetDataSet.GetSizeY();
+vY = ...
+    (this.mImarisApplication.GetDataSet().GetExtendMaxY() - ...
+    this.mImarisApplication.GetDataSet().GetExtendMinY()) / ...
+    this.mImarisApplication.GetDataSet().GetSizeY();
 
 % Voxel size Z
-voxelSizes(3) = ...
-    (this.mImarisApplication.GetDataSet.GetExtendMaxZ() - ...
-    this.mImarisApplication.GetDataSet.GetExtendMinZ()) / ...
-    this.mImarisApplication.GetDataSet.GetSizeZ();
+vZ = ...
+    (this.mImarisApplication.GetDataSet().GetExtendMaxZ() - ...
+    this.mImarisApplication.GetDataSet().GetExtendMinZ()) / ...
+    this.mImarisApplication.GetDataSet().GetSizeZ();
 
+% Return the voxels sizes
+if nargout == 1
+    
+    % We return all voxel sizes as one vector in the first output parameter 
+    voxelSizeX = [vX vY vZ];
+    
+else
+    
+    % Independent voxel sizes
+    voxelSizeX = vX;
+    voxelSizeY = vY;
+    voxelSizeZ = vZ;
+    
 end

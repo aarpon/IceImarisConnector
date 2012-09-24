@@ -50,7 +50,7 @@ if this.isAlive() == 0
 end
 
 % Which datatype?
-switch char(this.mImarisApplication.GetDataSet.GetType())
+switch char(this.mImarisApplication.GetDataSet().GetType())
     case 'eTypeUInt8',
         type  = 'uint8';
     case 'eTypeUInt16',

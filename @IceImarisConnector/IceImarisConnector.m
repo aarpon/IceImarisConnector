@@ -230,7 +230,7 @@ classdef IceImarisConnector < handle
         stack = getDataVolumeRM(this, channel, timepoint, iDataset)
         
         % getExtends
-        extends = getExtends(this)
+        [minX maxX minY maxY minZ maxZ] = getExtends(this)
 
         % getImarisVersionAsInteger
         version = getImarisVersionAsInteger(this)
@@ -239,16 +239,13 @@ classdef IceImarisConnector < handle
         type = getMatlabDatatype(this)
         
         % getSizes
-        sizes = getSizes(this)
-        
-        % getSpots
-        spotStruct = getSpots(this)
+        [sizeX sizeY sizeZ sizeC sizeT] = getSizes(this)
         
         % getSurpassScene
         vSurpassScene = getSurpassScene(this, varargin)
 
         % getVoxelSizes
-        voxelSizes = getVoxelSizes(this)
+        [voxelSizesX, voxelSizesY, voxelSizesZ] = getVoxelSizes(this)
         
         % getSurpassCameraRotationMatrix
         [R, isI] = getSurpassCameraRotationMatrix(this)

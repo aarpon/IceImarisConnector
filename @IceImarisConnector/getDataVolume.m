@@ -72,7 +72,7 @@ if nargin == 3
     iDataset = this.mImarisApplication.GetDataSet();
 else
     % Is the passed dataset a valid DataSet?
-    if ~this.mImarisApplication.GetFactory.IsDataSet(iDataset)
+    if ~this.mImarisApplication.GetFactory().IsDataSet(iDataset)
         error('Invalid IDataset object.');
     end
 end

@@ -133,15 +133,15 @@ end
 
 % Unit positions X
 posX = (vPosX - 0.5) .* ...
-    voxelSizes(1) + this.mImarisApplication.GetDataSet.GetExtendMinX();
+    voxelSizes(1) + this.mImarisApplication.GetDataSet().GetExtendMinX();
 
 % Unit positions Y
 posY = (vPosY - 0.5) .* ...
-    voxelSizes(2) + this.mImarisApplication.GetDataSet.GetExtendMinY();
+    voxelSizes(2) + this.mImarisApplication.GetDataSet().GetExtendMinY();
 
 % Unit positions Z
 posZ = (vPosZ - 0.5) .* ...
-    voxelSizes(3) + this.mImarisApplication.GetDataSet.GetExtendMinZ();
+    voxelSizes(3) + this.mImarisApplication.GetDataSet().GetExtendMinZ();
 
 if nargout == 0 || nargout == 1
     varargout{1} = [posX(:) posY(:) posZ(:)];

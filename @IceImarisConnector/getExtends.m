@@ -1,4 +1,4 @@
-function extends = getExtends(this)
+function [minX maxX minY maxY minZ maxZ] = getExtends(this)
 % IceImarisConnector:  getExtends (public method)
 %
 % DESCRIPTION
@@ -7,7 +7,8 @@ function extends = getExtends(this)
 % 
 % SYNOPSIS
 % 
-%   extends = conn.getExtends()
+%   [1]                         extends = conn.getExtends()
+%   [2] [minX maxX minY maxY minZ maxZ] = conn.getExtends()
 % 
 % INPUT
 % 
@@ -15,7 +16,14 @@ function extends = getExtends(this)
 % 
 % OUTPUT
 % 
-%   extends : vector of extends, [minX maxX minY maxY minZ maxZ]  
+%   [1] extends : vector of extends, [minX maxX minY maxY minZ maxZ]
+% 
+%   [2] minX : minimum dataset extend in X direction
+%       maxX : maximum dataset extend in X direction
+%       minY : minimum dataset extend in Y direction
+%       maxY : maximum dataset extend in Y direction
+%       minZ : minimum dataset extend in Z direction
+%       maxZ : maximum dataset extend in Z direction
 
 % AUTHORS
 %
@@ -41,26 +49,40 @@ function extends = getExtends(this)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-extends = [];
+% Initialize the output
+minX = 0; maxX = 0; minY = 0; maxY = 0; minZ = 0; maxZ = 0;
 
 % Is Imaris running?
 if this.isAlive() == 0
     return
 end
 
-% Check whether we have some voxels in the dataset
-if this.mImarisApplication.GetDataSet.GetSizeX() == 0
+% Is there a Dataset?
+if isempty(this.mImarisApplication.GetDataSet())
     return
 end
 
 % Return the extends
-extends = [
-    this.mImarisApplication.GetDataSet.GetExtendMinX(), ...
-    this.mImarisApplication.GetDataSet.GetExtendMaxX(), ...
-    this.mImarisApplication.GetDataSet.GetExtendMinY(), ...
-    this.mImarisApplication.GetDataSet.GetExtendMaxY(), ...
-    this.mImarisApplication.GetDataSet.GetExtendMinZ(), ...
-    this.mImarisApplication.GetDataSet.GetExtendMaxZ()
-   ];
+if nargout == 1
+    
+    % We return all extends as one vector in the first output parameter 
+    minX = [
+        this.mImarisApplication.GetDataSet().GetExtendMinX(), ...
+        this.mImarisApplication.GetDataSet().GetExtendMaxX(), ...
+        this.mImarisApplication.GetDataSet().GetExtendMinY(), ...
+        this.mImarisApplication.GetDataSet().GetExtendMaxY(), ...
+        this.mImarisApplication.GetDataSet().GetExtendMinZ(), ...
+        this.mImarisApplication.GetDataSet().GetExtendMaxZ()
+        ];
+
+else
+    
+    % Independent extends
+    minX = this.mImarisApplication.GetDataSet().GetExtendMinX();
+    maxX = this.mImarisApplication.GetDataSet().GetExtendMaxX();
+    minY = this.mImarisApplication.GetDataSet().GetExtendMinY();
+    maxY = this.mImarisApplication.GetDataSet().GetExtendMaxY();
+    minZ = this.mImarisApplication.GetDataSet().GetExtendMinZ();
+    maxZ = this.mImarisApplication.GetDataSet().GetExtendMaxZ();
 
 end
