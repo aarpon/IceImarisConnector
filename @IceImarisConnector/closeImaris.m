@@ -4,7 +4,7 @@ function success = closeImaris(this, quiet)
 % DESCRIPTION
 %
 %   This method close the Imaris instance associated to the 
-%   IceImarisConnector object (conn) and resets the 
+%   IceImarisConnector object and resets the 
 %   mImarisApplication property.
 %
 % SYNOPSIS
