@@ -1,5 +1,5 @@
 function derivedType = autocast(this, IDataItem)
-% IceImarisConnector:  autocast (private method)
+% IceImarisConnector:  autocast (public method)
 % 
 % DESCRIPTION
 % 
