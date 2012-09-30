@@ -54,7 +54,7 @@ end
 % The version must be in the form M.N.P
 
 tokens = regexp(char(this.mImarisApplication.GetVersion()), ...
-    '(\d)+\.(\d)+\.+(\d)+', 'tokens');
+    '(\d)+\.(\d)+\.+(\d)?', 'tokens');
 if isempty(tokens)
     disp('Could not get version number!');
     return
@@ -65,25 +65,23 @@ if numel(tokens{1}) ~= 3
 end
     
 % Get the major, minor and patch versions
-try
-    major = str2double(tokens{1}{1});
-catch e
+major = str2double(tokens{1}{1});
+if isnan(major)
     disp(['Could not get major version number! Error message was: ', ...
         e.message, '\n']);
     major = 0;
 end
-try
-    minor = str2double(tokens{1}{2});
-catch e
+
+minor = str2double(tokens{1}{2});
+if isnan(minor)
     disp(['Could not get minor version number! Error message was: ', ...
         e.message, '\n']);
     minor = 0;
 end
-try 
-    patch = str2double(tokens{1}{3});
-catch e
-    disp(['Could not get patch version number! Error message was: ', ...
-        e.message, '\n']);
+
+patch = str2double(tokens{1}{3});
+if isnan(patch)
+    % In case the patch version is not set we assume 0 is meant
     patch = 0;
 end
 

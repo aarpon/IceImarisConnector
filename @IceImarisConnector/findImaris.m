@@ -82,17 +82,27 @@ if isempty(imarisPath)
         switch length(d)
             case 0
                 errorMessage = sprintf(...
-                    ['No Imaris installation found in %s.',...
-                    ' Please define an environment variable IMARISPATH'],...
+                    ['No Imaris installation found in %s.\n',...
+                    ' Please define the environment variable ', ...
+                    'IMARISPATH.'],...
                     tmp);
             case 1
                 imarisPath = fullfile(tmp,d.name);
             otherwise
-                % take most recent installation
-                installDates = cat(1,d.datenum);
-                dirIdx = find(cat(1,d.isdir));
-                [~,idx] = max(installDates(dirIdx));
-                imarisPath = fullfile(tmp,d(dirIdx(idx)).name);
+                % Pick the directory name with highest version number
+                % Aaron - 09/12. Use highest version number instead of 
+                %                latest modification date to choose.
+                newestVersionDir = findNewestVersion(d);
+                if isempty(newestVersionDir)
+                    errorMessage = sprintf(...
+                        ['No Imaris installation found in %s.',...
+                        ' Please define an environment variable ', ...
+                        'IMARISPATH'],...
+                        tmp);
+                    imarisPath = [];
+                else
+                    imarisPath = fullfile(tmp, newestVersionDir);
+                end
         end
     else
         errorMessage = sprintf(...
@@ -102,8 +112,11 @@ if isempty(imarisPath)
     end
     
     
-    if isempty(imarisPath) && ~isempty(errorMessage)
-        errorMessage = 'Please define the environment variable IMARISPATH.';
+    if isempty(imarisPath)
+        if isempty(errorMessage)
+            errorMessage = ...
+                'Please define the environment variable IMARISPATH.';
+        end
         return;
     end
 end
@@ -116,9 +129,9 @@ if ~exist(imarisPath, 'dir')
 end
 
 % Set the path to the Imaris executable
-if strfind(computer, 'PCWIN')
+if ispc()
     exePath = fullfile(imarisPath, 'Imaris.exe');
-elseif strfind(computer, 'MAC')
+elseif ismac()
     exePath = fullfile(imarisPath, 'Contents', 'MacOS', 'Imaris');
 else
     errorMessage = ['IceImarisConnector can only be used on Windows ', ...
@@ -127,9 +140,9 @@ else
 end
 
 % Set the path to the ImarisServer executable
-if strfind(computer, 'PCWIN')
+if ispc()
     serverExePath = fullfile(imarisPath, 'ImarisServerIce.exe');
-elseif strfind(computer, 'MAC')
+elseif ismac()
     serverExePath = fullfile(imarisPath, 'Contents', 'MacOS', 'ImarisServerIce');
 else
     errorMessage = ['IceImarisConnector can only be used on Windows ', ...
@@ -144,9 +157,9 @@ if ~exist(exePath, 'file')
 end
 
 % Set the path to the ImarisLib library
-if strfind(computer, 'PCWIN')
+if ispc()
     libPath = fullfile(imarisPath, 'XT', 'matlab', 'ImarisLib.jar');
-elseif strfind(computer, 'MAC')
+elseif ismac()
     libPath = fullfile(imarisPath, 'Contents', 'SharedSupport', ...
         'XT', 'matlab', 'ImarisLib.jar');
 else
@@ -157,7 +170,7 @@ end
 
 % Check whether the ImarisLib jar package exists
 if ~exist(libPath, 'file')
-    errorMessage = 'Could not find the Imaris executable.';
+    errorMessage = 'Could not find the ImarisLib jar file.';
     return;
 end
 
@@ -168,4 +181,54 @@ this.mImarisLibPath = libPath;
 
 status = 1;
 
+% In case of multiple Imaris installations, return the most recent
+    function newestVersionDir = findNewestVersion(allDirs)
+        
+        % If found, this will be the (relative) ImarisPath
+        newestVersionDir = [];
+        
+        % Newest version. Initially set to one since valid versions will
+        % be larger, invalid versions might be zero.
+        newestVersion = 1;
+        
+        for i = 1 : numel(allDirs)
+            
+            % Extract version from directory name
+            tokens = regexp(allDirs(i).name, ...
+                '(\d)+\.(\d)+\.+(\d)?', 'tokens');
+            
+            if isempty(tokens) || numel(tokens{1}) ~= 3
+                continue;
+            end
+            
+            % Get the major, minor and patch versions
+            major = str2double(tokens{1}{1});
+            if isnan(major)
+                % Must be defined
+                continue;
+            end
+            
+            minor = str2double(tokens{1}{2});
+            if isnan(minor)
+                % Must be defined
+                continue;
+            end
+            
+            patch = str2double(tokens{1}{3});
+            if isnan(patch)
+                % In case the patch version is not set we assume 0 is meant
+                patch = 0;
+            end
+            
+            % Compute version as integer
+            version = 1e6 * major + 1e4 * minor + 1e2 * patch;
+            
+            % Is it the newest yet?
+            if version > newestVersion
+                newestVersionDir = allDirs(i).name;
+                newestVersion = version;
+            end
+        end
+
+    end
 end

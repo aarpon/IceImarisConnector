@@ -50,8 +50,7 @@ function success = startImaris(this, userControl)
 
 % Imaris only runs on Windows and Mac OS X
 success = 0;
-if isempty(strfind(computer, 'PCWIN')) && ...
-        isempty(strfind(computer, 'MAC'))
+if (~ispc() && ~ismac())
     disp('IceImarisConnector can only work on Windows and Mac OS X.');
     return
 end
@@ -71,7 +70,7 @@ this.mUserControl = userControl;
 % On Mac OS X, make sure that the Imaris Frameworks folder is at the
 % beginning of the dynamic library path to prevent any conflicts with
 % the Qt libraries loaded by MATLAB
-if ~isempty(strfind(computer, 'MAC'))
+if ismac()
     dylPath = getenv('DYLD_LIBRARY_PATH');
     ImarisFrameworksPath = [getenv('IMARISPATH'), filesep, ...
         'Contents', filesep, 'Frameworks'];

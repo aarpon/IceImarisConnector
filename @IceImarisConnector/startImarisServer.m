@@ -48,8 +48,7 @@ errorMessage = '';
 
 % Imaris only runs on Windows and Mac OS X
 success = 0;
-if isempty(strfind(computer, 'PCWIN')) && ...
-        isempty(strfind(computer, 'MAC'))
+if (~ispc() && ~ismac())
     disp('IceImarisConnector can only work on Windows and Mac OS X');
     return
 end
@@ -105,7 +104,7 @@ end
         isRunning = 0;
         
         % The check will be different on Windows and on Mac OS X
-        if strfind(computer, 'PCWIN')
+        if ispc()
             
             [~, result] = system(...
                 'tasklist /NH /FI "IMAGENAME eq ImarisServerIce.exe"');
@@ -114,7 +113,7 @@ end
                 return;
             end
             
-        elseif strfind(computer, 'MAC')
+        elseif ismac()
             
             [~, result] = system('ps aux | grep ImarisServerIce');
             if strfind(result, this.mImarisServerExePath)
