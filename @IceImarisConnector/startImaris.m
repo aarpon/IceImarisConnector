@@ -72,7 +72,7 @@ this.mUserControl = userControl;
 % the Qt libraries loaded by MATLAB
 if ismac()
     dylPath = getenv('DYLD_LIBRARY_PATH');
-    ImarisFrameworksPath = [getenv('IMARISPATH'), filesep, ...
+    ImarisFrameworksPath = [this.mImarisPath, filesep, ...
         'Contents', filesep, 'Frameworks'];
     indx = strfind(dylPath, ImarisFrameworksPath);
     if isempty(indx) || indx ~= 1

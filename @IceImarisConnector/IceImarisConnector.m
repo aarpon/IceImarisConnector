@@ -20,9 +20,11 @@
 %
 %                            conn.startImaris()
 %
-%                        Alternatively, vImarisApplication can be an
-%                        Imaris Application ID (as provided by Imaris)
-%                        or directly an Imaris Application ICE object.
+%                        Alternatively, vImarisApplication can be:
+%
+%                        - an Imaris Application ID as provided by Imaris
+%                        - an IceImarisConnector reference
+%                        - an Imaris Application ICE object.
 %
 %   indexingStart      : (optional, default is 0) either 0 or 1, depending
 %                        on whether you prefer to index arrays in 
@@ -87,6 +89,7 @@ classdef IceImarisConnector < handle
     end
     
     properties (Access = private)
+        mImarisPath;
         mImarisLib;
         mImarisExePath;
         mImarisServerExePath;
@@ -123,13 +126,16 @@ classdef IceImarisConnector < handle
             this.mImarisObjectID = randi(100000);
 
             % Now we check the (optional) input parameter.
-            % We have three cases. If called without parameters, we
-            % just create an IceImarisConnector object that does nothing.
+            % We have three cases. If called without parameters, we just
+            % create an IceImarisConnector object that does nothing.
             % If we get one input parameter, we have to distinguish between
-            % two cases: We either get an ID (as is the case when the 
-            % function is launched from Imaris) and thus we query for 
-            % the application, or directly the object: in this case we 
-            % just assign it to the mImarisApplication property
+            % three cases: 
+            % - we get an Imaris Application ID as provided by Imaris and
+            %      thus we query the Imaris Server for the application
+            % - we get an IceImarisConnector reference and thus we just
+            %      return it
+            % - we get an Imaris Application ICE object (rare) and thus
+            %      we simply assign it to the mImarisApplication property.
             
             if nargin == 0
                 
@@ -149,7 +155,7 @@ classdef IceImarisConnector < handle
                     
                 elseif isa(vImarisApplication, 'Imaris.IApplicationPrxHelper')
                     
-                    % This is an Imaris application object - se store it
+                    % This is an Imaris application object - we store it
                     this.mImarisApplication = vImarisApplication;
                     
                 elseif isscalar(vImarisApplication)
@@ -253,6 +259,9 @@ classdef IceImarisConnector < handle
         % indexingStart
         n = indexingStart(this)
         
+        % info
+        info(this)
+
         % isAlive
         alive = isAlive(this)
         

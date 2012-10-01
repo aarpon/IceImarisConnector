@@ -8,7 +8,7 @@ function [status, errorMessage] = findImaris(this)
 %
 % SYNOPSIS
 %
-%   [status, errorMessage] = imarisPath = conn.findImaris()
+%   [status, errorMessage] = conn.findImaris()
 %
 % INPUT
 %
@@ -51,10 +51,11 @@ status = 0;
 % Initialize the error messgae
 errorMessage = '';
 
-% Try to get the environment variable IMARISPATH
+% Try to get the path from the environment variable IMARISPATH
 imarisPath = getenv('IMARISPATH');
 
 % Set the paths
+this.mImarisPath = '';
 this.mImarisExePath = '';
 this.mImarisServerExePath = '';
 this.mImarisLibPath = '';
@@ -74,43 +75,28 @@ if isempty(imarisPath)
     end
     
     if exist(tmp,'dir')
+        % Pick the directory name with highest version number
+        % Aaron - 09/12. Use highest version number instead of
+        %                latest modification date to choose.
         d = dir(fullfile(tmp,'Imaris*'));
-        % Make sure to ignore the Scene Viewer
-        svi = strfind({d.name}, 'Scene Viewer');
-        d(~cellfun(@isempty, svi)) = [];
-        % Use latest version
-        switch length(d)
-            case 0
-                errorMessage = sprintf(...
-                    ['No Imaris installation found in %s.\n',...
-                    ' Please define the environment variable ', ...
-                    'IMARISPATH.'],...
-                    tmp);
-            case 1
-                imarisPath = fullfile(tmp,d.name);
-            otherwise
-                % Pick the directory name with highest version number
-                % Aaron - 09/12. Use highest version number instead of 
-                %                latest modification date to choose.
-                newestVersionDir = findNewestVersion(d);
-                if isempty(newestVersionDir)
-                    errorMessage = sprintf(...
-                        ['No Imaris installation found in %s.',...
-                        ' Please define an environment variable ', ...
-                        'IMARISPATH'],...
-                        tmp);
-                    imarisPath = [];
-                else
-                    imarisPath = fullfile(tmp, newestVersionDir);
-                end
+        newestVersionDir = findNewestVersion(d);
+        if isempty(newestVersionDir)
+            errorMessage = sprintf(...
+                ['No Imaris installation found in %s.',...
+                ' Please define an environment variable ', ...
+                'IMARISPATH'],...
+                tmp);
+            imarisPath = [];
+        else
+            imarisPath = fullfile(tmp, newestVersionDir);
         end
     else
+        imarisPath = [];
         errorMessage = sprintf(...
             ['No Imaris installation found in %s.',...
             ' Please define an environment variable IMARISPATH'],...
             tmp);
     end
-    
     
     if isempty(imarisPath)
         if isempty(errorMessage)
@@ -127,6 +113,10 @@ if ~exist(imarisPath, 'dir')
         'variable does not point to a valid directory.'];
     return;
 end
+
+% Now store imarisPath and proceed with setting all required executables
+% and libraries
+this.mImarisPath = imarisPath;
 
 % Set the path to the Imaris executable
 if ispc()
@@ -190,6 +180,15 @@ status = 1;
         % Newest version. Initially set to one since valid versions will
         % be larger, invalid versions might be zero.
         newestVersion = 1;
+        
+        % Make sure to ignore the Scene Viewer, the File Converter and 
+        % the 32bit version on 64 bit machines
+        allDirs(~cellfun(@isempty, ....
+            strfind({allDirs.name}, 'ImarisSceneViewer'))) = [];
+        allDirs(~cellfun(@isempty, ....
+            strfind({allDirs.name}, 'FileConverter'))) = [];
+        allDirs(~cellfun(@isempty, ....
+            strfind({allDirs.name}, '32bit'))) = [];
         
         for i = 1 : numel(allDirs)
             
