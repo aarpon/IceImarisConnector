@@ -43,7 +43,7 @@ function info(this)
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 % Display info
-disp(['IceImarisConnector version ', this.getVersion(), ' using:']);
+disp(['IceImarisConnector version ', this.version(), ' using:']);
 disp(['- Imaris path: ', this.mImarisPath]); 
 disp(['- Imaris executable: ', this.mImarisExePath]); 
 disp(['- ImarisServer executable: ', this.mImarisServerExePath]); 
