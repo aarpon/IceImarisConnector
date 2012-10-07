@@ -3,7 +3,7 @@ function selection = getSurpassSelection(this)
 %
 % DESCRIPTION
 % 
-%   This method returns the auto-casted current surpass selection 
+%   This method returns the auto-casted current surpass selection.
 % 
 % SYNOPSIS
 % 

@@ -3,7 +3,7 @@ function derivedType = autocast(this, IDataItem)
 % 
 % DESCRIPTION
 % 
-%   This method casts IDataItems to their derived types
+%   This method casts IDataItems to their derived types.
 % 
 % SYNOPSIS
 % 

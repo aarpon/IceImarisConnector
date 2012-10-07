@@ -3,7 +3,7 @@ function rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 %
 % DESCRIPTION
 %
-%   This method maps an uint32 RGBA scalar to an 1-by-4, (0..1) vector
+%   This method maps an uint32 RGBA scalar to an 1-by-4, (0..1) vector.
 %
 % SYNOPSIS
 %
