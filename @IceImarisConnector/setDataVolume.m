@@ -89,7 +89,7 @@ end
 
 % Check that the size matches
 outSizes = this.getSizes();
-if ndims(stack) == 2
+if ismatrix(stack)
     sizes = [size(stack) 1];
 else
     sizes = size(stack);
