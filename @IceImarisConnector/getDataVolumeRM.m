@@ -7,8 +7,8 @@ function stack = getDataVolumeRM(this, channel, timepoint, iDataset)
 % 
 % SYNOPSIS
 % 
-%   (1) stack = imarisConnector.getDataVolume(channel, timepoint)
-%   (2) stack = imarisConnector.getDataVolume(channel, timepoint, iDataset)
+%   (1) stack = conn.getDataVolumeRM(channel, timepoint)
+%   (2) stack = conn.getDataVolumeRM(channel, timepoint, iDataset)
 % 
 % INPUT
 % 

@@ -7,7 +7,7 @@ function stack = setDataVolumeRM(this, stack, channel, timepoint)
 % 
 % SYNOPSIS
 % 
-%   stack = imarisConnector.setDataVolumeRM(stack, channel, timepoint)
+%   stack = conn.setDataVolumeRM(stack, channel, timepoint)
 % 
 % INPUT
 %
