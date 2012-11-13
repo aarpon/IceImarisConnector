@@ -114,9 +114,6 @@ sudo install_name_tool -change @loader_path/QtCore.framework/Versions/4/QtCore \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtCore.framework/Versions/4/QtCore \
 	@loader_path/QtCore.framework/Versions/4/QtCore48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
-sudo install_name_tool -change @loader_path/QtCore.framework/Versions/4/QtCore \
-	@loader_path/QtCore.framework/Versions/4/QtCore48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtCore.framework/Versions/4/QtCore \
 	@loader_path/QtCore.framework/Versions/4/QtCore48 \
@@ -169,9 +166,6 @@ sudo install_name_tool -change @loader_path/QtDeclarative.framework/Versions/4/Q
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtDeclarative.framework/Versions/4/QtDeclarative \
 	@loader_path/QtDeclarative.framework/Versions/4/QtDeclarative48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
-sudo install_name_tool -change @loader_path/QtDeclarative.framework/Versions/4/QtDeclarative \
-	@loader_path/QtDeclarative.framework/Versions/4/QtDeclarative48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtDeclarative.framework/Versions/4/QtDeclarative \
 	@loader_path/QtDeclarative.framework/Versions/4/QtDeclarative48 \
@@ -224,9 +218,6 @@ sudo install_name_tool -change @loader_path/QtGui.framework/Versions/4/QtGui \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtGui.framework/Versions/4/QtGui \
 	@loader_path/QtGui.framework/Versions/4/QtGui48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
-sudo install_name_tool -change @loader_path/QtGui.framework/Versions/4/QtGui \
-	@loader_path/QtGui.framework/Versions/4/QtGui48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtGui.framework/Versions/4/QtGui \
 	@loader_path/QtGui.framework/Versions/4/QtGui48 \
@@ -277,9 +268,6 @@ sudo install_name_tool -change @loader_path/QtNetwork.framework/Versions/4/QtNet
 sudo install_name_tool -change @loader_path/QtNetwork.framework/Versions/4/QtNetwork \
 	@loader_path/QtNetwork.framework/Versions/4/QtNetwork48 \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
-sudo install_name_tool -change @loader_path/QtNetwork.framework/Versions/4/QtNetwork \
-	@loader_path/QtNetwork.framework/Versions/4/QtNetwork48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
 sudo install_name_tool -change @loader_path/QtNetwork.framework/Versions/4/QtNetwork \
 	@loader_path/QtNetwork.framework/Versions/4/QtNetwork48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
@@ -334,9 +322,6 @@ sudo install_name_tool -change @loader_path/QtOpenGL.framework/Versions/4/QtOpen
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtOpenGL.framework/Versions/4/QtOpenGL \
 	@loader_path/QtOpenGL.framework/Versions/4/QtOpenGL48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
-sudo install_name_tool -change @loader_path/QtOpenGL.framework/Versions/4/QtOpenGL \
-	@loader_path/QtOpenGL.framework/Versions/4/QtOpenGL48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtOpenGL.framework/Versions/4/QtOpenGL \
 	@loader_path/QtOpenGL.framework/Versions/4/QtOpenGL48 \
@@ -387,9 +372,6 @@ sudo install_name_tool -change @loader_path/QtScript.framework/Versions/4/QtScri
 sudo install_name_tool -change @loader_path/QtScript.framework/Versions/4/QtScript \
 	@loader_path/QtScript.framework/Versions/4/QtScript48 \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
-sudo install_name_tool -change @loader_path/QtScript.framework/Versions/4/QtScript \
-	@loader_path/QtScript.framework/Versions/4/QtScript48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
 sudo install_name_tool -change @loader_path/QtScript.framework/Versions/4/QtScript \
 	@loader_path/QtScript.framework/Versions/4/QtScript48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
@@ -444,9 +426,6 @@ sudo install_name_tool -change @loader_path/QtSql.framework/Versions/4/QtSql \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtSql.framework/Versions/4/QtSql \
 	@loader_path/QtSql.framework/Versions/4/QtSql48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
-sudo install_name_tool -change @loader_path/QtSql.framework/Versions/4/QtSql \
-	@loader_path/QtSql.framework/Versions/4/QtSql48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtSql.framework/Versions/4/QtSql \
 	@loader_path/QtSql.framework/Versions/4/QtSql48 \
@@ -497,9 +476,6 @@ sudo install_name_tool -change @loader_path/QtSvg.framework/Versions/4/QtSvg \
 sudo install_name_tool -change @loader_path/QtSvg.framework/Versions/4/QtSvg \
 	@loader_path/QtSvg.framework/Versions/4/QtSvg48 \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
-sudo install_name_tool -change @loader_path/QtSvg.framework/Versions/4/QtSvg \
-	@loader_path/QtSvg.framework/Versions/4/QtSvg48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
 sudo install_name_tool -change @loader_path/QtSvg.framework/Versions/4/QtSvg \
 	@loader_path/QtSvg.framework/Versions/4/QtSvg48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
@@ -554,9 +530,6 @@ sudo install_name_tool -change @loader_path/QtXml.framework/Versions/4/QtXml \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtXml.framework/Versions/4/QtXml \
 	@loader_path/QtXml.framework/Versions/4/QtXml48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
-sudo install_name_tool -change @loader_path/QtXml.framework/Versions/4/QtXml \
-	@loader_path/QtXml.framework/Versions/4/QtXml48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
 sudo install_name_tool -change @loader_path/QtXml.framework/Versions/4/QtXml \
 	@loader_path/QtXml.framework/Versions/4/QtXml48 \
@@ -607,9 +580,6 @@ sudo install_name_tool -change @loader_path/QtXmlPatterns.framework/Versions/4/Q
 sudo install_name_tool -change @loader_path/QtXmlPatterns.framework/Versions/4/QtXmlPatterns \
 	@loader_path/QtXmlPatterns.framework/Versions/4/QtXmlPatterns48 \
 	"${ImarisPath}/Contents/Frameworks/libbpImarisBatchAgent.7.6.dylib"
-sudo install_name_tool -change @loader_path/QtXmlPatterns.framework/Versions/4/QtXmlPatterns \
-	@loader_path/QtXmlPatterns.framework/Versions/4/QtXmlPatterns48 \
-	"${ImarisPath}/Contents/Frameworks/libbpImarisStorage.7.5.dylib"
 sudo install_name_tool -change @loader_path/QtXmlPatterns.framework/Versions/4/QtXmlPatterns \
 	@loader_path/QtXmlPatterns.framework/Versions/4/QtXmlPatterns48 \
 	"${ImarisPath}/Contents/Frameworks/libbpcore.7.6.dylib"
