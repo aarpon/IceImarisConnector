@@ -1,4 +1,4 @@
-function [voxelSizeX voxelSizeY voxelSizeZ] = getVoxelSizes(this)
+function varargout = getVoxelSizes(this)
 % IceImarisConnector:  getVoxelSizes (public method)
 %
 % DESCRIPTION
@@ -47,9 +47,6 @@ function [voxelSizeX voxelSizeY voxelSizeZ] = getVoxelSizes(this)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-% Initialize voxel sizes
-voxelSizeX = 0; voxelSizeY = 0; voxelSizeZ = 0;
-
 % Is Imaris running?
 if this.isAlive() == 0
     return
@@ -79,16 +76,16 @@ vZ = ...
     this.mImarisApplication.GetDataSet().GetSizeZ();
 
 % Return the voxels sizes
-if nargout == 1
+if nargout <= 1
     
     % We return all voxel sizes as one vector in the first output parameter 
-    voxelSizeX = [vX vY vZ];
+    varargout{1} = [vX vY vZ];
     
 else
     
     % Independent voxel sizes
-    voxelSizeX = vX;
-    voxelSizeY = vY;
-    voxelSizeZ = vZ;
+    varargout{1} = vX;
+    varargout{2} = vY;
+    varargout{3} = vZ;
     
 end

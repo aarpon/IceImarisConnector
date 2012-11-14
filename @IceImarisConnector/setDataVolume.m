@@ -7,7 +7,7 @@ function setDataVolume(this, stack, channel, timepoint)
 % 
 % SYNOPSIS
 % 
-%   stack = conn.setDataVolume(stack, channel, timepoint)
+%   conn.setDataVolume(stack, channel, timepoint)
 % 
 % INPUT
 % 
@@ -57,7 +57,7 @@ end
 iDataSet = this.mImarisApplication.GetDataSet();
 
 % Check whether we have some voxels in the dataset
-if iDataSet.GetSizeX() == 0
+if isempty(iDataSet)
     return
 end
 

@@ -1,4 +1,4 @@
-function [sizeX sizeY sizeZ sizeC sizeT] = getSizes(this)
+function varargout = getSizes(this)
 % IceImarisConnector:  getSizes (public method)
 %
 % DESCRIPTION
@@ -62,10 +62,10 @@ if isempty(this.mImarisApplication.GetDataSet())
 end
 
 % Return the sizes
-if nargout == 1
+if nargout <= 1
 
     % We return all sizes as one vector in the first output parameter 
-    sizeX = [
+    varargout{1} = [
         this.mImarisApplication.GetDataSet().GetSizeX(), ...
         this.mImarisApplication.GetDataSet().GetSizeY(), ...
         this.mImarisApplication.GetDataSet().GetSizeZ(), ...
@@ -75,10 +75,10 @@ if nargout == 1
 else
     
     % Independent dimensions
-    sizeX = this.mImarisApplication.GetDataSet().GetSizeX();
-    sizeY = this.mImarisApplication.GetDataSet().GetSizeY();
-    sizeZ = this.mImarisApplication.GetDataSet().GetSizeZ();
-    sizeC = this.mImarisApplication.GetDataSet().GetSizeC();
-    sizeT = this.mImarisApplication.GetDataSet().GetSizeT();
+    varargout{1} = this.mImarisApplication.GetDataSet().GetSizeX();
+    varargout{2} = this.mImarisApplication.GetDataSet().GetSizeY();
+    varargout{3} = this.mImarisApplication.GetDataSet().GetSizeZ();
+    varargout{4} = this.mImarisApplication.GetDataSet().GetSizeC();
+    varargout{5} = this.mImarisApplication.GetDataSet().GetSizeT();
 
 end

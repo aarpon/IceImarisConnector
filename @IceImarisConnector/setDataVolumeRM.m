@@ -7,7 +7,7 @@ function stack = setDataVolumeRM(this, stack, channel, timepoint)
 % 
 % SYNOPSIS
 % 
-%   stack = conn.setDataVolumeRM(stack, channel, timepoint)
+%   conn.setDataVolumeRM(stack, channel, timepoint)
 % 
 % INPUT
 %

@@ -1,4 +1,4 @@
-function [minX maxX minY maxY minZ maxZ] = getExtends(this)
+function varargout = getExtends(this)
 % IceImarisConnector:  getExtends (public method)
 %
 % DESCRIPTION
@@ -63,10 +63,10 @@ if isempty(this.mImarisApplication.GetDataSet())
 end
 
 % Return the extends
-if nargout == 1
+if nargout <= 1
     
     % We return all extends as one vector in the first output parameter 
-    minX = [
+    varargout{1} = [
         this.mImarisApplication.GetDataSet().GetExtendMinX(), ...
         this.mImarisApplication.GetDataSet().GetExtendMaxX(), ...
         this.mImarisApplication.GetDataSet().GetExtendMinY(), ...
@@ -78,11 +78,11 @@ if nargout == 1
 else
     
     % Independent extends
-    minX = this.mImarisApplication.GetDataSet().GetExtendMinX();
-    maxX = this.mImarisApplication.GetDataSet().GetExtendMaxX();
-    minY = this.mImarisApplication.GetDataSet().GetExtendMinY();
-    maxY = this.mImarisApplication.GetDataSet().GetExtendMaxY();
-    minZ = this.mImarisApplication.GetDataSet().GetExtendMinZ();
-    maxZ = this.mImarisApplication.GetDataSet().GetExtendMaxZ();
+    varargout{1} = this.mImarisApplication.GetDataSet().GetExtendMinX();
+    varargout{2} = this.mImarisApplication.GetDataSet().GetExtendMaxX();
+    varargout{3} = this.mImarisApplication.GetDataSet().GetExtendMinY();
+    varargout{4} = this.mImarisApplication.GetDataSet().GetExtendMaxY();
+    varargout{5} = this.mImarisApplication.GetDataSet().GetExtendMinZ();
+    varargout{6} = this.mImarisApplication.GetDataSet().GetExtendMaxZ();
 
 end
