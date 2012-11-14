@@ -92,12 +92,12 @@ if this.isAlive() == 0
 end
 
 % Imaris datatype
-switch datatype
-    case {'uint8', Imaris.tType.eTypeUInt8},
+switch char(datatype)
+    case {'uint8', 'eTypeUInt8'},
         classDataSet = Imaris.tType.eTypeUInt8;
-    case {'uint16', Imaris.tType.eTypeUInt16},
+    case {'uint16', 'eTypeUInt16'},
         classDataSet=Imaris.tType.eTypeUInt16;
-    case {'single', Imaris.tType.eTypeFloat},
+    case {'single', 'eTypeFloat'},
         classDataSet=Imaris.tType.eTypeFloat;
     otherwise,
         error('Bad data type.');
