@@ -300,6 +300,9 @@ classdef IceImarisConnector < handle
         % findImaris
         [imarisPath, errorMessage] = findImaris(this)
         
+        % isOfType
+        b = isOfType(this, object, type)
+        
         % startImarisServer
         [success, errorMessage] = startImarisServer(this)
         

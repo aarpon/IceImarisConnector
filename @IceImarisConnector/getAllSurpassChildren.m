@@ -73,15 +73,6 @@ if ~ismember(recursive, [0 1])
     error('Bad value for input parameter ''recursive''.');
 end
 
-if ~isempty(filter)
-    filterValues = {'Cells', 'ClippingPlane', 'Dataset', 'Filaments', ...
-        'Frame', 'LightSource', 'MeasurementPoints', 'Spots', ...
-        'Surfaces', 'SurpassCamera', 'Volume'};
-    if ~ismember(filter, filterValues)
-        error('Bad value for input parameter ''filter''.');
-    end
-end
-
 % Initialize children
 children = {};
 
@@ -152,7 +143,7 @@ end
                 end
             else
                 currentChild = this.autocast(child);
-                if isOfType(currentChild, filter)
+                if this.isOfType(currentChild, filter)
                     currentChildNumber = currentChildNumber + 1;
                     children{currentChildNumber} = currentChild;
                 end
@@ -160,41 +151,6 @@ end
             
         end
 
-    end
-
-% =========================================================================
-
-    % Check whether the object is of type specified by the filter
-    function b = isOfType(child, filter)
-        
-        % Test the child
-        switch filter
-            case 'Cells',
-                b = this.mImarisApplication.GetFactory().IsCells(child);
-            case 'ClippingPlane',
-                b = this.mImarisApplication.GetFactory().IsClippingPlane(child);
-            case 'Dataset',
-                b = this.mImarisApplication.GetFactory().IsDataset(child);
-            case 'Filaments',
-                b = this.mImarisApplication.GetFactory().IsFilaments(child);
-            case 'Frame',
-                b = this.mImarisApplication.GetFactory().IsFrame(child);
-            case 'LightSource',
-                b = this.mImarisApplication.GetFactory().IsLightSource(child);
-            case 'MeasurementPoints',
-                b = this.mImarisApplication.GetFactory().IsMeasurementPoints(child);
-            case 'Spots',
-                b = this.mImarisApplication.GetFactory().IsSpots(child);
-            case 'Surfaces',
-                b = this.mImarisApplication.GetFactory().IsSurfaces(child);
-            case 'SurpassCamera',
-                b = this.mImarisApplication.GetFactory().IsSurpassCamera(child);
-            case 'Volume',
-                b = this.mImarisApplication.GetFactory().IsVolume(child);
-            otherwise,
-                error('Bad value for ''filter''.');
-        end
-                
     end
 
 end

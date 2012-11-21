@@ -1,21 +1,41 @@
-function selection = getSurpassSelection(this)
+function selection = getSurpassSelection(this, type)
 % IceImarisConnector:  getSurpassSelection (public method)
 %
 % DESCRIPTION
 % 
-%   This method returns the auto-casted current surpass selection 
+%   This method returns the auto-casted current surpass selection. If
+%   the 'type' parameter is specified, the object class is checked
+%   against it and [] is returned instead of the object if the type
+%   does not match.
 % 
 % SYNOPSIS
 % 
-%   selection = conn.getSurpassSelection()
+%   (1) selection = conn.getSurpassSelection()
+%   (2) selection = conn.getSurpassSelection(type)
 % 
 % INPUT
 % 
-%   None
+%   type : (optional) Specify the expected object class. If the selected
+%          object is not of the specified type, the function will return
+%          [] instead. Typs is one of:
+%
+%               'Cells'
+%               'ClippingPlane'
+%               'Dataset'
+%               'Filaments'
+%               'Frame'
+%               'LightSource'
+%               'MeasurementPoints'
+%               'Spots'
+%               'Surfaces'
+%               'SurpassCamera'
+%               'Volume'
 % 
 % OUTPUT
 % 
-%   selection : autocasted, currently selected surpass object
+%   selection : autocasted, currently selected surpass object; if nothing
+%               is selected, or if the object class does not match the
+%               passed type, selection will be [] instead.
 
 % AUTHORS
 %
@@ -50,5 +70,15 @@ end
 
 % Get current selection
 selection = this.autocast(this.mImarisApplication.GetSurpassSelection());
+if isempty(selection)
+    return
+end
+
+% Check type?
+if nargin == 2
+    if ~this.isOfType(selection, type)
+        selection = [];
+    end
+end
 
 end
