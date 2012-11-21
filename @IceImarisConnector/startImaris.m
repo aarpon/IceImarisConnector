@@ -121,7 +121,7 @@ try
             % really catch it...
             this.mImarisLib = ImarisLib();
             vImaris = this.mImarisLib.GetApplication(this.mImarisObjectID);
-        catch ex
+        catch ex %#ok<NASGU>
             % We can't catch the exception...
         end
         if ~isempty(vImaris) 

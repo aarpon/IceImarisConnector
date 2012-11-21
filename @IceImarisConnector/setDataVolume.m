@@ -49,6 +49,14 @@ if nargin ~= 4
     error('3 input parameters expected.');
 end
 
+% Make sure that there is no mismatch with indexingStart
+if channel < 1 && this.mIndexingStart == 1
+    error('Channel cannot be < 1 if indexingStart is 1.');
+end
+if timepoint < 1 && this.mIndexingStart == 1
+    error('Timepoint cannot be < 1 if indexingStart is 1.');
+end
+
 if this.isAlive() == 0
     return
 end
@@ -61,7 +69,7 @@ if isempty(iDataSet)
     return
 end
 
-% convert channel, timepoint, to 0-based indexing
+% Convert channel and timepoint to 0-based indexing
 channel = channel - this.mIndexingStart;
 timepoint = timepoint - this.mIndexingStart;
 

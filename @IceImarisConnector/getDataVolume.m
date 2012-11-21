@@ -1,4 +1,4 @@
-function stack = getDataVolume(this, channel, timepoint, iDataset)
+function stack = getDataVolume(this, channel, timepoint, iDataSet)
 % IceImarisConnector:  getDataVolume (public method)
 % 
 % DESCRIPTION
@@ -8,7 +8,7 @@ function stack = getDataVolume(this, channel, timepoint, iDataset)
 % SYNOPSIS
 % 
 %   (1) stack = conn.getDataVolume(channel, timepoint)
-%   (2) stack = conn.getDataVolume(channel, timepoint, iDataset)
+%   (2) stack = conn.getDataVolume(channel, timepoint, iDataSet)
 % 
 % INPUT
 % 
@@ -61,6 +61,14 @@ if nargin < 3 || nargin > 4
     error('2 or 3 input parameters expected.');
 end
 
+% Make sure that there is no mismatch with indexingStart
+if channel < 1 && this.mIndexingStart == 1
+    error('Channel cannot be < 1 if indexingStart is 1.');
+end
+if timepoint < 1 && this.mIndexingStart == 1
+    error('Timepoint cannot be < 1 if indexingStart is 1.');
+end
+    
 % Initialize stack
 stack = [];
 
@@ -69,21 +77,33 @@ if this.isAlive() == 0
 end
 
 if nargin == 3
-    iDataset = this.mImarisApplication.GetDataSet();
+    iDataSet = this.mImarisApplication.GetDataSet();
 else
     % Is the passed dataset a valid DataSet?
-    if ~this.mImarisApplication.GetFactory().IsDataSet(iDataset)
+    if ~this.mImarisApplication.GetFactory().IsDataSet(iDataSet)
         error('Invalid IDataset object.');
     end
 end
 
 % Check whether we have some voxels in the dataset
-if isempty(iDataset) || iDataset.GetSizeX() == 0
+if isempty(iDataSet) || iDataSet.GetSizeX() == 0
     return
 end
 
+% Convert channel and timepoint to 0-based indexing
+channel = channel - this.mIndexingStart;
+timepoint = timepoint - this.mIndexingStart;
+
+% Check that the requested channel and timepoint exist
+if channel > (iDataSet.GetSizeC() - 1)
+    error('The requested channel index is out of bounds.');
+end
+if timepoint > (iDataSet.GetSizeT() - 1)
+    error('The requested time index is out of bounds.');
+end
+
 % Get the dataset class
-switch char(iDataset.GetType())
+switch char(iDataSet.GetType())
     case 'eTypeUInt8',   datatype = 'uint8';
     case 'eTypeUInt16',  datatype = 'uint16';
     case 'eTypeFloat',   datatype = 'single';
@@ -92,29 +112,24 @@ switch char(iDataset.GetType())
 end
 
 % Allocate memory
-stack = zeros([iDataset.GetSizeX(), iDataset.GetSizeY(), ...
-    iDataset.GetSizeZ()], datatype);
+stack = zeros([iDataSet.GetSizeX(), iDataSet.GetSizeY(), ...
+    iDataSet.GetSizeZ()], datatype);
 
 % Get the stack
-switch char(iDataset.GetType())
+switch char(iDataSet.GetType())
     case 'eTypeUInt8',   
         % Java does not have unsigned ints
-        arr = iDataset.GetDataVolumeAs1DArrayBytes(...
-            channel - this.mIndexingStart, ...
-            timepoint - this.mIndexingStart);
+        arr = iDataSet.GetDataVolumeAs1DArrayBytes(channel, timepoint);
         stack(:) = typecast(arr, 'uint8');
     case 'eTypeUInt16',
         % Java does not have unsigned ints
-        arr = iDataset.GetDataVolumeAs1DArrayShorts(...
-            channel - this.mIndexingStart, ...
-            timepoint - this.mIndexingStart);
+        arr = iDataSet.GetDataVolumeAs1DArrayShorts(channel, timepoint);
         stack(:) = typecast(arr, 'uint16');
     case 'eTypeFloat',
-        stack(:) = iDataset.GetDataVolumeAs1DArrayFloats(...
-            channel - this.mIndexingStart, ...
-            timepoint - this.mIndexingStart);
+        stack(:) = ...
+            iDataSet.GetDataVolumeAs1DArrayFloats(channel, timepoint);
     otherwise,
-        error('Bad value for iDataset.GetType().');
+        error('Bad value for iDataSet.GetType().');
 end
 
 end

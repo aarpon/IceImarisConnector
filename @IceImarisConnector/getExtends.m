@@ -49,9 +49,6 @@ function varargout = getExtends(this)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-% Initialize the output
-minX = 0; maxX = 0; minY = 0; maxY = 0; minZ = 0; maxZ = 0;
-
 % Is Imaris running?
 if this.isAlive() == 0
     return
