@@ -4,6 +4,9 @@ function stack = setDataVolumeRM(this, stack, channel, timepoint)
 % DESCRIPTION
 % 
 %   This method sends the data volume to Imaris in row-major order.
+%   Practically, this means that each plane of a 3D stack from MATLAB
+%   is transposed before it is pushed back into Imaris to maintain the 
+%   same geometry and orientation.
 % 
 % SYNOPSIS
 % 

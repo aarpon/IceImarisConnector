@@ -17,7 +17,7 @@ function selection = getSurpassSelection(this, type)
 % 
 %   type : (optional) Specify the expected object class. If the selected
 %          object is not of the specified type, the function will return
-%          [] instead. Typs is one of:
+%          [] instead. Type is one of:
 %
 %               'Cells'
 %               'ClippingPlane'

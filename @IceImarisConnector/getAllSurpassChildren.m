@@ -5,7 +5,8 @@ function children = getAllSurpassChildren(this, recursive, filter)
 % 
 %   This method returns all children of the surpass scene recursively.
 %   Folders (i.e. IDataContainer objects) may be scanned (recursively)
-%   but are not returned.
+%   but are not returned. Optionally, the returned objects may be filtered
+%   by type.
 % 
 % SYNOPSIS
 % 
@@ -14,7 +15,7 @@ function children = getAllSurpassChildren(this, recursive, filter)
 % INPUT
 % 
 %   recursive: {0 | 1} If 1, folders will be scanned recursively;
-%                        if 0, only objects at root level will be inspected.
+%                      if 0, only objects at root level will be inspected.
 %
 %   filter   : (optional) Filters the children by type. Only the 
 %                         surpass children of the specified type are

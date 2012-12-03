@@ -20,12 +20,12 @@ function varargout = mapPositionsUnitsToVoxels(this, varargin)
 % 
 % INPUT
 % 
-%   Synopses 1 and 3:
+%   [1] and [3]:
 % 
 %   uPos  : (N x 3) matrix containing the X, Y, Z coordinates in dataset
 %           units
 % 
-%   Synopses 2 and 4:
+%   [2] and [4]:
 % 
 %   uPosX : (M x 1) vector containing the X coordinates in dataset units
 %   uPosY : (N x 1) vector containing the Y coordinates in dataset units
@@ -36,17 +36,17 @@ function varargout = mapPositionsUnitsToVoxels(this, varargin)
 % 
 % OUTPUT
 % 
-%   Synopses 1 and 2:
+%   [1] and [2]:
 % 
 %   pos   : (N x 3) matrix containing the X, Y, Z voxel indices
 % 
-%   Synopses 3 and 4:
+%   [3] and [4]:
 % 
-%  posX  : (M x 1) vector containing the X voxel indices
-%  posY  : (N x 1) vector containing the Y voxel indices
-%  posZ  : (O x 1) vector containing the Z voxel indices
+%   posX  : (M x 1) vector containing the X voxel indices
+%   posY  : (N x 1) vector containing the Y voxel indices
+%   posZ  : (O x 1) vector containing the Z voxel indices
 % 
-%  M, N, a O will most likely be the same.
+%   M, N, a O will most likely be the same.
 
 % AUTHORS
 %

@@ -4,6 +4,9 @@ function stack = getDataVolumeRM(this, channel, timepoint, iDataset)
 % DESCRIPTION
 % 
 %   This method returns the data volume from Imaris in row-major order.
+%   Practically, this means that each plane of a 3D stack is transposed
+%   and will display in a plot in MATLAB with the same geometry and
+%   orientation as in Imaris.
 % 
 % SYNOPSIS
 % 

@@ -16,7 +16,8 @@ function type = getMatlabDatatype(this)
 % 
 % OUTPUT
 % 
-%   type : datatype of the dataset as a MATLAB type
+%   type : datatype of the dataset as a MATLAB type: one of one of 'uint8',
+%          'uint16', 'single', or '' if the type is unknown in Imaris.
 
 % AUTHORS
 %

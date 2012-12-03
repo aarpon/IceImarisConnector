@@ -27,7 +27,7 @@ function stack = getDataVolume(this, channel, timepoint, iDataSet)
 %
 %   This function gets the volume as a 1D array and reshapes it in place.
 %   It also performs a type cast to take care of the signed/unsigned int
-%   mismatch when transferring data over Ice. The spped-up compared to
+%   mismatch when transferring data over Ice. The speed-up compared to
 %   calling the ImarisXT GetDataVolumeBytes() or GetDataVolumeWords() 
 %   methods is of the order of 20x.
 
