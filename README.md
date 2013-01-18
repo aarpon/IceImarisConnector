@@ -55,3 +55,10 @@ non-standard location, you have to tell **IceImarisConnector** where to find
 the desired installation. You can do that by setting the environment variable
 IMARISPATH to point to the Imaris root folder (e.g.
 `C:\Program Files\Bitlane\Imaris 7.5.2`).
+
+MATLAB path setting
+-------------------
+Alternatively, you could set MATLAB's path to include the **IceImarisConnector**
+directory. To do this, open MATLAB and use the `Set Path...` entry in the `File`
+menu. In the dialog, click on `Add Folder...` and add the path to your git clone
+(e.g. `C:\Devel\IceImarisConnector`).
