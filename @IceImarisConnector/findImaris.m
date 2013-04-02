@@ -86,76 +86,60 @@ if isempty(imarisPath)
                 ' Please define an environment variable ', ...
                 'IMARISPATH'],...
                 tmp);
-            imarisPath = [];
+            return;
         else
             imarisPath = fullfile(tmp, newestVersionDir);
         end
     else
-        imarisPath = [];
         errorMessage = sprintf(...
             ['No Imaris installation found in %s.',...
             ' Please define an environment variable IMARISPATH'],...
             tmp);
-    end
-    
-    if isempty(imarisPath)
-        if isempty(errorMessage)
-            errorMessage = ...
-                'Please define the environment variable IMARISPATH.';
-        end
         return;
     end
-end
+    
+else
 
-% Does it point to an existing directory?
-if ~exist(imarisPath, 'dir')
-    errorMessage = ['The content of the IMARISPATH environment ', ...
-        'variable does not point to a valid directory.'];
-    return;
+    % Does it point to an existing directory?
+    if ~exist(imarisPath, 'dir')
+        errorMessage = ['The content of the IMARISPATH environment ', ...
+            'variable does not point to a valid directory.'];
+        return;
+   end
+    
 end
 
 % Now store imarisPath and proceed with setting all required executables
 % and libraries
 this.mImarisPath = imarisPath;
 
-% Set the path to the Imaris executable
+% Set the path to the Imaris and ImarisServer executables, and to the 
+% ImarisLib library
 if ispc()
     exePath = fullfile(imarisPath, 'Imaris.exe');
-elseif ismac()
-    exePath = fullfile(imarisPath, 'Contents', 'MacOS', 'Imaris');
-else
-    errorMessage = ['IceImarisConnector can only be used on Windows ', ...
-        'and Mac OS X.'];
-    return
-end
-
-% Set the path to the ImarisServer executable
-if ispc()
     serverExePath = fullfile(imarisPath, 'ImarisServerIce.exe');
-elseif ismac()
-    serverExePath = fullfile(imarisPath, 'Contents', 'MacOS', 'ImarisServerIce');
-else
-    errorMessage = ['IceImarisConnector can only be used on Windows ', ...
-        'and Mac OS X.'];
-    return
-end
-
-% Check whether the exectable Imaris file exists
-if ~exist(exePath, 'file')
-    errorMessage = 'Could not find the Imaris executable.';
-    return;
-end
-
-% Set the path to the ImarisLib library
-if ispc()
     libPath = fullfile(imarisPath, 'XT', 'matlab', 'ImarisLib.jar');
 elseif ismac()
+    exePath = fullfile(imarisPath, 'Contents', 'MacOS', 'Imaris');
+    serverExePath = fullfile(imarisPath, 'Contents', 'MacOS', 'ImarisServerIce');
     libPath = fullfile(imarisPath, 'Contents', 'SharedSupport', ...
         'XT', 'matlab', 'ImarisLib.jar');
 else
     errorMessage = ['IceImarisConnector can only be used on Windows ', ...
         'and Mac OS X.'];
     return
+end
+
+% Check whether the executable Imaris file exists
+if ~exist(exePath, 'file')
+    errorMessage = 'Could not find the Imaris executable.';
+    return;
+end
+
+% Check whether the executable ImarisServer file exists
+if ~exist(serverExePath, 'file')
+    errorMessage = 'Could not find the ImarisServer executable.';
+    return;
 end
 
 % Check whether the ImarisLib jar package exists

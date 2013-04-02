@@ -32,7 +32,7 @@
 %                        
 %                        All indexing in ICE starts at 0; in contrast, 
 %                        MATLAB indexing starts at 1.
-%                        To keep consistentcy, indexing in IceImarisConnector
+%                        To keep consistency, indexing in IceImarisConnector
 %                        is also 0-based (i.e. indexingStart defaults to 0).
 %                        This means that to get the data volume for the 
 %                        first channel and first time point of the dataset
@@ -107,7 +107,7 @@ classdef IceImarisConnector < handle
 
             % First, we prepare everything we need
             % Store the Imaris and ImarisLib path
-            [success, errorMessage] = findImaris(this);
+            [success, errorMessage] = this.findImaris;
             if ~success
                 error(errorMessage);
             end
@@ -196,7 +196,7 @@ classdef IceImarisConnector < handle
             
         end
        
-        % Desctructor
+        % Destructor
         function delete(this)
         
             if this.mUserControl == 1
