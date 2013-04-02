@@ -153,7 +153,8 @@ classdef IceImarisConnector < handle
                     % IceImarisConnector object as input parameter
                     this = vImarisApplication;
                     
-                elseif isa(vImarisApplication, 'Imaris.IApplicationPrxHelper')
+                elseif isa(vImarisApplication, ...
+                        'Imaris.IApplicationPrxHelper')
                     
                     % This is an Imaris application object - we store it
                     this.mImarisApplication = vImarisApplication;
@@ -217,8 +218,9 @@ classdef IceImarisConnector < handle
         % autocast
         castObject = autocast(this, obj)
                     
-        % createAndSetSpots(this, coords, timeIndices, radii, name, color)
-        createAndSetSpots(this, coords, timeIndices, radii, name, color)
+        % createAndSetSpots
+        createAndSetSpots(this, coords, timeIndices, radii, name, ...
+            color, container)
         
         % close Imaris
         success = closeImaris(this, varargin)
@@ -229,6 +231,14 @@ classdef IceImarisConnector < handle
         % getAllSurpassChildren
         children = getAllSurpassChildren(this, recursive, filter)
 
+        % getDataSubVolume
+        stack = getDataSubVolume(this, x0, y0, z0, channel, timepoint, ...
+            dX, dY, dZ, iDataSet)
+        
+        % getDataSubVolumeRM
+        stack = getDataSubVolumeRM(this, x0, y0, z0, channel, ...
+            timepoint, dX, dY, dZ, iDataSet)
+        
         % getDataVolume
         stack = getDataVolume(this, channel, timepoint, iDataset)
 

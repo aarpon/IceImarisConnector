@@ -1,4 +1,4 @@
-function stack = getDataVolumeRM(this, x0, y0, z0, channel, timepoint, dX, dY, dZ, iDataSet)
+function stack = getDataSubVolumeRM(this, x0, y0, z0, channel, timepoint, dX, dY, dZ, iDataSet)
 % Imaris Connector:  getDataSubVolumeRM (public method)
 % 
 % DESCRIPTION

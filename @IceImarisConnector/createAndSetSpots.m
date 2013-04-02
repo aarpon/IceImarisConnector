@@ -1,4 +1,4 @@
-function createAndSetSpots(this, coords, timeIndices, radii, name, color)
+function createAndSetSpots(this, coords, timeIndices, radii, name, color, container)
 % Imaris Connector:  createAndSetSpots (public method)
 % 
 % DESCRIPTION
@@ -7,7 +7,8 @@ function createAndSetSpots(this, coords, timeIndices, radii, name, color)
 % 
 % SYNOPSIS
 % 
-%   createAndSetSpots(coords, timeIndices, radii, name, color)
+%   (1) createAndSetSpots(coords, timeIndices, radii, name, color)
+%   (2) createAndSetSpots(coords, timeIndices, radii, name, color, container)
 % 
 % INPUT
 % 
@@ -16,6 +17,10 @@ function createAndSetSpots(this, coords, timeIndices, radii, name, color)
 %   radii       : (nx1) vector of spots radii
 %   name        : name of the Spots object
 %   color       : (1x4), (0..1) vector of [R G B A] values
+%   container   : (optional) if not set, the Spots object is added at the
+%                 root of the Surpass Scene.
+%                 Please note that it is the user's responsibility to
+%                 attach the container to the surpass scene!
 % 
 % OUTPUT
 % 
@@ -43,9 +48,19 @@ function createAndSetSpots(this, coords, timeIndices, radii, name, color)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if nargin ~= 6
+if nargin < 6 || nargin > 7
     % The this parameter is hidden
-    error('5 input parameters expected.');
+    error('5 or 6 input parameters expected.');
+end
+
+% Container
+if nargin == 6
+    container = this.mImarisApplication.GetSurpassScene();
+else
+    % Make sure the container is valid
+    if ~this.mImarisApplication.GetFactory().IsDataContainer(container)
+        error('Invalid data container!');
+    end
 end
 
 % Check the coordinates
@@ -98,7 +113,7 @@ newSpots.SetName(name);
 % Set the color
 newSpots.SetColorRGBA(this.mapRgbaVectorToScalar(color));
 
-% Add the new Spots object to the surpass scene
-this.mImarisApplication.GetSurpassScene().AddChild(newSpots, -1);
+% Add the new Spots object to the container
+container.AddChild(newSpots, -1);
 
 end
