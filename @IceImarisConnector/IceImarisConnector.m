@@ -294,15 +294,20 @@ classdef IceImarisConnector < handle
 
     methods (Access = public, Static = true)
         
-        % version
-        v = version(this);
-
+        % isSupportedPlatform
+        function b = isSupportedPlatform()
+            b = ismac() || ispc();
+        end
+		
         % mapRgbaScalarToVector
         rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 
         % mapRgbaVectorToScalar
         rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
-               
+		
+        % version
+        v = version();
+
     end
     
     methods (Access = private)

@@ -50,7 +50,7 @@ function success = startImaris(this, userControl)
 
 % Imaris only runs on Windows and Mac OS X
 success = 0;
-if (~ispc() && ~ismac())
+if ~this.isSupportedPlatform()
     disp('IceImarisConnector can only work on Windows and Mac OS X.');
     return
 end
