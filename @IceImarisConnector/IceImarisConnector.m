@@ -284,9 +284,6 @@ classdef IceImarisConnector < handle
         % setDataVolume
         setDataVolume(this, stack, channel, timepoint)
         
-        % setSpots
-        setSpots(this, spotStruct)
-       
         % startImaris
         success = startImaris(this, userControl)
 
@@ -295,9 +292,7 @@ classdef IceImarisConnector < handle
     methods (Access = public, Static = true)
         
         % isSupportedPlatform
-        function b = isSupportedPlatform()
-            b = ismac() || ispc();
-        end
+        b = isSupportedPlatform()
 		
         % mapRgbaScalarToVector
         rgbaVector = mapRgbaScalarToVector(rgbaScalar)
