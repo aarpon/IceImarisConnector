@@ -1,27 +1,49 @@
-function stack = getDataVolume(this, channel, timepoint, iDataSet)
-% IceImarisConnector:  getDataVolume (public method)
+function stack = getDataSubVolume(this, x0, y0, z0, channel, timepoint, dX, dY, dZ, iDataSet)
+% IceImarisConnector:  getDataSubVolume (public method)
 % 
 % DESCRIPTION
 % 
-%   This method returns the data volume from Imaris.
+%   This method returns a data subvolume from Imaris.
 % 
 % SYNOPSIS
 % 
-%   (1) stack = conn.getDataVolume(channel, timepoint)
-%   (2) stack = conn.getDataVolume(channel, timepoint, iDataSet)
+%   (1) stack = conn.getDataSubVolume(x0, y0, z0, channel, timepoint, ...
+%                                         dX, dY, dZ)
+%   (2) stack = conn.getDataSubVolume(x0, y0, z0, channel, timepoint, ...
+%                                         dX, dY, dZ, iDataSet)
 % 
 % INPUT
 % 
-%   channel  : channel number (0/1-based depending on indexing start)
-%   timepoint: timepoint number (0/1-based depending on indexing start)
-%   dataset  : (optional) get the data volume from the passed IDataset
+%   x0, y0, z0: coordinates (0/1-based depending on indexing start) of
+%               the top-left vertex of the subvolume to be returned.
+%   channel   : channel number (0/1-based depending on indexing start)
+%   timepoint : timepoint number (0/1-based depending on indexing start)
+%   dX, dY, dZ: extension of the subvolume to be returned
+%   dataset   : (optional) get the data volume from the passed IDataset
 %               object instead of current one; if omitted, current dataset
 %               (i.e. this.mImarisApplication.GetDataSet()) will be used.
 %               This is useful for instance when masking channels.
 % 
+%   Coordinates and extension are in voxels and not in units!
+%
+%   The following holds:
+%
+%   if conn.indexingStart == 0:
+%   
+%       subA = conn.getDataSubVolume(x0, y0, z0, 0, 0, dX, dY, dZ);
+%       A = conn.getDataVolume(0, 0);
+%       A(x0 + 1 : x0 + dX, y0 + 1 : y0 + dY, z0 + 1 : z0 + dZ) === subA 
+%       
+%
+%   if conn.indexingStart == 1:
+%   
+%       subA = conn.getDataSubVolume(x0, y0, z0, 1, 1, dX, dY, dZ);
+%       A = conn.getDataVolume(1, 1);
+%       A(x0 : x0 + dX - 1, y0 : y0 + dY - 1, z0 : z0 + dZ - 1) === subA 
+%
 % OUTPUT
 % 
-%   stack    : data volume (3D matrix)
+%   stack    : data subvolume (3D matrix)
 %
 % REMARK
 %
@@ -34,7 +56,6 @@ function stack = getDataVolume(this, channel, timepoint, iDataSet)
 % AUTHORS
 %
 % Author: Aaron Ponti
-% Contributor: Jonas Dorn
 
 % LICENSE
 %
@@ -56,9 +77,9 @@ function stack = getDataVolume(this, channel, timepoint, iDataSet)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if nargin < 3 || nargin > 4
+if nargin < 9 || nargin > 10
     % The this parameter is hidden
-    error('2 or 3 input parameters expected.');
+    error('8 or 9 input parameters expected.');
 end
 
 % Make sure that there is no mismatch with indexingStart
@@ -76,12 +97,12 @@ if this.isAlive() == 0
     return
 end
 
-if nargin == 3
+if nargin == 9
     iDataSet = this.mImarisApplication.GetDataSet();
 else
     % Is the passed dataset a valid DataSet?
     if ~this.mImarisApplication.GetFactory().IsDataSet(iDataSet)
-        error('Invalid IDataSet object.');
+        error('Invalid IDataset object.');
     end
 end
 
@@ -90,9 +111,12 @@ if isempty(iDataSet) || iDataSet.GetSizeX() == 0
     return
 end
 
-% Convert channel and timepoint to 0-based indexing
-channel = channel - this.mIndexingStart;
-timepoint = timepoint - this.mIndexingStart;
+% Convert all dimensions to 0-based indexing
+x0 = uint32(x0 - this.mIndexingStart);
+y0 = uint32(y0 - this.mIndexingStart);
+z0 = uint32(z0 - this.mIndexingStart);
+channel = uint32(channel - this.mIndexingStart);
+timepoint = uint32(timepoint - this.mIndexingStart);
 
 % Check that the requested channel and timepoint exist
 if channel > (iDataSet.GetSizeC() - 1)
@@ -112,22 +136,22 @@ switch char(iDataSet.GetType())
 end
 
 % Allocate memory
-stack = zeros([iDataSet.GetSizeX(), iDataSet.GetSizeY(), ...
-    iDataSet.GetSizeZ()], datatype);
+stack = zeros([dX, dY, dZ], datatype);
 
 % Get the stack
 switch char(iDataSet.GetType())
     case 'eTypeUInt8',   
         % Java does not have unsigned ints
-        arr = iDataSet.GetDataVolumeAs1DArrayBytes(channel, timepoint);
+        arr = iDataSet.GetDataSubVolumeAs1DArrayBytes(x0, y0, z0, ...
+            channel, timepoint, dX, dY, dZ);
         stack(:) = typecast(arr, 'uint8');
     case 'eTypeUInt16',
         % Java does not have unsigned ints
-        arr = iDataSet.GetDataVolumeAs1DArrayShorts(channel, timepoint);
+        arr = iDataSet.GetDataSubVolumeAs1DArrayShorts(channel, timepoint);
         stack(:) = typecast(arr, 'uint16');
     case 'eTypeFloat',
         stack(:) = ...
-            iDataSet.GetDataVolumeAs1DArrayFloats(channel, timepoint);
+            iDataSet.GetDataSubVolumeAs1DArrayFloats(channel, timepoint);
     otherwise,
         error('Bad value for iDataSet.GetType().');
 end

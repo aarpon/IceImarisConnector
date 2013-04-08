@@ -1,13 +1,14 @@
-function v = version()
+function b = isSupportedPlatform()
 % IceImarisConnector:  version (public static method)
 % 
 % DESCRIPTION
 % 
-% This method returns the IceImarisConnector version number.
+% This method checks whether IceImarisConnector is running on a supported
+% platform.
 % 
 % SYNOPSIS
 % 
-%   v = IceImarisConnector.version()
+%   b = IceImarisConnector.isSupportedPlatform()
 % 
 % INPUT
 % 
@@ -15,7 +16,8 @@ function v = version()
 % 
 % OUTPUT
 % 
-%   v : IceImarisConnector version
+%   b : 1 if IceImarisConnector is running on a supported platform, 0
+%       otherwise
 
 % AUTHORS
 %
@@ -41,6 +43,6 @@ function v = version()
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-v = '0.3.0';
+b = ismac() || ispc();
 
 end

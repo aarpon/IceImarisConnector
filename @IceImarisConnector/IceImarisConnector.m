@@ -32,7 +32,7 @@
 %                        
 %                        All indexing in ICE starts at 0; in contrast, 
 %                        MATLAB indexing starts at 1.
-%                        To keep consistentcy, indexing in IceImarisConnector
+%                        To keep consistency, indexing in IceImarisConnector
 %                        is also 0-based (i.e. indexingStart defaults to 0).
 %                        This means that to get the data volume for the 
 %                        first channel and first time point of the dataset
@@ -107,7 +107,7 @@ classdef IceImarisConnector < handle
 
             % First, we prepare everything we need
             % Store the Imaris and ImarisLib path
-            [success, errorMessage] = findImaris(this);
+            [success, errorMessage] = this.findImaris;
             if ~success
                 error(errorMessage);
             end
@@ -153,7 +153,8 @@ classdef IceImarisConnector < handle
                     % IceImarisConnector object as input parameter
                     this = vImarisApplication;
                     
-                elseif isa(vImarisApplication, 'Imaris.IApplicationPrxHelper')
+                elseif isa(vImarisApplication, ...
+                        'Imaris.IApplicationPrxHelper')
                     
                     % This is an Imaris application object - we store it
                     this.mImarisApplication = vImarisApplication;
@@ -196,7 +197,7 @@ classdef IceImarisConnector < handle
             
         end
        
-        % Desctructor
+        % Destructor
         function delete(this)
         
             if this.mUserControl == 1
@@ -217,8 +218,9 @@ classdef IceImarisConnector < handle
         % autocast
         castObject = autocast(this, obj)
                     
-        % createAndSetSpots(this, coords, timeIndices, radii, name, color)
-        createAndSetSpots(this, coords, timeIndices, radii, name, color)
+        % createAndSetSpots
+        createAndSetSpots(this, coords, timeIndices, radii, name, ...
+            color, container)
         
         % close Imaris
         success = closeImaris(this, varargin)
@@ -229,6 +231,14 @@ classdef IceImarisConnector < handle
         % getAllSurpassChildren
         children = getAllSurpassChildren(this, recursive, filter)
 
+        % getDataSubVolume
+        stack = getDataSubVolume(this, x0, y0, z0, channel, timepoint, ...
+            dX, dY, dZ, iDataSet)
+        
+        % getDataSubVolumeRM
+        stack = getDataSubVolumeRM(this, x0, y0, z0, channel, ...
+            timepoint, dX, dY, dZ, iDataSet)
+        
         % getDataVolume
         stack = getDataVolume(this, channel, timepoint, iDataset)
 
@@ -274,9 +284,6 @@ classdef IceImarisConnector < handle
         % setDataVolume
         setDataVolume(this, stack, channel, timepoint)
         
-        % setSpots
-        setSpots(this, spotStruct)
-       
         % startImaris
         success = startImaris(this, userControl)
 
@@ -284,15 +291,18 @@ classdef IceImarisConnector < handle
 
     methods (Access = public, Static = true)
         
-        % version
-        v = version(this);
-
+        % isSupportedPlatform
+        b = isSupportedPlatform()
+		
         % mapRgbaScalarToVector
         rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 
         % mapRgbaVectorToScalar
         rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
-               
+		
+        % version
+        v = version();
+
     end
     
     methods (Access = private)
