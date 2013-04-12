@@ -257,9 +257,6 @@ classdef IceImarisConnector < handle
         % getSizes
         [sizeX sizeY sizeZ sizeC sizeT] = getSizes(this)
         
-        % getSurpassScene
-        vSurpassScene = getSurpassScene(this, varargin)
-
         % getVoxelSizes
         [voxelSizesX, voxelSizesY, voxelSizesZ] = getVoxelSizes(this)
         
