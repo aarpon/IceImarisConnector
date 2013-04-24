@@ -147,11 +147,13 @@ switch char(iDataSet.GetType())
         stack(:) = typecast(arr, 'uint8');
     case 'eTypeUInt16',
         % Java does not have unsigned ints
-        arr = iDataSet.GetDataSubVolumeAs1DArrayShorts(channel, timepoint);
+        arr = iDataSet.GetDataSubVolumeAs1DArrayShorts(x0, y0, z0, ...
+            channel, timepoint, dX, dY, dZ);
         stack(:) = typecast(arr, 'uint16');
     case 'eTypeFloat',
         stack(:) = ...
-            iDataSet.GetDataSubVolumeAs1DArrayFloats(channel, timepoint);
+            iDataSet.GetDataSubVolumeAs1DArrayFloats(x0, y0, z0, ...
+            channel, timepoint, dX, dY, dZ);
     otherwise,
         error('Bad value for iDataSet.GetType().');
 end
