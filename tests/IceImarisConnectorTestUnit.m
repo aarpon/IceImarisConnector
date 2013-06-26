@@ -54,7 +54,7 @@ assert(abs(extends(4) - EXTENDS(4)) < 1e-4)
 assert(abs(extends(5) - EXTENDS(5)) < 1e-4)
 assert(abs(extends(6) - EXTENDS(6)) < 1e-4)
 
-[minX maxX minY maxY minZ maxZ] = conn.getExtends();
+[minX, maxX, minY, maxY, minZ, maxZ] = conn.getExtends();
 assert(abs(minX - EXTENDS(1)) < 1e-4)
 assert(abs(maxX - EXTENDS(2)) < 1e-4)
 assert(abs(minY - EXTENDS(3)) < 1e-4)
@@ -71,7 +71,7 @@ assert(abs(voxelSize(1) - VOXELSIZE(1)) < 1e-4)
 assert(abs(voxelSize(2) - VOXELSIZE(2)) < 1e-4)
 assert(abs(voxelSize(3) - VOXELSIZE(3)) < 1e-4)
 
-[vX vY vZ] = conn.getVoxelSizes();
+[vX, vY, vZ] = conn.getVoxelSizes();
 assert(abs(vX - VOXELSIZE(1)) < 1e-4)
 assert(abs(vY - VOXELSIZE(2)) < 1e-4)
 assert(abs(vZ - VOXELSIZE(3)) < 1e-4)
@@ -90,7 +90,7 @@ DATASETSIZE = [255 254 69 1 1];
 sizes = conn.getSizes();
 assert(all(sizes == DATASETSIZE) == 1);
 
-[sizeX sizeY sizeZ sizeC sizeT] = conn.getSizes();
+[sizeX, sizeY, sizeZ, sizeC, sizeT] = conn.getSizes();
 assert(all([sizeX sizeY sizeZ sizeC sizeT] == DATASETSIZE) == 1);
 
 % Get a spot object, its coordinates and check the unit conversions
