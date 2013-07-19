@@ -1,5 +1,5 @@
-function createDataset(this, datatype, sizeX, sizeY, sizeZ, sizeC, ...
-    sizeT, voxelSizeX, voxelSizeY, voxelSizeZ, deltaTime)
+function iDataset = createDataset(this, datatype, sizeX, sizeY, ...
+     sizeZ, sizeC, sizeT, voxelSizeX, voxelSizeY, voxelSizeZ, deltaTime)
 % IceImarisConnector:  createDataset (public method)
 % 
 % DESCRIPTION
@@ -88,6 +88,7 @@ end
 
 % Check inputs
 if this.isAlive() == 0
+    iDataset = [];
     return
 end
 
@@ -104,21 +105,21 @@ switch char(datatype)
 end
 
 % Create the dataset
-imarisDataset = this.mImarisApplication.GetFactory().CreateDataSet();
-imarisDataset.Create(classDataSet, sizeX, sizeY, sizeZ, sizeC, sizeT);
+iDataset = this.mImarisApplication.GetFactory().CreateDataSet();
+iDataset.Create(classDataSet, sizeX, sizeY, sizeZ, sizeC, sizeT);
 
 % Apply the spatial calibration
-imarisDataset.SetExtendMinX(0);
-imarisDataset.SetExtendMinY(0);
-imarisDataset.SetExtendMinZ(0);
-imarisDataset.SetExtendMaxX(sizeX * voxelSizeX);
-imarisDataset.SetExtendMaxY(sizeY * voxelSizeY);
-imarisDataset.SetExtendMaxZ(sizeZ * voxelSizeZ);
+iDataset.SetExtendMinX(0);
+iDataset.SetExtendMinY(0);
+iDataset.SetExtendMinZ(0);
+iDataset.SetExtendMaxX(sizeX * voxelSizeX);
+iDataset.SetExtendMaxY(sizeY * voxelSizeY);
+iDataset.SetExtendMaxZ(sizeZ * voxelSizeZ);
 
 % Apply the temporal calibration
-imarisDataset.SetTimePointsDelta(deltaTime);
+iDataset.SetTimePointsDelta(deltaTime);
 
 % Set the dataset in Imaris
-this.mImarisApplication.SetDataSet(imarisDataset);
+this.mImarisApplication.SetDataSet(iDataset);
 
 end

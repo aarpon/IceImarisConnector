@@ -208,9 +208,9 @@ assert(isa(stack, type) == 1);
 
 % Check the sizes
 disp('Check the data volume size...');
-assert(size(stack, 1) == DATASETSIZE(1) == 1);
-assert(size(stack, 2) == DATASETSIZE(2) == 1);
-assert(size(stack, 3) == DATASETSIZE(3) == 1);
+assert(size(stack, 1) == DATASETSIZE(1));
+assert(size(stack, 2) == DATASETSIZE(2));
+assert(size(stack, 3) == DATASETSIZE(3));
 
 % Get the data volume by explicitly passing an iDataSet object
 % =========================================================================
@@ -406,10 +406,13 @@ assert(conn.mImarisApplication.GetDataSet().GetTimePointsDelta() == 0.1);
 % Check transfering volume data
 % =========================================================================
 disp('Check two-way data volume transfer...');
-data(:, :, 1) = [ 1 2 3; 4 5 6 ];
-data(:, :, 2) = [ 7 8 9; 10 11 12];
+data = zeros(255, 255, 2);
+[X, Y] = meshgrid(1 : 255, 1 : 255);
+data(:, :, 1) = X;
+data(:, :, 2) = Y;
+data = data(2 : end, :, :);
 data = uint8(data);
-conn.createDataset('uint8', 3, 2, 2, 1, 1);
+conn.createDataset('uint8', 255, 254, 2, 1, 1);
 conn.setDataVolumeRM(data, 0, 0);
 dataOut = conn.getDataVolumeRM(0, 0);
 r = data == dataOut;
