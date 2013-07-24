@@ -2,13 +2,36 @@
 %
 % This is a unit test test the ICE Imaris connector
 %
-% Copyright Aaron Ponti, 2011 - 2012. All rights reserved
+% Copyright Aaron Ponti, 2011 - 2013. All rights reserved
 function IceImarisConnectorTestUnit
 
 % ImarisConnector version
 % =========================================================================
 disp(['Testing IceImarisConnector version ', ...
     IceImarisConnector.version()]);
+
+% Instantiate IceImarisConnector object without parameters
+% =========================================================================
+disp('Instantiate IceImarisConnector conn1 object without parameters...');
+conn1 = IceImarisConnector();
+conn1.display();
+conn1.info();
+
+% Instantiate IceImarisConnector object with existing instance as parameter
+% =========================================================================
+disp(['Instantiate IceImarisConnector object conn2 with existing ', ...
+    'instance conn1 as parameter...']);
+conn2 = IceImarisConnector(conn1);
+
+% Check that conn1 and conn2 are the same object
+% =========================================================================
+disp('Check that conn1 and conn2 are the same object...');
+assert(conn1 == conn2);
+
+% Delete the objects
+% =========================================================================
+clear 'conn1'
+clear 'conn2'
 
 % Create an ImarisConnector object
 % =========================================================================
@@ -108,7 +131,7 @@ spot = child{ 1 };
 assert(ismethod(spot, 'GetPositionsXYZ'));
 
 % Get the coordinates
-pos = spot.GetPositionsXYZ;
+pos = spot.GetPositionsXYZ();
 
 % These are the expected spot coordinates
 disp('Check spot coordinates and conversions units<->pixels...');
@@ -374,6 +397,15 @@ conn = IceImarisConnector([], 0);
 % =========================================================================
 disp('Start Imaris...');
 assert(conn.startImaris == 1)
+
+% Send a data volume that will force creation of a compatible dataset
+% =========================================================================
+disp('Send volume (force dataset creation)...');
+stack          = [ 1,  2,  3;  4,  5,  6];
+stack(:, :, 2) = [ 7,  8,  9; 10, 11, 12];
+stack(:, :, 3) = [13, 14, 15; 16, 17, 18];
+stack = cast(stack, 'uint16');
+conn.setDataVolume(stack, 0, 0)
 
 % Create a dataset
 % =========================================================================
