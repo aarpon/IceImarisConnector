@@ -274,6 +274,13 @@ assert(all(all(subStack(:, :, 2) == (stack(77 : 86, 112 : 121, 39)))));
 assert(all(all(subStackRM(:, :, 1) == (stackRM(112 : 121, 77 : 86, 38)))));
 assert(all(all(subStackRM(:, :, 2) == (stackRM(112 : 121, 77 : 86, 39)))));
 
+% Check the boundaries
+% =========================================================================
+disp('Check subvolume boundaries...');
+subVolume = conn.getDataSubVolume(0, 0, 0, 0, 0, 255, 254, 69);
+subVolumeRM = conn.getDataSubVolumeRM(0, 0, 0, 0, 0, 255, 254, 69);
+assert(all(all(subVolume(:, :, 31) == subVolumeRM(:, :, 31)')));
+
 % Get the rotation matrix from the camera angle
 % =========================================================================
 disp('Get the rotation matrix from the camera angle...');
@@ -381,6 +388,13 @@ assert(all(all(subStackRMIndx1(:, :, 1) == ...
     (stackRMIndx1(111 : 120, 76 : 85, 37)))));
 assert(all(all(subStackRMIndx1(:, :, 2) == ...
     (stackRMIndx1(111 : 120, 76 : 85, 38)))));
+
+% Check the boundaries
+% =========================================================================
+disp('Check subvolume boundaries...');
+subVolume = conn.getDataSubVolume(1, 1, 1, 1, 1, 255, 254, 69);
+subVolumeRM = conn.getDataSubVolumeRM(1, 1, 1, 1, 1, 255, 254, 69);
+assert(all(all(subVolume(:, :, 31) == subVolumeRM(:, :, 31)')));
 
 % Close imaris
 % =========================================================================
