@@ -81,15 +81,7 @@ if nargin < 9 || nargin > 10
     % The this parameter is hidden
     error('8 or 9 input parameters expected.');
 end
-
-% Make sure that there is no mismatch with indexingStart
-if channel < 1 && this.mIndexingStart == 1
-    error('Channel cannot be < 1 if indexingStart is 1.');
-end
-if timepoint < 1 && this.mIndexingStart == 1
-    error('Timepoint cannot be < 1 if indexingStart is 1.');
-end
-    
+ 
 % Initialize stack
 stack = [];
 
@@ -112,18 +104,47 @@ if isempty(iDataSet) || iDataSet.GetSizeX() == 0
 end
 
 % Convert all dimensions to 0-based indexing
-x0 = uint32(x0 - this.mIndexingStart);
-y0 = uint32(y0 - this.mIndexingStart);
-z0 = uint32(z0 - this.mIndexingStart);
-channel = uint32(channel - this.mIndexingStart);
-timepoint = uint32(timepoint - this.mIndexingStart);
-
-% Check that the requested channel and timepoint exist
-if channel > (iDataSet.GetSizeC() - 1)
-    error('The requested channel index is out of bounds.');
+x0 = x0 - this.mIndexingStart;
+if x0 < 0 || x0 > iDataSet.GetSizeX() - 1
+   error('The requested starting position x0 is out of bounds.');
 end
-if timepoint > (iDataSet.GetSizeT() - 1)
-    error('The requested time index is out of bounds.');
+x0 = uint32(x0);
+
+y0 = y0 - this.mIndexingStart;
+if y0 < 0 || y0 > iDataSet.GetSizeY() - 1
+   error('The requested starting position y0 is out of bounds.');
+end
+y0 = uint32(y0);
+
+z0 = z0 - this.mIndexingStart;
+if z0 < 0 || z0 > iDataSet.GetSizeZ() - 1
+   error('The requested starting position z0 is out of bounds.');
+end
+z0 = uint32(z0);
+
+channel = channel - this.mIndexingStart;
+if channel < 0 || channel > iDataSet.GetSizeC() - 1
+   error('The requested channel index is out of bounds.');
+end
+channel = uint32(channel);
+
+timepoint = timepoint - this.mIndexingStart;
+if timepoint < 0 || timepoint > iDataSet.GetSizeT() - 1
+   error('The requested timepoint index is out of bounds.');
+end
+timepoint = uint32(timepoint);
+
+% Check that we are within bounds
+if x0 + dX > iDataSet.GetSizeX()
+    error('The requested x range dimension is out of bounds.');
+end
+
+if y0 + dY > iDataSet.GetSizeY()
+    error('The requested x range dimension is out of bounds.');
+end
+
+if z0 + dZ > iDataSet.GetSizeZ()
+    error('The requested x range dimension is out of bounds.');
 end
 
 % Get the dataset class
