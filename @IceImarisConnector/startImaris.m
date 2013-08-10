@@ -18,7 +18,8 @@ function success = startImaris(this, userControl)
 %                 Imaris when the client is closed: if userControl is 
 %                 true (1), Imaris terminates when the IceImarisConnector
 %                 object (conn) is deleted. If is it set to false (0), 
-%                 Imaris stays open after the client is closed.
+%                 Imaris stays open after the IceImarisConnector object 
+%                 (conn) is deleted.
 %
 % OUTPUT
 % 

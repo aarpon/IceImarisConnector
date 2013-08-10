@@ -7,8 +7,8 @@ function varargout = getExtends(this)
 % 
 % SYNOPSIS
 % 
-%   [1]                         extends = conn.getExtends()
-%   [2] [minX maxX minY maxY minZ maxZ] = conn.getExtends()
+%   [1]                              extends = conn.getExtends()
+%   [2] [minX, maxX, minY, maxY, minZ, maxZ] = conn.getExtends()
 % 
 % INPUT
 % 

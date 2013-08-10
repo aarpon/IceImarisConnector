@@ -7,8 +7,8 @@ function varargout = getSizes(this)
 % 
 % SYNOPSIS
 % 
-%   [1]                           sizes = conn.getSizes()
-%   [2] [sizeX sizeY sizeZ sizeC sizeT] = conn.getSizes()
+%   [1]                               sizes = conn.getSizes()
+%   [2] [sizeX, sizeY, sizeZ, sizeC, sizeT] = conn.getSizes()
 % 
 % INPUT
 % 

@@ -8,9 +8,9 @@ function iDataset = createDataset(this, datatype, sizeX, sizeY, ...
 % 
 % SYNOPSIS
 %
-%   (1) createDataset(datatype, sizeX, sizeY, sizeZ, sizeC, sizeT)
-%   (2) createDataset(datatype, sizeX, sizeY, sizeZ, sizeC, sizeT, ...
-%                     voxelSizeX, voxelsSizeY, voxelSizeZ, deltaTime)
+%   (1) iDataset = createDataset(datatype, sizeX, sizeY, sizeZ, sizeC, sizeT)
+%   (2) iDataset = createDataset(datatype, sizeX, sizeY, sizeZ, sizeC, sizeT, ...
+%                                voxelSizeX, voxelsSizeY, voxelSizeZ, deltaTime)
 % 
 % INPUT
 % 
@@ -29,7 +29,7 @@ function iDataset = createDataset(this, datatype, sizeX, sizeY, ...
 % 
 % OUTPUT
 % 
-%   none
+%   iDataset  : created DataSet
 %
 % EXAMPLE
 %
