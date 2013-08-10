@@ -7,7 +7,7 @@ function display(this)
 %
 % SYNOPSIS
 %
-%   conn.display
+%   conn.display()
 %
 % INPUT
 %
