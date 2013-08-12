@@ -41,7 +41,7 @@ conn = IceImarisConnector;
 % Start Imaris
 % =========================================================================
 disp('Start Imaris...');
-assert(conn.startImaris == 1)
+assert(conn.startImaris() == 1)
 
 % Test that the connection is valid
 disp('Get version...');
@@ -63,7 +63,7 @@ conn.mImarisApplication.FileOpen(filename, '');
 % Check that there is something loaded
 % =========================================================================
 disp('Test that the file was loaded...');
-assert(conn.mImarisApplication.GetDataSet.GetSizeX > 0)
+assert(conn.mImarisApplication.GetDataSet.GetSizeX() > 0)
 
 % Check the extends
 % =========================================================================
@@ -176,7 +176,7 @@ assert(isempty(conn.getSurpassSelection('Surfaces')));
 % Test creating and adding new spots
 % =========================================================================
 disp('Test creation of new spots...');
-vSpotsData = spot.Get;
+vSpotsData = spot.Get();
 coords = vSpotsData.mPositionsXYZ + 1.00;
 timeIndices = vSpotsData.mIndicesT;
 radii = vSpotsData.mRadii;
@@ -320,7 +320,7 @@ for i = 1 : size(clr, 1)
     % Get the RGBA color
     current = conn.mapRgbaScalarToVector(spots.GetColorRGBA());
     
-    % Compare (rounding erros allowed)
+    % Compare (rounding errors allowed)
     assert(abs(all(clr(i, :) - current)) < 1e-2);
 
 end
@@ -339,7 +339,7 @@ conn = IceImarisConnector([], 1);
 % Start Imaris
 % =========================================================================
 disp('Start Imaris...');
-assert(conn.startImaris == 1)
+assert(conn.startImaris() == 1)
 
 % Check the starting index
 % =========================================================================
@@ -399,7 +399,7 @@ assert(all(all(subVolume(:, :, 31) == subVolumeRM(:, :, 31)')));
 % Close imaris
 % =========================================================================
 disp('Close Imaris...');
-assert(conn.closeImaris == 1)
+assert(conn.closeImaris() == 1)
 
 % Create an ImarisConnector object with starting index 0
 % =========================================================================
@@ -410,7 +410,7 @@ conn = IceImarisConnector([], 0);
 % Start Imaris
 % =========================================================================
 disp('Start Imaris...');
-assert(conn.startImaris == 1)
+assert(conn.startImaris() == 1)
 
 % Send a data volume that will force creation of a compatible dataset
 % =========================================================================
