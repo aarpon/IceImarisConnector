@@ -96,7 +96,7 @@ classdef IceImarisConnector < handle
         mImarisLibPath;
         mImarisObjectID;
         mIndexingStart = 0; % default is zero-based
-        mUserControl;
+        mUserControl = 0;   % default is zero
     end
     
     % Methods

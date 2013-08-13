@@ -58,7 +58,7 @@ end
 
 % Check and if needed set the optional parameter userControl
 if nargin == 1
-    userControl = false;
+    userControl = 0;
 end
 
 if ~ismember(userControl, [0 1])
@@ -85,7 +85,7 @@ end
 
 % If an Imaris instance is open, we close it -- no questions asked
 if this.isAlive() == 1
-    this.closeImaris();
+    this.closeImaris(1);
 end
 
 % Now we open a new one
