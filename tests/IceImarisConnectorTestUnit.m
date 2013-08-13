@@ -176,10 +176,10 @@ assert(isempty(conn.getSurpassSelection('Surfaces')));
 % Test creating and adding new spots
 % =========================================================================
 disp('Test creation of new spots...');
-vSpotsData = spot.Get;
-coords = vSpotsData.mPositionsXYZ + 1.00;
-timeIndices = vSpotsData.mIndicesT;
-radii = vSpotsData.mRadii;
+spotsData = spot.Get;
+coords = spotsData.mPositionsXYZ + 1.00;
+timeIndices = spotsData.mIndicesT;
+radii = spotsData.mRadii;
 conn.createAndSetSpots(coords, timeIndices, radii, 'Test', rand(1, 4));
 spots = conn.getAllSurpassChildren(0, 'Spots');
 assert(numel(spots) == 2);
