@@ -36,7 +36,7 @@ clear 'conn2'
 % Create an ImarisConnector object
 % =========================================================================
 disp('Create an IceImarisConnector object...');
-conn = IceImarisConnector;
+conn = IceImarisConnector();
 
 % Start Imaris
 % =========================================================================

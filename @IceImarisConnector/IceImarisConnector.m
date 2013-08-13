@@ -204,7 +204,8 @@ classdef IceImarisConnector < handle
         
             if this.mUserControl == 1
                 if ~isempty(this.mImarisApplication)
-                    this.closeImaris();
+                    % Force close
+                    this.closeImaris(1);
                 end
             end
 
