@@ -7,11 +7,11 @@
 %
 % SYNOPSIS
 %
-%   conn = IceImarisConnector(vImarisApplication, indexingStart)
+%   conn = IceImarisConnector(imarisApplication, indexingStart)
 %
 % INPUT
 %
-%   vImarisApplication : (optional) if omitted (or set to []), an 
+%   imarisApplication : (optional) if omitted (or set to []), an 
 %                        IceImarisConnector object is created that is 
 %                        not connected to any Imaris instance.
 %
@@ -20,7 +20,7 @@
 %
 %                            conn.startImaris()
 %
-%                        Alternatively, vImarisApplication can be:
+%                        Alternatively, imarisApplication can be:
 %
 %                        - an Imaris Application ID as provided by Imaris
 %                        - an IceImarisConnector reference
@@ -96,14 +96,14 @@ classdef IceImarisConnector < handle
         mImarisLibPath;
         mImarisObjectID;
         mIndexingStart = 0; % default is zero-based
-        mUserControl;
+        mUserControl = 0;   % default is zero
     end
     
     % Methods
     methods
         
         % Constructor
-        function this = IceImarisConnector(vImarisApplication, indexingStart)
+        function this = IceImarisConnector(imarisApplication, indexingStart)
 
             % First, we prepare everything we need
             % Store the Imaris and ImarisLib path
@@ -126,7 +126,7 @@ classdef IceImarisConnector < handle
             this.mImarisObjectID = randi(100000);
 
             % Now we check the (optional) input parameter.
-            % We have three cases. If called without parameters, we just
+            % If the constructor is called without parameters, we just
             % create an IceImarisConnector object that does nothing.
             % If we get one input parameter, we have to distinguish between
             % three cases: 
@@ -141,25 +141,26 @@ classdef IceImarisConnector < handle
                 
                 % We already did everything
                 return
+
             end
                 
-            if nargin > 0 && ~isempty(vImarisApplication)
+            if nargin > 0 && ~isempty(imarisApplication)
                 
-                if isa(vImarisApplication, 'IceImarisConnector')
+                if isa(imarisApplication, 'IceImarisConnector')
                     
                     % If the input parameter is an IceImarisConnector
                     % object we return the reference. This way, an
                     % XTension class can take a reference to an 
                     % IceImarisConnector object as input parameter
-                    this = vImarisApplication;
+                    this = imarisApplication;
                     
-                elseif isa(vImarisApplication, ...
+                elseif isa(imarisApplication, ...
                         'Imaris.IApplicationPrxHelper')
                     
                     % This is an Imaris application object - we store it
-                    this.mImarisApplication = vImarisApplication;
+                    this.mImarisApplication = imarisApplication;
                     
-                elseif isscalar(vImarisApplication)
+                elseif isscalar(imarisApplication)
 
                     % Check if the application is registered
                     server = this.mImarisLib.GetServer();
@@ -168,12 +169,12 @@ classdef IceImarisConnector < handle
                         error('There are no registered Imaris applications.');
                     end
                     
-                    if server.GetObjectID(vImarisApplication) == -1
+                    if server.GetObjectID(imarisApplication) == -1
                         error('Invalid Imaris application ID.');
                     end
 
                     this.mImarisApplication = ...
-                        this.mImarisLib.GetApplication(vImarisApplication);
+                        this.mImarisLib.GetApplication(imarisApplication);
                 
                 else
                 
@@ -181,6 +182,7 @@ classdef IceImarisConnector < handle
                         'Application ID.']);
    
                 end
+                
             end
             
             if nargin > 1 && ~isempty(indexingStart)
@@ -202,7 +204,8 @@ classdef IceImarisConnector < handle
         
             if this.mUserControl == 1
                 if ~isempty(this.mImarisApplication)
-                    this.closeImaris();
+                    % Force close
+                    this.closeImaris(1);
                 end
             end
 
@@ -219,8 +222,8 @@ classdef IceImarisConnector < handle
         castObject = autocast(this, obj)
                     
         % createAndSetSpots
-        createAndSetSpots(this, coords, timeIndices, radii, name, ...
-            color, container)
+        newSpots = createAndSetSpots(this, coords, timeIndices, radii, ...
+            name, color, container)
         
         % close Imaris
         success = closeImaris(this, varargin)
@@ -246,7 +249,7 @@ classdef IceImarisConnector < handle
         stack = getDataVolumeRM(this, channel, timepoint, iDataset)
         
         % getExtends
-        [minX maxX minY maxY minZ maxZ] = getExtends(this)
+        [minX, maxX, minY, maxY, minZ, maxZ] = getExtends(this)
 
         % getImarisVersionAsInteger
         version = getImarisVersionAsInteger(this)
@@ -255,7 +258,7 @@ classdef IceImarisConnector < handle
         type = getMatlabDatatype(this)
         
         % getSizes
-        [sizeX sizeY sizeZ sizeC sizeT] = getSizes(this)
+        [sizeX, sizeY, sizeZ, sizeC, sizeT] = getSizes(this)
         
         % getVoxelSizes
         [voxelSizesX, voxelSizesY, voxelSizesZ] = getVoxelSizes(this)

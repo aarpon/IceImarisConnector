@@ -7,8 +7,8 @@ function varargout = getVoxelSizes(this)
 % 
 % SYNOPSIS
 %
-%   [1]                         voxelSizes = conn.getVoxelSizes()
-%   [2] [voxelSizeX voxelSizeY voxelSizeZ] = conn.getVoxelSizes()   
+%   (1)                         voxelSizes = conn.getVoxelSizes()
+%   (2) [voxelSizeX voxelSizeY voxelSizeZ] = conn.getVoxelSizes()   
 % 
 % INPUT
 % 
@@ -16,9 +16,9 @@ function varargout = getVoxelSizes(this)
 % 
 % OUTPUT
 %
-%   [1] voxelSizes : vector of voxel sizes, [voxelSizeX voxelSizeY voxelSizeZ]  
+%   (1) voxelSizes : vector of voxel sizes, [voxelSizeX voxelSizeY voxelSizeZ]  
 % 
-%   [2] voxelSizeX : voxel size in X direction
+%   (2) voxelSizeX : voxel size in X direction
 %       voxelSizeY : voxel size in Y direction
 %       voxelSizeZ : voxel size in Z direction
 %

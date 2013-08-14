@@ -18,7 +18,8 @@ function success = startImaris(this, userControl)
 %                 Imaris when the client is closed: if userControl is 
 %                 true (1), Imaris terminates when the IceImarisConnector
 %                 object (conn) is deleted. If is it set to false (0), 
-%                 Imaris stays open after the client is closed.
+%                 Imaris stays open after the IceImarisConnector object 
+%                 (conn) is deleted.
 %
 % OUTPUT
 % 
@@ -57,7 +58,7 @@ end
 
 % Check and if needed set the optional parameter userControl
 if nargin == 1
-    userControl = false;
+    userControl = 0;
 end
 
 if ~ismember(userControl, [0 1])
@@ -84,7 +85,7 @@ end
 
 % If an Imaris instance is open, we close it -- no questions asked
 if this.isAlive() == 1
-    this.closeImaris();
+    this.closeImaris(1);
 end
 
 % Now we open a new one

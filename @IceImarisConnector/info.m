@@ -17,6 +17,10 @@ function info(this)
 % OUTPUT
 %
 %   None
+%
+% REMARK
+%
+% A summary of the object properties is output to console.
 
 % AUTHORS
 %

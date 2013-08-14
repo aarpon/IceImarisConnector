@@ -7,8 +7,8 @@ function varargout = getExtends(this)
 % 
 % SYNOPSIS
 % 
-%   [1]                         extends = conn.getExtends()
-%   [2] [minX maxX minY maxY minZ maxZ] = conn.getExtends()
+%   (1)                              extends = conn.getExtends()
+%   (2) [minX, maxX, minY, maxY, minZ, maxZ] = conn.getExtends()
 % 
 % INPUT
 % 
@@ -16,9 +16,9 @@ function varargout = getExtends(this)
 % 
 % OUTPUT
 % 
-%   [1] extends : vector of extends, [minX maxX minY maxY minZ maxZ]
+%   (1) extends : vector of extends, [minX maxX minY maxY minZ maxZ]
 % 
-%   [2] minX : minimum dataset extend in X direction
+%   (2) minX : minimum dataset extend in X direction
 %       maxX : maximum dataset extend in X direction
 %       minY : minimum dataset extend in Y direction
 %       maxY : maximum dataset extend in Y direction

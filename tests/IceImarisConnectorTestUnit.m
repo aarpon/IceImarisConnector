@@ -2,7 +2,7 @@
 %
 % This is a unit test test the ICE Imaris connector
 %
-% Copyright Aaron Ponti, 2011 - 2012. All rights reserved
+% Copyright Aaron Ponti, 2011 - 2013. All rights reserved
 function IceImarisConnectorTestUnit
 
 % ImarisConnector version
@@ -10,15 +10,38 @@ function IceImarisConnectorTestUnit
 disp(['Testing IceImarisConnector version ', ...
     IceImarisConnector.version()]);
 
+% Instantiate IceImarisConnector object without parameters
+% =========================================================================
+disp('Instantiate IceImarisConnector conn1 object without parameters...');
+conn1 = IceImarisConnector();
+conn1.display();
+conn1.info();
+
+% Instantiate IceImarisConnector object with existing instance as parameter
+% =========================================================================
+disp(['Instantiate IceImarisConnector object conn2 with existing ', ...
+    'instance conn1 as parameter...']);
+conn2 = IceImarisConnector(conn1);
+
+% Check that conn1 and conn2 are the same object
+% =========================================================================
+disp('Check that conn1 and conn2 are the same object...');
+assert(conn1 == conn2);
+
+% Delete the objects
+% =========================================================================
+clear 'conn1'
+clear 'conn2'
+
 % Create an ImarisConnector object
 % =========================================================================
 disp('Create an IceImarisConnector object...');
-conn = IceImarisConnector;
+conn = IceImarisConnector();
 
 % Start Imaris
 % =========================================================================
 disp('Start Imaris...');
-assert(conn.startImaris == 1)
+assert(conn.startImaris() == 1)
 
 % Test that the connection is valid
 disp('Get version...');
@@ -40,7 +63,7 @@ conn.mImarisApplication.FileOpen(filename, '');
 % Check that there is something loaded
 % =========================================================================
 disp('Test that the file was loaded...');
-assert(conn.mImarisApplication.GetDataSet.GetSizeX > 0)
+assert(conn.mImarisApplication.GetDataSet.GetSizeX() > 0)
 
 % Check the extends
 % =========================================================================
@@ -54,7 +77,7 @@ assert(abs(extends(4) - EXTENDS(4)) < 1e-4)
 assert(abs(extends(5) - EXTENDS(5)) < 1e-4)
 assert(abs(extends(6) - EXTENDS(6)) < 1e-4)
 
-[minX maxX minY maxY minZ maxZ] = conn.getExtends();
+[minX, maxX, minY, maxY, minZ, maxZ] = conn.getExtends();
 assert(abs(minX - EXTENDS(1)) < 1e-4)
 assert(abs(maxX - EXTENDS(2)) < 1e-4)
 assert(abs(minY - EXTENDS(3)) < 1e-4)
@@ -71,7 +94,7 @@ assert(abs(voxelSize(1) - VOXELSIZE(1)) < 1e-4)
 assert(abs(voxelSize(2) - VOXELSIZE(2)) < 1e-4)
 assert(abs(voxelSize(3) - VOXELSIZE(3)) < 1e-4)
 
-[vX vY vZ] = conn.getVoxelSizes();
+[vX, vY, vZ] = conn.getVoxelSizes();
 assert(abs(vX - VOXELSIZE(1)) < 1e-4)
 assert(abs(vY - VOXELSIZE(2)) < 1e-4)
 assert(abs(vZ - VOXELSIZE(3)) < 1e-4)
@@ -90,7 +113,7 @@ DATASETSIZE = [255 254 69 1 1];
 sizes = conn.getSizes();
 assert(all(sizes == DATASETSIZE) == 1);
 
-[sizeX sizeY sizeZ sizeC sizeT] = conn.getSizes();
+[sizeX, sizeY, sizeZ, sizeC, sizeT] = conn.getSizes();
 assert(all([sizeX sizeY sizeZ sizeC sizeT] == DATASETSIZE) == 1);
 
 % Get a spot object, its coordinates and check the unit conversions
@@ -108,7 +131,7 @@ spot = child{ 1 };
 assert(ismethod(spot, 'GetPositionsXYZ'));
 
 % Get the coordinates
-pos = spot.GetPositionsXYZ;
+pos = spot.GetPositionsXYZ();
 
 % These are the expected spot coordinates
 disp('Check spot coordinates and conversions units<->pixels...');
@@ -153,10 +176,10 @@ assert(isempty(conn.getSurpassSelection('Surfaces')));
 % Test creating and adding new spots
 % =========================================================================
 disp('Test creation of new spots...');
-vSpotsData = spot.Get;
-coords = vSpotsData.mPositionsXYZ + 1.00;
-timeIndices = vSpotsData.mIndicesT;
-radii = vSpotsData.mRadii;
+spotsData = spot.Get;
+coords = spotsData.mPositionsXYZ + 1.00;
+timeIndices = spotsData.mIndicesT;
+radii = spotsData.mRadii;
 conn.createAndSetSpots(coords, timeIndices, radii, 'Test', rand(1, 4));
 spots = conn.getAllSurpassChildren(0, 'Spots');
 assert(numel(spots) == 2);
@@ -208,9 +231,9 @@ assert(isa(stack, type) == 1);
 
 % Check the sizes
 disp('Check the data volume size...');
-assert(size(stack, 1) == DATASETSIZE(1) == 1);
-assert(size(stack, 2) == DATASETSIZE(2) == 1);
-assert(size(stack, 3) == DATASETSIZE(3) == 1);
+assert(size(stack, 1) == DATASETSIZE(1));
+assert(size(stack, 2) == DATASETSIZE(2));
+assert(size(stack, 3) == DATASETSIZE(3));
 
 % Get the data volume by explicitly passing an iDataSet object
 % =========================================================================
@@ -251,6 +274,13 @@ assert(all(all(subStack(:, :, 2) == (stack(77 : 86, 112 : 121, 39)))));
 assert(all(all(subStackRM(:, :, 1) == (stackRM(112 : 121, 77 : 86, 38)))));
 assert(all(all(subStackRM(:, :, 2) == (stackRM(112 : 121, 77 : 86, 39)))));
 
+% Check the boundaries
+% =========================================================================
+disp('Check subvolume boundaries...');
+subVolume = conn.getDataSubVolume(0, 0, 0, 0, 0, 255, 254, 69);
+subVolumeRM = conn.getDataSubVolumeRM(0, 0, 0, 0, 0, 255, 254, 69);
+assert(all(all(subVolume(:, :, 31) == subVolumeRM(:, :, 31)')));
+
 % Get the rotation matrix from the camera angle
 % =========================================================================
 disp('Get the rotation matrix from the camera angle...');
@@ -290,7 +320,7 @@ for i = 1 : size(clr, 1)
     % Get the RGBA color
     current = conn.mapRgbaScalarToVector(spots.GetColorRGBA());
     
-    % Compare (rounding erros allowed)
+    % Compare (rounding errors allowed)
     assert(abs(all(clr(i, :) - current)) < 1e-2);
 
 end
@@ -309,7 +339,7 @@ conn = IceImarisConnector([], 1);
 % Start Imaris
 % =========================================================================
 disp('Start Imaris...');
-assert(conn.startImaris == 1)
+assert(conn.startImaris() == 1)
 
 % Check the starting index
 % =========================================================================
@@ -359,10 +389,17 @@ assert(all(all(subStackRMIndx1(:, :, 1) == ...
 assert(all(all(subStackRMIndx1(:, :, 2) == ...
     (stackRMIndx1(111 : 120, 76 : 85, 38)))));
 
+% Check the boundaries
+% =========================================================================
+disp('Check subvolume boundaries...');
+subVolume = conn.getDataSubVolume(1, 1, 1, 1, 1, 255, 254, 69);
+subVolumeRM = conn.getDataSubVolumeRM(1, 1, 1, 1, 1, 255, 254, 69);
+assert(all(all(subVolume(:, :, 31) == subVolumeRM(:, :, 31)')));
+
 % Close imaris
 % =========================================================================
 disp('Close Imaris...');
-assert(conn.closeImaris == 1)
+assert(conn.closeImaris() == 1)
 
 % Create an ImarisConnector object with starting index 0
 % =========================================================================
@@ -373,7 +410,16 @@ conn = IceImarisConnector([], 0);
 % Start Imaris
 % =========================================================================
 disp('Start Imaris...');
-assert(conn.startImaris == 1)
+assert(conn.startImaris() == 1)
+
+% Send a data volume that will force creation of a compatible dataset
+% =========================================================================
+disp('Send volume (force dataset creation)...');
+stack          = [ 1,  2,  3;  4,  5,  6];
+stack(:, :, 2) = [ 7,  8,  9; 10, 11, 12];
+stack(:, :, 3) = [13, 14, 15; 16, 17, 18];
+stack = cast(stack, 'uint16');
+conn.setDataVolume(stack, 0, 0)
 
 % Create a dataset
 % =========================================================================
@@ -406,10 +452,13 @@ assert(conn.mImarisApplication.GetDataSet().GetTimePointsDelta() == 0.1);
 % Check transfering volume data
 % =========================================================================
 disp('Check two-way data volume transfer...');
-data(:, :, 1) = [ 1 2 3; 4 5 6 ];
-data(:, :, 2) = [ 7 8 9; 10 11 12];
+data = zeros(255, 255, 2);
+[X, Y] = meshgrid(1 : 255, 1 : 255);
+data(:, :, 1) = X;
+data(:, :, 2) = Y;
+data = data(2 : end, :, :);
 data = uint8(data);
-conn.createDataset('uint8', 3, 2, 2, 1, 1);
+conn.createDataset('uint8', 255, 254, 2, 1, 1);
 conn.setDataVolumeRM(data, 0, 0);
 dataOut = conn.getDataVolumeRM(0, 0);
 r = data == dataOut;

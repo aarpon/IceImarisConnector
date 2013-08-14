@@ -9,7 +9,8 @@ function success = closeImaris(this, quiet)
 %
 % SYNOPSIS
 %
-%   success = conn.closeImaris()
+%   (1) success = conn.closeImaris()
+%   (2) success = conn.closeImaris(quiet)
 %
 % INPUT
 %

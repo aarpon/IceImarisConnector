@@ -20,12 +20,12 @@ function varargout = mapPositionsVoxelsToUnits(this, varargin)
 % 
 % INPUT
 % 
-%   [1] and [3]:
+%   (1) and (3):
 % 
 %   vPos  : (N x 3) matrix containing the X, Y, Z unit coordinates
 %            mapped onto a voxel grid
 % 
-%   [2] and [4]:
+%   (2) and (4):
 % 
 %   vPosX : (M x 1) vector containing the X coordinates mapped onto a
 %           voxel grid
@@ -39,12 +39,12 @@ function varargout = mapPositionsVoxelsToUnits(this, varargin)
 % 
 % OUTPUT
 % 
-%   [1] and [2]:
+%   (1) and (2):
 % 
 %   pos   : (N x 3) matrix containing the X, Y, Z coordinates in
 %           dataset units
 % 
-%   [3] and [4]:
+%   (3) and (4):
 % 
 %   posX  : (M x 1) vector containing the X coordinates in dataset units
 %   posY  : (N x 1) vector containing the Y coordinates in dataset units

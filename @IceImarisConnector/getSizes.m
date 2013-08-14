@@ -7,8 +7,8 @@ function varargout = getSizes(this)
 % 
 % SYNOPSIS
 % 
-%   [1]                           sizes = conn.getSizes()
-%   [2] [sizeX sizeY sizeZ sizeC sizeT] = conn.getSizes()
+%   (1)                               sizes = conn.getSizes()
+%   (2) [sizeX, sizeY, sizeZ, sizeC, sizeT] = conn.getSizes()
 % 
 % INPUT
 % 
@@ -16,9 +16,9 @@ function varargout = getSizes(this)
 % 
 % OUTPUT
 %
-%   [1] sizes : vector of sizes, [sizeX sizeY sizeZ sizeC sizeT]  
+%   (1) sizes : vector of sizes, [sizeX sizeY sizeZ sizeC sizeT]  
 % 
-%   [2] sizeX : dataset size X
+%   (2) sizeX : dataset size X
 %       sizeY : dataset size Y
 %       sizeZ : number of planes
 %       sizeC : number of channels

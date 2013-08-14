@@ -1,4 +1,4 @@
-function stack = setDataVolumeRM(this, stack, channel, timepoint)
+function setDataVolumeRM(this, stack, channel, timepoint)
 % Imaris Connector:  setDataVolumeRM (public method)
 % 
 % DESCRIPTION
@@ -20,7 +20,13 @@ function stack = setDataVolumeRM(this, stack, channel, timepoint)
 % 
 % OUTPUT
 % 
-%   stack    : data volume (3D matrix)
+%   None
+%
+% REMARK
+%
+%   If a dataset exists, the X, Y, and Z dimensions must match the ones of 
+%   the stack being copied in. If no dataset exists, one will be created
+%   to fit it with default other values.
 
 % Author: Aaron Ponti
 

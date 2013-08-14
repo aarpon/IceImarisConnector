@@ -18,6 +18,12 @@ function setDataVolume(this, stack, channel, timepoint)
 % OUTPUT
 % 
 %   none
+%
+% REMARK
+%
+%   If a dataset exists, the X, Y, and Z dimensions must match the ones of 
+%   the stack being copied in. If no dataset exists, one will be created
+%   to fit it with default other values.
 
 % AUTHORS
 %
@@ -66,7 +72,14 @@ iDataSet = this.mImarisApplication.GetDataSet();
 
 % Check whether we have some voxels in the dataset
 if isempty(iDataSet)
-    return
+    
+    % Create and store a new dataset
+    sz = size(stack);
+    if numel(sz) == 2
+        sz = [sz 1];
+    end
+    iDataSet = this.createDataset(class(stack), sz(1), sz(2), sz(3), 1, 1);
+
 end
 
 % Convert channel and timepoint to 0-based indexing
