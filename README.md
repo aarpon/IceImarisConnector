@@ -13,6 +13,9 @@ computer.
 
 Simple installation
 -------------------
+
+**Please notice**: from Imaris 7.6.3 on, you **must** add the IceImarisConnector root folder to the MATLAB path!
+
 Copy the <b>@IceImarisApplication</b> subfolder to the Imaris XT folder.
 
 In Windows:
