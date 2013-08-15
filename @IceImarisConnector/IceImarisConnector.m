@@ -47,7 +47,7 @@
 %
 %   The Imaris Application ICE object is stored in the read-only property
 %   mImarisApplication. The mImarisApplication property gives access to
-%   the entire Imaris ICE methods. Example:
+%   the entire Imaris ICE API. Example:
 %
 %   conn.mImarisApplication.GetSurpassSelection()
 %
