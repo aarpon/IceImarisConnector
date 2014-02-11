@@ -165,7 +165,7 @@ classdef IceImarisConnector < handle
                     % Check if the application is registered
                     server = this.mImarisLib.GetServer();
                     if isempty(server)
-                        error('Could not connect Imaris Server.');
+                        error('Could not connect to Imaris Server.');
                     end
                     nApps = server.GetNumberOfObjects();
                     if nApps == 0
@@ -186,8 +186,13 @@ classdef IceImarisConnector < handle
                     end
 
                     % Now we can get the application object and store it
-                    this.mImarisApplication = ...
+                    imarisApplicationObj = ...
                         this.mImarisLib.GetApplication(imarisApplication);
+                    if isempty(imarisApplicationObj)
+                        error('Cannot access Imaris application.');
+                    else
+                        this.mImarisApplication = imarisApplicationObj;
+                    end
                 
                 else
                 
