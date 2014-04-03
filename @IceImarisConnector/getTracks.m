@@ -93,21 +93,18 @@ positions  = iSpots.GetPositionsXYZ;
 timeIndices = iSpots.GetIndicesT;
 trackEdges = iSpots.GetTrackEdges;
 
-% Get the number of time points
-[~, ~, ~, ~, nTimepoints] = this.getSizes();
-
 % Now extract one track after the other and store them into a cell array
 tracks = cell(1, nTracks);
 startTimes = zeros(1, nTracks);
 for i = 1 : nTracks
     
-    % Get the positions and edges for current track (id)
-    edges = trackEdges(ids == uids(i), :) + 1;
-    edges = edges(1 : min(nTimepoints, size(edges, 1)), :);
+    % Get the positions and edges for current track (id) (1-based)
+    edges = (trackEdges(ids == uids(i), :) + 1)';
+    edges = unique(edges(:));
 
     % Extract and store the track and the initial time index
-    tracks{i} = positions(edges(:, 1), :);
-    startTimes(i) = this.indexingStart + timeIndices(edges(1, 1));
+    tracks{i} = positions(edges, :);
+    startTimes(i) = this.indexingStart + timeIndices(edges(1));
    
 end
 
