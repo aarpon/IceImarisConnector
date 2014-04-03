@@ -78,7 +78,11 @@ if nargin == 1
 end
 
 % Check that we have a valid iSpots object
-if this.mImarisApplication.GetFactory().IsSpots(iSpots) == 0
+try
+    if this.mImarisApplication.GetFactory().IsSpots(iSpots) == 0
+        error('Spots object required.');
+    end
+catch
     error('Spots object required.');
 end
 
