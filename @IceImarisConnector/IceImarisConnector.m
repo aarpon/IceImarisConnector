@@ -285,7 +285,7 @@ classdef IceImarisConnector < handle
         [R, isI] = getSurpassCameraRotationMatrix(this)
         
         % getTracks
-        [tracks, timeIndices] = getTracks(iSpots)
+        [tracks, startTimes] = getTracks(iSpots)
         
         % indexingStart
         n = indexingStart(this)
