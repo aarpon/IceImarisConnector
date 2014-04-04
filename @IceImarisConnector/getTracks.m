@@ -65,6 +65,7 @@ end
 tracks = {};
 startTimes = [];
 
+% Do we have an open connection?
 if this.isAlive() == 0
     return
 end
@@ -77,7 +78,7 @@ if nargin == 1
 
 end
 
-% Check that we have a valid iSpots object
+% Check that we have a valid ISpots object
 try
     if this.mImarisApplication.GetFactory().IsSpots(iSpots) == 0
         error('Spots object required.');
@@ -87,15 +88,16 @@ catch
 end
 
 % Now extract the tracks
+
 % Get the IDs of the tracks
-ids     = iSpots.GetTrackIds;
+ids     = iSpots.GetTrackIds();
 uids    = unique(ids);
 nTracks = numel(uids);
 
 % Get all spot positions and the track edges
-positions  = iSpots.GetPositionsXYZ;
-timeIndices = iSpots.GetIndicesT;
-trackEdges = iSpots.GetTrackEdges;
+positions  = iSpots.GetPositionsXYZ();
+timeIndices = iSpots.GetIndicesT();
+trackEdges = iSpots.GetTrackEdges();
 
 % Now extract one track after the other and store them into a cell array
 tracks = cell(1, nTracks);
@@ -103,7 +105,7 @@ startTimes = zeros(1, nTracks);
 for i = 1 : nTracks
     
     % Get the positions and edges for current track (id) (1-based)
-    edges = (trackEdges(ids == uids(i), :) + 1)';
+    edges = trackEdges(ids == uids(i), :) + 1;
     edges = unique(edges(:));
 
     % Extract and store the track and the initial time index

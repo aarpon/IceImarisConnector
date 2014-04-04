@@ -482,6 +482,7 @@ conn.mImarisApplication.FileOpen(filename, '');
 
 % Get the Spots object
 iSpots = conn.getAllSurpassChildren(0, 'Spots');
+assert(~isempty(iSpots))
 
 % Get the tracks
 [tracks, startTimes] = conn.getTracks(iSpots{1});
@@ -522,7 +523,7 @@ assert(all(all(abs(tracks{1} - TRACKS_1) < 1e-4)) == 1);
 assert(all(all(abs(tracks{2} - TRACKS_2) < 1e-4)) == 1);
 assert(all(all(abs(tracks{3} - TRACKS_3) < 1e-4)) == 1);
 
-% check start time points
+% Check start time points
 assert(all(startTimes == [0 4 8]));
 
 % Close imaris
@@ -534,4 +535,4 @@ assert(conn.closeImaris(1) == 1)
 % All done
 % =========================================================================
 disp('');
-disp('All test succesfully run.');
+disp('All test successfully run.');
