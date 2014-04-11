@@ -1,28 +1,29 @@
-function [tracks, startTimes] = getTracks(this, iSpots)
+function [tracks, startTimes] = getTracks(this, iObject)
 % Imaris Connector:  getTracks (public method)
 % 
 % DESCRIPTION
 % 
-%   This method returns the tracks associated to an iSpots object. If no
-%   iSpots objects is passed as argument, the function will try with the
-%   currently selected object in the Surpass Scene. If this is not an
-%   iSpots object, an empty result set will be returned.
+%   This method returns the tracks associated to an ISpots or an ISurfaces
+%   object. If no object is passed as argument, the function will try with
+%   the currently selected object in the Surpass Scene. If this is not an
+%   ISpots nor an ISurfaces object, an empty result set will be returned.
 % 
 % SYNOPSIS
 % 
-%   (1) [tracks, startTimes] = getTracks(iSpots)
+%   (1) [tracks, startTimes] = getTracks(iObject)
 %   (2) [tracks, startTimes] = getTracks()
 % 
 % INPUT
 % 
-%   iSpots   : (optional) an iSpots object. If not passed, the function
-%              will try with the currently selected object in the Surpass 
-%              Scene.
+%   iObject : (optional) either an ISpots or an ISurfaces object. If not
+%             passed, the function will try with the currently selected
+%             object in the Surpass Scene.
 % 
 % OUTPUT
 % 
 %   tracks    : cell array with tracks. Empty if no tracks exist for the
-%               iSpots object or if the argument is not an iSpots object.
+%               object or if the argument is not an ISpots or an 
+%               ISurfaces object.
 %               Each track is in the form [x y z]n, were n is the length 
 %               of the track.
 %   startTimes: time index of the beginning of each track: please notice
@@ -32,7 +33,7 @@ function [tracks, startTimes] = getTracks(this, iSpots)
 %
 % SEE
 %
-%   help IceImarisConnector
+%   help IceImarisConnector (for indexingStart)
 
 % Author: Aaron Ponti
 
@@ -70,34 +71,52 @@ if this.isAlive() == 0
     return
 end
 
-% Check the input parameter
+% No input parameter passed, we get current selection
 if nargin == 1
     
-    % Try to get the currently selected object in the Surpass Scene
-    iSpots = this.getSurpassSelection('Spots');
+    % Try to get the currently selected object in the Surpass Scene. We
+    % do not cast it, otherwise we cannot use the Is...() Factory()
+    % methods.
+    iObject = this.mImarisApplication.GetSurpassSelection();
+    if isempty(iObject)
+        error(['If no object is passed to the function, then either ', ...
+            'an ISpots or an ISurfaces object must be selected in ', ...
+            'the Surpass Scene.']);
+    end       
 
 end
 
-% Check that we have a valid ISpots object
-try
-    if this.mImarisApplication.GetFactory().IsSpots(iSpots) == 0
-        error('Spots object required.');
+% Now we check the type of the iObject
+
+% If we got a base Imaris.IDataItemPrxHelper object we cast it.
+if isa(iObject, 'Imaris.IDataItemPrxHelper')
+    iObject = this.autocast(iObject);
+    if isempty(iObject)
+        error('Expected ISpots or ISurfaces object.');
     end
-catch
-    error('Spots object required.');
 end
+
+% Now we check for the specialized type.
+if ~isa(iObject, 'Imaris.ISurfacesPrxHelper') && ...
+        ~isa(iObject, 'Imaris.ISpotsPrxHelper')
+    error('Expected ISpots or ISurfaces object.');
+end    
+
 
 % Now extract the tracks
 
 % Get the IDs of the tracks
-ids     = iSpots.GetTrackIds();
+ids     = iObject.GetTrackIds();
+if isempty(ids)
+    return;
+end
 uids    = unique(ids);
 nTracks = numel(uids);
 
 % Get all spot positions and the track edges
-positions  = iSpots.GetPositionsXYZ();
-timeIndices = iSpots.GetIndicesT();
-trackEdges = iSpots.GetTrackEdges();
+positions  = getPositions(iObject);
+timeIndices = getTimeIndices(iObject);
+trackEdges = iObject.GetTrackEdges();
 
 % Now extract one track after the other and store them into a cell array
 tracks = cell(1, nTracks);
@@ -114,5 +133,62 @@ for i = 1 : nTracks
    
 end
 
+% = Functions =============================================================
+
+function positions = getPositions(iObject)   
+
+% Get the positions for the object. Depending on the type, different
+% methods will be needed.
+
+if isa(iObject, 'Imaris.ISurfacesPrxHelper')
+    
+    % This is an ISurfaces object. We query each contained surface for its 
+    % center of mass.
+    nSufaces = iObject.GetNumberOfSurfaces();
+    positions = zeros(nSufaces, 3);
+    for i = 1 : nSufaces
+        positions(i, :) = iObject.GetCenterOfMass(i - 1);
+    end
+    
+elseif isa(iObject, 'Imaris.ISpotsPrxHelper')
+    
+    % This is an ISPots object. We can get all positions in one shot.
+    positions  = iObject.GetPositionsXYZ();
+    
+else
+    
+    % Invalid object
+    error('Either Spots or Surfaces object required.');
 
 end
+
+% -------------------------------------------------------------------------
+
+function timeIndices = getTimeIndices(iObject)   
+
+% Get the time indices for the object. Depending on the type, different
+% methods will be needed.
+
+if isa(iObject, 'Imaris.ISurfacesPrxHelper')
+
+    % This is an ISurfaces object. We query each contained surface for its 
+    % time indices.    
+    nSufaces = iObject.GetNumberOfSurfaces();
+    timeIndices = zeros(nSufaces, 1);
+    for i = 1 : nSufaces
+        timeIndices(i, :) = iObject.GetTimeIndex(i - 1);
+    end
+    
+elseif isa(iObject, 'Imaris.ISpotsPrxHelper')
+    
+    % This is an ISPots object. We can get all time indices in one shot.
+    timeIndices  = iObject.GetIndicesT();
+    
+else
+    
+    % Invalid object
+    error('Either Spots or Surfaces object required.');
+
+end
+    
+
