@@ -122,8 +122,9 @@ classdef IceImarisConnector < handle
             % Create and store an ImarisLib instance
             this.mImarisLib = ImarisLib();
 
-            % Assign a random id
-            this.mImarisObjectID = randi(100000);
+            % Assign a random id. We reserve the first 1000 to manually
+            % started Imaris instances.
+            this.mImarisObjectID = 1000 + randi(100000);
 
             % Now we check the (optional) input parameter.
             % If the constructor is called without parameters, we just
@@ -157,7 +158,8 @@ classdef IceImarisConnector < handle
                 elseif isa(imarisApplication, ...
                         'Imaris.IApplicationPrxHelper')
                     
-                    % This is an Imaris application object - we store it
+                    % This is an Imaris application object - we store it.
+                    % We leave the ID to the randomly generated one.
                     this.mImarisApplication = imarisApplication;
                     
                 elseif isscalar(imarisApplication)
@@ -193,6 +195,9 @@ classdef IceImarisConnector < handle
                     else
                         this.mImarisApplication = imarisApplicationObj;
                     end
+                    
+                    % We also update the id
+                    this.mImarisObjectID = imarisApplication;
                 
                 else
                 
