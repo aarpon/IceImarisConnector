@@ -96,7 +96,7 @@ if isa(iObject, 'Imaris.IDataItemPrxHelper')
     end
 end
 
-% Now we check for the specialized type.
+% Now we check the class of the specialized type.
 if ~isa(iObject, 'Imaris.ISurfacesPrxHelper') && ...
         ~isa(iObject, 'Imaris.ISpotsPrxHelper')
     error('Expected ISpots or ISurfaces object.');
@@ -144,9 +144,9 @@ if isa(iObject, 'Imaris.ISurfacesPrxHelper')
     
     % This is an ISurfaces object. We query each contained surface for its 
     % center of mass.
-    nSufaces = iObject.GetNumberOfSurfaces();
-    positions = zeros(nSufaces, 3);
-    for i = 1 : nSufaces
+    nSurfaces = iObject.GetNumberOfSurfaces();
+    positions = zeros(nSurfaces, 3);
+    for i = 1 : nSurfaces
         positions(i, :) = iObject.GetCenterOfMass(i - 1);
     end
     
