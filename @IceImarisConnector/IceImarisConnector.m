@@ -3,7 +3,7 @@
 % DESCRIPTION
 %
 %   IceImarisConnector is a simple commodity class that eases communication
-%   between Imaris and MATLAB using the Imaris XT interface.
+%   between Imaris and MATLAB using the ImarisXT interface.
 %
 % SYNOPSIS
 %
