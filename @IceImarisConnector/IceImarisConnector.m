@@ -248,8 +248,11 @@ classdef IceImarisConnector < handle
         newSpots = createAndSetSpots(this, coords, timeIndices, radii, ...
             name, color, container)
         
-        % close Imaris
+        % closeImaris
         success = closeImaris(this, varargin)
+        
+        % copyChannels
+        copyChannels(this, channelIndices)
         
         % display
         display(this)        

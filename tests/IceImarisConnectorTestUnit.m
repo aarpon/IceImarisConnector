@@ -324,7 +324,24 @@ for i = 1 : size(clr, 1)
     assert(abs(all(clr(i, :) - current)) < 1e-2);
 
 end
-    
+ 
+% Copy channel a couple of times
+% =========================================================================
+disp('Test copying channels...');
+conn.mImarisApplication.GetDataSet().SetChannelName(0, 'One');
+conn.copyChannels(0);
+conn.copyChannels([0 1]);
+conn.copyChannels([0 2]);
+conn.copyChannels(3);
+aDataset = conn.mImarisApplication.GetDataSet();
+assert(strcmp(char(aDataset.GetChannelName(0)), 'One'));
+assert(strcmp(char(aDataset.GetChannelName(1)), 'Copy of One'));
+assert(strcmp(char(aDataset.GetChannelName(2)), 'Copy of One'));
+assert(strcmp(char(aDataset.GetChannelName(3)), 'Copy of Copy of One'));
+assert(strcmp(char(aDataset.GetChannelName(4)), 'Copy of One'));
+assert(strcmp(char(aDataset.GetChannelName(5)), 'Copy of Copy of One'));
+assert(strcmp(char(aDataset.GetChannelName(6)), 'Copy of Copy of Copy of One'));
+
 % Close imaris
 % =========================================================================
 disp('Close Imaris...');
