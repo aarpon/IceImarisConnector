@@ -260,6 +260,12 @@ classdef IceImarisConnector < handle
         % getAllSurpassChildren
         children = getAllSurpassChildren(this, recursive, filter)
 
+        % getDataSlice
+        slice = getDataSlice(this, plane, channel, timepoint, iDataset)
+
+        % getDataSliceRM
+        slice = getDataSliceRM(this, plane, channel, timepoint, iDataset)
+
         % getDataSubVolume
         stack = getDataSubVolume(this, x0, y0, z0, channel, timepoint, ...
             dX, dY, dZ, iDataSet)
@@ -271,7 +277,7 @@ classdef IceImarisConnector < handle
         % getDataVolume
         stack = getDataVolume(this, channel, timepoint, iDataset)
 
-        % getDataVolume
+        % getDataVolumeRM
         stack = getDataVolumeRM(this, channel, timepoint, iDataset)
         
         % getExtends

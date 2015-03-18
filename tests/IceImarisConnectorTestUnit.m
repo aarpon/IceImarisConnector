@@ -226,6 +226,11 @@ assert(strcmp(type, 'uint8') == 1);
 disp('Get the data volume...');
 stack = conn.getDataVolume(0, 0);
 
+% Get a slice
+disp('Get and check a data slice...');
+slice = conn.getDataSlice(34, 0, 0);
+assert(all(all(stack(:, :, 35) == slice)))
+
 disp('Check the data volume type...');
 assert(isa(stack, type) == 1);
 
@@ -238,7 +243,12 @@ assert(size(stack, 3) == DATASETSIZE(3));
 % Get the data volume by explicitly passing an iDataSet object
 % =========================================================================
 disp('Get the data volume by explicitly passing an iDataSet object...');
-stack = conn.getDataVolume(0, 0, conn.mImarisApplication.GetDataSet);
+stack = conn.getDataVolume(0, 0, conn.mImarisApplication.GetDataSet());
+
+% Get a slice
+disp('Get and check a data slice by explicitly passing an iDataSet object...');
+slice = conn.getDataSlice(34, 0, 0, conn.mImarisApplication.GetDataSet());
+assert(all(all(stack(:, :, 35) == slice)))
 
 disp('Check the data volume type...');
 assert(isa(stack, type) == 1);
@@ -248,6 +258,24 @@ disp('Check the data volume size...');
 assert(size(stack, 1) == DATASETSIZE(1) == 1);
 assert(size(stack, 2) == DATASETSIZE(2) == 1);
 assert(size(stack, 3) == DATASETSIZE(3) == 1);
+
+% Check the get data RM methods
+% =========================================================================
+disp('Get the data volume in row-major order...');
+stackRM = conn.getDataVolumeRM(0, 0);
+
+% Get a slice
+disp('Get and check a data slice in row-major order...');
+sliceRM = conn.getDataSliceRM(34, 0, 0);
+assert(all(all(stackRM(:, :, 35) == sliceRM)))
+
+disp('Get the data volume in row-major order by explicitly passing an iDataSet object...');
+stackRM = conn.getDataVolumeRM(0, 0, conn.mImarisApplication.GetDataSet());
+
+% Get a slice
+disp('Get and check a data slice in row-major order by explicitly passing an iDataSet object...');
+sliceRM = conn.getDataSliceRM(34, 0, 0, conn.mImarisApplication.GetDataSet());
+assert(all(all(stackRM(:, :, 35) == sliceRM)))
 
 % Check the getDataSubVolume{RM}() methods
 % =========================================================================

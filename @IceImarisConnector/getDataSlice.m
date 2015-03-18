@@ -1,17 +1,18 @@
-function stack = getDataVolume(this, channel, timepoint, iDataSet)
+function slice = getDataSlice(this, plane, channel, timepoint, iDataSet)
 % IceImarisConnector:  getDataVolume (public method)
 % 
 % DESCRIPTION
 % 
-%   This method returns the data volume from Imaris.
+%   This method returns a data slice from Imaris.
 % 
 % SYNOPSIS
 % 
-%   (1) stack = conn.getDataVolume(channel, timepoint)
-%   (2) stack = conn.getDataVolume(channel, timepoint, iDataSet)
+%   (1) slice = conn.getDataSlice(plane, channel, timepoint)
+%   (2) slice = conn.getDataSlice(plane, channel, timepoint, iDataSet)
 % 
 % INPUT
 % 
+%   plane    : slice number (0/1-based depending on indexing start)
 %   channel  : channel number (0/1-based depending on indexing start)
 %   timepoint: timepoint number (0/1-based depending on indexing start)
 %   iDataSet : (optional) get the data volume from the passed IDataset
@@ -21,20 +22,17 @@ function stack = getDataVolume(this, channel, timepoint, iDataSet)
 % 
 % OUTPUT
 % 
-%   stack    : data volume (3D matrix)
+%   slice    : data slice (2D matrix)
 %
 % REMARK
 %
-%   This function gets the volume as a 1D array and reshapes it in place.
+%   This function gets the slice as a 1D array and reshapes it in place.
 %   It also performs a type cast to take care of the signed/unsigned int
-%   mismatch when transferring data over Ice. The speed-up compared to
-%   calling the ImarisXT GetDataVolumeBytes() or GetDataVolumeWords() 
-%   methods is of the order of 20x.
-
+%   mismatch when transferring data over Ice.
+%
 % AUTHORS
 %
 % Author: Aaron Ponti
-% Contributor: Jonas Dorn
 
 % LICENSE
 %
@@ -56,12 +54,15 @@ function stack = getDataVolume(this, channel, timepoint, iDataSet)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if nargin < 3 || nargin > 4
+if nargin < 4 || nargin > 5
     % The this parameter is hidden
-    error('2 or 3 input parameters expected.');
+    error('3 or 4 input parameters expected.');
 end
 
 % Make sure that there is no mismatch with indexingStart
+if plane < 1 && this.mIndexingStart == 1
+    error('Plane cannot be < 1 if indexingStart is 1.');
+end
 if channel < 1 && this.mIndexingStart == 1
     error('Channel cannot be < 1 if indexingStart is 1.');
 end
@@ -69,14 +70,14 @@ if timepoint < 1 && this.mIndexingStart == 1
     error('Timepoint cannot be < 1 if indexingStart is 1.');
 end
     
-% Initialize stack
-stack = [];
+% Initialize slice
+slice = [];
 
 if this.isAlive() == 0
     return
 end
 
-if nargin == 3
+if nargin == 4
     iDataSet = this.mImarisApplication.GetDataSet();
 else
     % Is the passed dataset a valid DataSet?
@@ -90,11 +91,15 @@ if isempty(iDataSet) || iDataSet.GetSizeX() == 0
     return
 end
 
-% Convert channel and timepoint to 0-based indexing
+% Convert plane, channel and timepoint to 0-based indexing
+plane = plane - this.mIndexingStart;
 channel = channel - this.mIndexingStart;
 timepoint = timepoint - this.mIndexingStart;
 
-% Check that the requested channel and timepoint exist
+% Check that the requested plane, channel and timepoint exist
+if plane > (iDataSet.GetSizeZ() - 1)
+    error('The requested plane is out of bounds.');
+end
 if channel > (iDataSet.GetSizeC() - 1)
     error('The requested channel index is out of bounds.');
 end
@@ -112,22 +117,21 @@ switch char(iDataSet.GetType())
 end
 
 % Allocate memory
-stack = zeros([iDataSet.GetSizeX(), iDataSet.GetSizeY(), ...
-    iDataSet.GetSizeZ()], datatype);
+slice = zeros([iDataSet.GetSizeX(), iDataSet.GetSizeY(), 1], datatype);
 
-% Get the stack
+% Get the slice
 switch char(iDataSet.GetType())
     case 'eTypeUInt8',   
         % Java does not have unsigned ints
-        arr = iDataSet.GetDataVolumeAs1DArrayBytes(channel, timepoint);
-        stack(:) = typecast(arr, 'uint8');
+        arr = iDataSet.GetDataSliceBytes(plane, channel, timepoint);
+        slice(:) = typecast(arr(:), 'uint8');
     case 'eTypeUInt16',
         % Java does not have unsigned ints
-        arr = iDataSet.GetDataVolumeAs1DArrayShorts(channel, timepoint);
-        stack(:) = typecast(arr, 'uint16');
+        arr = iDataSet.GetDataVolumeShorts(plane, channel, timepoint);
+        slice(:) = typecast(arr(:), 'uint16');
     case 'eTypeFloat',
-        stack(:) = ...
-            iDataSet.GetDataVolumeAs1DArrayFloats(channel, timepoint);
+        slice(:) = ...
+            iDataSet.GetDataVolumeFloats(plane, channel, timepoint);
     otherwise,
         error('Bad value for iDataSet.GetType().');
 end

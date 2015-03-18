@@ -1,20 +1,18 @@
-function stack = getDataVolumeRM(this, channel, timepoint, iDataSet)
-% Imaris Connector:  getDataVolumeRM (public method)
+function slice = getDataSliceRM(this, plane, channel, timepoint, iDataset)
+% IceImarisConnector:  getDataSliceRM (public method)
 % 
 % DESCRIPTION
 % 
-%   This method returns the data volume from Imaris in row-major order.
-%   Practically, this means that each plane of a 3D stack is transposed
-%   and will display in a plot in MATLAB with the same geometry and
-%   orientation as in Imaris.
-% 
+%   This method returns a data slice from Imaris in row-major order.
+%
 % SYNOPSIS
 % 
-%   (1) stack = conn.getDataVolumeRM(channel, timepoint)
-%   (2) stack = conn.getDataVolumeRM(channel, timepoint, iDataSet)
+%   (1) stack = conn.getDataSliceRM(plane, channel, timepoint)
+%   (2) stack = conn.getDataSliceRM(plane, channel, timepoint, iDataSet)
 % 
 % INPUT
 % 
+%   plane    : slice number (0/1-based depending on indexing start)
 %   channel  : channel number (0/1-based depending on indexing start)
 %   timepoint: timepoint number (0/1-based depending on indexing start)
 %   iDataSet : (optional) get the data volume from the passed IDataset
@@ -24,8 +22,16 @@ function stack = getDataVolumeRM(this, channel, timepoint, iDataSet)
 % 
 % OUTPUT
 % 
-%   stack    : data volume (3D matrix)
-
+%   slice    : data slice (2D matrix)
+%
+% REMARK
+%
+%   This function gets the slice as a 1D array and reshapes it in place.
+%   It also performs a type cast to take care of the signed/unsigned int
+%   mismatch when transferring data over Ice.
+%
+% AUTHORS
+%
 % Author: Aaron Ponti
 
 % LICENSE
@@ -48,26 +54,26 @@ function stack = getDataVolumeRM(this, channel, timepoint, iDataSet)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if nargin < 3 || nargin > 4
+if nargin < 4 || nargin > 5
     % The this parameter is hidden
-    error('2 or 3 input parameters expected.');
+    error('3 or 4 input parameters expected.');
 end
 
-% Initialize stack
-stack = [];
+% Initialize slice
+slice = [];
 
 if this.isAlive() == 0
     return
 end
 
 % We let getDataVolume do the parameter checking
-if nargin == 3
-    stack = this.getDataVolume(channel, timepoint);
+if nargin == 4
+    slice = this.getDataSlice(plane, channel, timepoint);
 else
-    stack = this.getDataVolume(channel, timepoint, iDataSet);
+    slice = this.getDataSlice(plane, channel, timepoint, iDataset);
 end
 
 % Now we permute the stack
-stack = permute(stack, [2 1 3]);
+slice = permute(slice, [2 1]);
 
 end
