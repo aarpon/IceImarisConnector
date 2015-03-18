@@ -7,8 +7,8 @@ function slice = getDataSliceRM(this, plane, channel, timepoint, iDataset)
 %
 % SYNOPSIS
 % 
-%   (1) stack = conn.getDataSliceRM(plane, channel, timepoint)
-%   (2) stack = conn.getDataSliceRM(plane, channel, timepoint, iDataSet)
+%   (1) slice = conn.getDataSliceRM(plane, channel, timepoint)
+%   (2) slice = conn.getDataSliceRM(plane, channel, timepoint, iDataSet)
 % 
 % INPUT
 % 
