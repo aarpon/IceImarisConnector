@@ -47,7 +47,8 @@ if this.isAlive() == 0
 end
 
 % Is there a Dataset?
-if isempty(this.mImarisApplication.GetDataSet())
+iDataSet = this.mImarisApplication.GetDataSet();
+if isempty(iDataSet)
     return
 end
 
@@ -69,8 +70,7 @@ end
 channelNames = cell(1, nChannels);
 for i = 1 : nChannels
     
-    channelNames{i} = char( ...
-        this.mImarisApplication.GetDataSet().GetChannelName(i - 1));
+    channelNames{i} = char(iDataSet.GetChannelName(i - 1));
     
 end
 
@@ -79,21 +79,18 @@ for c = 1 : numel(channelIndices)
 
     % Add channel
     nChannels = nChannels + 1;
-    this.mImarisApplication.GetDataSet().SetSizeC(nChannels);
+    iDataSet.SetSizeC(nChannels);
 
     % New channel index
     newChannelIndex = nChannels - 1;
         
     % Set the new channel name
-    this.mImarisApplication.GetDataSet().SetChannelName( ...
-        newChannelIndex, ...
+    iDataSet.SetChannelName(newChannelIndex, ...
         ['Copy of ', channelNames{1 + channelIndices(c)}]);
     
     % Set the new channel color
-    this.mImarisApplication.GetDataSet().SetChannelColorRGBA( ...
-        newChannelIndex, ...
-        this.mImarisApplication.GetDataSet().GetChannelColorRGBA( ...
-        channelIndices(c)));
+    iDataSet.SetChannelColorRGBA(newChannelIndex, ...
+        iDataSet.GetChannelColorRGBA(channelIndices(c)));
 
 
     for t = 1 : nTimepoints
