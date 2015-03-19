@@ -466,6 +466,12 @@ stack(:, :, 3) = [13, 14, 15; 16, 17, 18];
 stack = cast(stack, 'uint16');
 conn.setDataVolume(stack, 0, 0)
 
+% Test retrieving volume and slice for a non 8-bit dataset
+disp('Test retrieving volume and slice for a non 8-bit dataset...')
+volume16 = conn.getDataVolume(0, 0);
+slice16 = conn.getDataSlice(1, 0, 0);
+assert(all(all(volume16(2, :, :) == slice16)))
+
 % Create a dataset
 % =========================================================================
 disp('Create a dataset');
