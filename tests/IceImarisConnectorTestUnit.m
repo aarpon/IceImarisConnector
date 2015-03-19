@@ -470,7 +470,13 @@ conn.setDataVolume(stack, 0, 0)
 disp('Test retrieving volume and slice for a non 8-bit dataset...')
 volume16 = conn.getDataVolume(0, 0);
 slice16 = conn.getDataSlice(1, 0, 0);
-assert(all(all(volume16(2, :, :) == slice16)))
+assert(all(all(volume16(:, :, 2) == slice16)))
+
+% Test retrieving volume and slice for a non 8-bit dataset in RM order
+disp('Test retrieving volume and slice for a non 8-bit dataset in row-major order...')
+volume16RM = conn.getDataVolumeRM(0, 0);
+slice16RM = conn.getDataSliceRM(1, 0, 0);
+assert(all(all(volume16RM(:, :, 2) == slice16RM)))
 
 % Create a dataset
 % =========================================================================
@@ -581,7 +587,6 @@ assert(all(startTimes == [0 4 8]));
 % =========================================================================
 disp('Close Imaris...');
 assert(conn.closeImaris(1) == 1)
-
 
 % All done
 % =========================================================================
