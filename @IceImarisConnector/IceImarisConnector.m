@@ -260,6 +260,9 @@ classdef IceImarisConnector < handle
         % getAllSurpassChildren
         children = getAllSurpassChildren(this, recursive, filter)
 
+        % getChannelNames
+        channelNames = getChannelNames(this)
+
         % getDataSlice
         slice = getDataSlice(this, plane, channel, timepoint, iDataset)
 
