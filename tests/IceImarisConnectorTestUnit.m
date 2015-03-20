@@ -361,14 +361,14 @@ conn.copyChannels(0);
 conn.copyChannels([0 1]);
 conn.copyChannels([0 2]);
 conn.copyChannels(3);
-aDataset = conn.mImarisApplication.GetDataSet();
-assert(strcmp(char(aDataset.GetChannelName(0)), 'One'));
-assert(strcmp(char(aDataset.GetChannelName(1)), 'Copy of One'));
-assert(strcmp(char(aDataset.GetChannelName(2)), 'Copy of One'));
-assert(strcmp(char(aDataset.GetChannelName(3)), 'Copy of Copy of One'));
-assert(strcmp(char(aDataset.GetChannelName(4)), 'Copy of One'));
-assert(strcmp(char(aDataset.GetChannelName(5)), 'Copy of Copy of One'));
-assert(strcmp(char(aDataset.GetChannelName(6)), 'Copy of Copy of Copy of One'));
+channelNames = conn.getChannelNames();
+assert(strcmp(channelNames{1}, 'One'));
+assert(strcmp(channelNames{2}, 'Copy of One'));
+assert(strcmp(channelNames{3}, 'Copy of One'));
+assert(strcmp(channelNames{4}, 'Copy of Copy of One'));
+assert(strcmp(channelNames{5}, 'Copy of One'));
+assert(strcmp(channelNames{6}, 'Copy of Copy of One'));
+assert(strcmp(channelNames{7}, 'Copy of Copy of Copy of One'));
 
 % Close imaris
 % =========================================================================
