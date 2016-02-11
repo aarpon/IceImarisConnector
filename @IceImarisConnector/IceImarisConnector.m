@@ -322,6 +322,9 @@ classdef IceImarisConnector < handle
         % setDataVolume
         setDataVolume(this, stack, channel, timepoint)
         
+        % setVoxelSizes
+        setVoxelSizes(this, voxelSizes)
+        
         % startImaris
         success = startImaris(this, userControl)
 
