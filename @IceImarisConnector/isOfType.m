@@ -62,36 +62,41 @@ end
 
 % Check type
 typeValues = {'Cells', 'ClippingPlane', 'Dataset', 'Filaments', ...
-    'Frame', 'LightSource', 'MeasurementPoints', 'Spots', ...
-    'Surfaces', 'SurpassCamera', 'Volume'};
+    'Frame', 'LightSource', 'MeasurementPoints', 'ReferenceFrames', ...
+    'Spots', 'Surfaces', 'SurpassCamera', 'Volume'};
 if ~ismember(type, typeValues)
     error('Bad value for input parameter ''type''.');
 end
 
 % Test the object
+factory = this.mImarisApplication.GetFactory();
+
 switch type
     case 'Cells',
-        b = this.mImarisApplication.GetFactory().IsCells(object);
+        b = factory.IsCells(object);
     case 'ClippingPlane',
-        b = this.mImarisApplication.GetFactory().IsClippingPlane(object);
+        b = factory.IsClippingPlane(object);
     case 'Dataset',
-        b = this.mImarisApplication.GetFactory().IsDataset(object);
+        b = factory.IsDataset(object);
     case 'Filaments',
-        b = this.mImarisApplication.GetFactory().IsFilaments(object);
+        b = factory.IsFilaments(object);
     case 'Frame',
-        b = this.mImarisApplication.GetFactory().IsFrame(object);
+        b = factory.IsFrame(object);
     case 'LightSource',
-        b = this.mImarisApplication.GetFactory().IsLightSource(object);
+        b = factory.IsLightSource(object);
     case 'MeasurementPoints',
-        b = this.mImarisApplication.GetFactory().IsMeasurementPoints(object);
+        b = factory.IsMeasurementPoints(object);
     case 'Spots',
-        b = this.mImarisApplication.GetFactory().IsSpots(object);
+        b = factory.IsSpots(object);
     case 'Surfaces',
-        b = this.mImarisApplication.GetFactory().IsSurfaces(object);
+        b = factory.IsSurfaces(object);
     case 'SurpassCamera',
-        b = this.mImarisApplication.GetFactory().IsSurpassCamera(object);
+        b = factory.IsSurpassCamera(object);
     case 'Volume',
-        b = this.mImarisApplication.GetFactory().IsVolume(object);
+        b = factory.IsVolume(object);
+    case 'ReferenceFrames',
+        % The factory does not have a Is...() method for reference frames
+        b = ~isempty(factory.ToReferenceFrames(object));
     otherwise,
         error('Bad value for ''type''.');
 end
