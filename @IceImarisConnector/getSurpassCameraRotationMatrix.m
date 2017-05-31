@@ -61,57 +61,11 @@ end
 % Get the camera position quaternion
 q = vCamera.GetOrientationQuaternion();
 
-% Make sure the quaternion is a unit quaternion
-[q1, q2, q3, q4] = makeUnit(q(1), q(2), q(3), q(4));
-
 % Calculate the rotation matrix R from the quaternion
-R = rotationMatrixFromQuaternion(q1, q2, q3, q4);
+R = IceImarisConnector.mapQuaternionToRotationMatrix(q);
 
 % Is R the Identity matrix?
 T = R == eye(4);
 isI = all(T(:));
-
-end
-
-% =========================================================================
-
-function R = rotationMatrixFromQuaternion(X, Y, Z, W)
-
-R = zeros(4, 4);
-
-x2 = X + X;    y2 = Y + Y;    z2 = Z + Z;
-xx = X * x2;   xy = X * y2;   xz = X * z2;
-yy = Y * y2;   yz = Y * z2;   zz = Z * z2;
-wx = W * x2;   wy = W * y2;   wz = W * z2;
-
-R(1, 1) = 1.0 - (yy + zz);
-R(1, 2) = xy - wz;
-R(1, 3) = xz + wy;
-
-R(2, 1) = xy + wz;
-R(2, 2) = 1.0 - (xx + zz);
-R(2, 3) = yz - wx;
-
-R(3, 1) = xz - wy;
-R(3, 2) = yz + wx;
-R(3, 3) = 1.0 - (xx + yy);
-
-R(4, 4) = 1;
-
-end
-
-% =========================================================================
-
-function [X, Y, Z, W] = makeUnit(X, Y, Z, W)
-
-n2 = X ^ 2 + Y ^ 2 + Z ^ 2 + W ^ 2;
-if n2 == 1
-    return
-end
-n = sqrt(n2);
-X = X / n;
-Y = Y / n;
-Z = Z / n;
-W = W / n;
 
 end

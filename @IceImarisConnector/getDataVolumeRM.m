@@ -1,5 +1,5 @@
 function stack = getDataVolumeRM(this, channel, timepoint, iDataSet)
-% Imaris Connector:  getDataVolumeRM (public method)
+% IceImarisConnector:  getDataVolumeRM (public method)
 % 
 % DESCRIPTION
 % 

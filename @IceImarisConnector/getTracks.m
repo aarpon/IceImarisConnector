@@ -1,5 +1,5 @@
 function [tracks, startTimes] = getTracks(this, iObject)
-% Imaris Connector:  getTracks (public method)
+% IceImarisConnector:  getTracks (public method)
 % 
 % DESCRIPTION
 % 

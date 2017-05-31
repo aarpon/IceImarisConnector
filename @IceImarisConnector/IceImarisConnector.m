@@ -104,6 +104,7 @@ classdef IceImarisConnector < handle
         
         % Constructor
         function this = IceImarisConnector(imarisApplication, indexingStart)
+            % IceImarisConnector constructor
 
             % First, we prepare everything we need
             % Store the Imaris and ImarisLib path
@@ -331,16 +332,31 @@ classdef IceImarisConnector < handle
     end
 
     methods (Access = public, Static = true)
+
+        % calcRotationBetweenVectors3D
+        q = calcRotationBetweenVectors3D(start, dest)
         
         % isSupportedPlatform
         b = isSupportedPlatform()
-		
+
         % mapRgbaScalarToVector
         rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 
         % mapRgbaVectorToScalar
         rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
-		
+
+        % mapAxisAngleToQuaternion
+        q = mapAxisAngleToQuaternion(r_axis, r_angle)
+
+        % mapAxisAngleToRotationMatrix
+        [R, x_axis, y_axis, z_axis] = mapAxisAngleToRotationMatrix(r_axis, r_angle)
+        
+        % mapQuaternionToRotationMatrix
+        [R, x_axis, y_axis, z_axis] = mapQuaternionToRotationMatrix(quaternion)
+        
+        % normalize
+        v = normalize(v, epsilon)
+
         % version
         v = version();
 

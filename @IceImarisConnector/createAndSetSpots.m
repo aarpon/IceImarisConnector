@@ -1,5 +1,5 @@
 function newSpots = createAndSetSpots(this, coords, timeIndices, radii, name, color, container)
-% Imaris Connector:  createAndSetSpots (public method)
+% IceImarisConnector:  createAndSetSpots (public method)
 % 
 % DESCRIPTION
 % 
