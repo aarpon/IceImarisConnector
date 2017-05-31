@@ -83,8 +83,8 @@ R = [ca + ux2*uca, ux_uy_uca - uz*sa, ux_uz_uca + uy*sa;
 
 R(4, 4) = 1;
 
-x_axis = R(1:3, 1);
-y_axis = R(1:3, 2);
-z_axis = R(1:3, 3);
+x_axis = R(1:3, 1)';
+y_axis = R(1:3, 2)';
+z_axis = R(1:3, 3)';
 
 end

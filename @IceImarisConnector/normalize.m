@@ -56,8 +56,8 @@ if nargin == 1
     epsilon = 1e-8;
 end
 
-% Make sure v is a column vector
-v = v(:);
+% Make sure v is a row vector
+v = v(:)';
 
 % Normalize
 n_v = norm(v, 2);
