@@ -354,6 +354,9 @@ classdef IceImarisConnector < handle
         % mapQuaternionToRotationMatrix
         [R, x_axis, y_axis, z_axis] = mapQuaternionToRotationMatrix(quaternion)
         
+        % multiplyQuaternions
+        q = multiplyQuaternions(q1, q2)
+        
         % normalize
         v = normalize(v, epsilon)
 
