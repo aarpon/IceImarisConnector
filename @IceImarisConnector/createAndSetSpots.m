@@ -16,7 +16,8 @@ function newSpots = createAndSetSpots(this, coords, timeIndices, radii, name, co
 % 
 %   coords      : (nx3) [x y z]n coordinate matrix in dataset units
 %   timeIndices : (nx1) vector of spots time indices
-%   radii       : (nx1) vector of spots radii
+%   radii       : (nx1) vector of spots radii, or (nx3) matrix of spot
+%                       radii XYZ.
 %   name        : name of the Spots object
 %   color       : (1x4), (0..1) vector of [R G B A] values
 %   container   : (optional) if not set, the Spots object is added at the
@@ -77,12 +78,11 @@ end
 
 % Check timeIndices and radii
 timeIndices = timeIndices(:);
-radii = radii(:);
 nSpots = size(coords, 1);
 if numel(timeIndices) ~= nSpots
     error('Wrong number of time indices.');
 end
-if numel(radii) ~= nSpots
+if size(radii, 1) ~= nSpots
     error('Wrong number of radii.');
 end
 
@@ -107,7 +107,12 @@ end
 newSpots = this.mImarisApplication.GetFactory().CreateSpots();
 
 % Set coordinates, time indices and radii
-newSpots.Set(coords, timeIndices, radii);
+if size(radii, 2) == 3
+    newSpots.Set(coords, timeIndices, radii(:, 1));
+    newSpots.SetRadiiXYZ(radii);
+else
+    newSpots.Set(coords, timeIndices, radii);
+end
 
 % Set the name
 newSpots.SetName(name);
