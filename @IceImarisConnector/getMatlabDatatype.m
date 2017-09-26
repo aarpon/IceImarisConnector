@@ -52,16 +52,11 @@ end
 
 % Which datatype?
 switch char(this.mImarisApplication.GetDataSet().GetType())
-    case 'eTypeUInt8',
-        type  = 'uint8';
-    case 'eTypeUInt16',
-        type  = 'uint16';
-    case 'eTypeFloat',
-        type  = 'single';
-    case 'eTypeUnknown',
-        type = '';
-    otherwise,
-        type = '';
+    case 'eTypeUInt8',   type  = 'uint8';
+    case 'eTypeUInt16',  type  = 'uint16';
+    case 'eTypeFloat',   type  = 'single';
+    case 'eTypeUnknown', type = '';
+    otherwise,           type = '';
 end
 
 end

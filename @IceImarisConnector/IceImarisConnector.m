@@ -248,10 +248,19 @@ classdef IceImarisConnector < handle
         % createAndSetSpots
         newSpots = createAndSetSpots(this, coords, timeIndices, radii, ...
             name, color, container)
-        
+
+        % createDataset
+        iDataset = createDataset(this, datatype, sizeX, sizeY, ...
+            sizeZ, sizeC, sizeT, voxelSizeX, voxelSizeY, voxelSizeZ, ...
+            deltaTime, addToImaris)
+ 
+
+        % cloneDataSet
+        dataset = cloneDataSet(this, iDataSet)
+
         % closeImaris
         success = closeImaris(this, varargin)
-        
+
         % copyChannels
         copyChannels(this, channelIndices)
         

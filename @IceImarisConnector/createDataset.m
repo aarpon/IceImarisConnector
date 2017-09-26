@@ -1,32 +1,39 @@
 function iDataset = createDataset(this, datatype, sizeX, sizeY, ...
-     sizeZ, sizeC, sizeT, voxelSizeX, voxelSizeY, voxelSizeZ, deltaTime)
+     sizeZ, sizeC, sizeT, voxelSizeX, voxelSizeY, voxelSizeZ, ...
+     deltaTime, addToImaris)
 % IceImarisConnector:  createDataset (public method)
 % 
 % DESCRIPTION
 % 
-%   This method creates an Imaris dataset and replaces current one.
+%   This method creates an Imaris dataset and optionally replaces current one.
 % 
 % SYNOPSIS
 %
 %   (1) iDataset = createDataset(datatype, sizeX, sizeY, sizeZ, sizeC, sizeT)
 %   (2) iDataset = createDataset(datatype, sizeX, sizeY, sizeZ, sizeC, sizeT, ...
-%                                voxelSizeX, voxelsSizeY, voxelSizeZ, deltaTime)
+%                                voxelSizeX, voxelsSizeY, voxelSizeZ, ...
+%                                deltaTime, addToImaris)
 % 
 % INPUT
 % 
-%   datatype  : one of 'uint8', 'uint16', 'single', Imaris.tType.eTypeUInt8,
-%               Imaris.tType.eTypeUInt16, Imaris.tType.eTypeFloat
-%   sizeX     : dataset width
-%   sizeY     : dataset height
-%   sizeZ     : number of planes
-%   sizeC     : number of channels
-%   sizeT     : number of timepoints
-%   voxelSizeX: (optional, default = 1) voxel size in X direction
-%   voxelSizeY: (optional, default = 1) voxel size in Y direction
-%   voxelSizeZ: (optional, default = 1) voxel size in Z direction
-%   deltaTime : (optional, default = 1) time difference between consecutive
-%               time points
+%   datatype   : one of 'uint8', 'uint16', 'single', Imaris.tType.eTypeUInt8,
+%                Imaris.tType.eTypeUInt16, Imaris.tType.eTypeFloat
+%   sizeX      : dataset width
+%   sizeY      : dataset height
+%   sizeZ      : number of planes
+%   sizeC      : number of channels
+%   sizeT      : number of timepoints
+%   voxelSizeX : (optional, default = 1) voxel size in X direction
+%   voxelSizeY : (optional, default = 1) voxel size in Y direction
+%   voxelSizeZ : (optional, default = 1) voxel size in Z direction
+%   deltaTime  : (optional, default = 1) time difference between consecutive
+%                time points
+%   addToImaris: (optional, default = 1) Add newly created dataset to
+%                Imaris or only return it to the caller.
 % 
+%   If you want to pass the 'addToImaris' argument but want to use the
+%   default values for voxel sizes and delta time, set these to [].
+%
 % OUTPUT
 % 
 %   iDataset  : created DataSet
@@ -73,9 +80,9 @@ function iDataset = createDataset(this, datatype, sizeX, sizeY, ...
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-if nargin ~= 7 && nargin ~= 11
+if nargin ~= 7 && nargin ~= 11 && nargin ~= 12
     % The this parameter is hidden
-    error('6 or 10 input parameters expected.');
+    error('6, 10 or 11 input parameters expected.');
 end
 
 % Default voxel sizes
@@ -84,6 +91,24 @@ if nargin == 7
     voxelSizeY = 1;
     voxelSizeZ = 1;
     deltaTime  = 1;
+    addToImaris = 1;
+end
+
+if nargin == 1
+    addToImaris = 1;
+end
+
+if isempty(voxelSizeX)
+    voxelSizeX = 1;
+end
+if isempty(voxelSizeY)
+    voxelSizeY = 1;
+end
+if isempty(voxelSizeZ)
+    voxelSizeZ = 1;
+end
+if isempty(deltaTime)
+    deltaTime = 1;
 end
 
 % Check inputs
@@ -94,13 +119,13 @@ end
 
 % Imaris datatype
 switch char(datatype)
-    case {'uint8', 'eTypeUInt8'},
+    case {'uint8', 'eTypeUInt8'}
         classDataSet = Imaris.tType.eTypeUInt8;
-    case {'uint16', 'eTypeUInt16'},
+    case {'uint16', 'eTypeUInt16'}
         classDataSet=Imaris.tType.eTypeUInt16;
-    case {'single', 'eTypeFloat'},
+    case {'single', 'eTypeFloat'}
         classDataSet=Imaris.tType.eTypeFloat;
-    otherwise,
+    otherwise
         error('Bad data type.');
 end
 
@@ -120,6 +145,8 @@ iDataset.SetExtendMaxZ(sizeZ * voxelSizeZ);
 iDataset.SetTimePointsDelta(deltaTime);
 
 % Set the dataset in Imaris
-this.mImarisApplication.SetDataSet(iDataset);
+if addToImaris == 1
+    this.mImarisApplication.SetDataSet(iDataset);
+end
 
 end

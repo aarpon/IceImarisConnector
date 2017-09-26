@@ -72,32 +72,32 @@ end
 factory = this.mImarisApplication.GetFactory();
 
 switch type
-    case 'Cells',
+    case 'Cells'
         b = factory.IsCells(object);
-    case 'ClippingPlane',
+    case 'ClippingPlane'
         b = factory.IsClippingPlane(object);
-    case 'Dataset',
+    case 'Dataset'
         b = factory.IsDataset(object);
-    case 'Filaments',
+    case 'Filaments'
         b = factory.IsFilaments(object);
-    case 'Frame',
+    case 'Frame'
         b = factory.IsFrame(object);
-    case 'LightSource',
+    case 'LightSource'
         b = factory.IsLightSource(object);
-    case 'MeasurementPoints',
+    case 'MeasurementPoints'
         b = factory.IsMeasurementPoints(object);
-    case 'Spots',
+    case 'Spots'
         b = factory.IsSpots(object);
-    case 'Surfaces',
+    case 'Surfaces'
         b = factory.IsSurfaces(object);
-    case 'SurpassCamera',
+    case 'SurpassCamera'
         b = factory.IsSurpassCamera(object);
-    case 'Volume',
+    case 'Volume'
         b = factory.IsVolume(object);
-    case 'ReferenceFrames',
+    case 'ReferenceFrames'
         % The factory does not have a Is...() method for reference frames
         b = ~isempty(factory.ToReferenceFrames(object));
-    otherwise,
+    otherwise
         error('Bad value for ''type''.');
 end
 

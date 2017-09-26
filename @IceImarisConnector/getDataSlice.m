@@ -112,7 +112,7 @@ switch char(iDataSet.GetType())
     case 'eTypeUInt8',   datatype = 'uint8';
     case 'eTypeUInt16',  datatype = 'uint16';
     case 'eTypeFloat',   datatype = 'single';
-    otherwise,
+    otherwise
         error('Bad value for IDataSet::GetType().');
 end
 
@@ -121,18 +121,18 @@ slice = zeros([iDataSet.GetSizeX(), iDataSet.GetSizeY(), 1], datatype);
 
 % Get the slice
 switch char(iDataSet.GetType())
-    case 'eTypeUInt8',   
+    case 'eTypeUInt8'
         % Java does not have unsigned ints
         arr = iDataSet.GetDataSliceBytes(plane, channel, timepoint);
         slice(:) = typecast(arr(:), 'uint8');
-    case 'eTypeUInt16',
+    case 'eTypeUInt16'
         % Java does not have unsigned ints
         arr = iDataSet.GetDataSliceShorts(plane, channel, timepoint);
         slice(:) = typecast(arr(:), 'uint16');
-    case 'eTypeFloat',
+    case 'eTypeFloat'
         slice(:) = ...
             iDataSet.GetDataSliceFloats(plane, channel, timepoint);
-    otherwise,
+    otherwise
         error('Bad value for iDataSet.GetType().');
 end
 
