@@ -114,10 +114,31 @@ classdef IceImarisConnector < handle
             end
             
             % Add the ImarisLib.jar package to the java class path
-            % (if not there yet)
-            if all(cellfun(...
-                    @isempty, strfind(javaclasspath, 'ImarisLib.jar')))
+            % (if not there yet). Make sure that the version already 
+            % in the path is the same as the one returned by
+            % findImaris. A discrepancy could occur if
+            % IMARISPATH is set manually from the MATLAB
+            % console using setenv().
+            jcp = javaclasspath();
+            indxJcp = find(contains(jcp, 'ImarisLib.jar'));
+            if isempty(indxJcp)
                 javaaddpath(this.mImarisLibPath);
+            else
+                % Do we have the same version? It it is the case,
+                % we do not need to do anything. % If not, we try to 
+                % replace the old with the new.
+                if strcmp(jcp{indxJcp}, this.mImarisLibPath) == 0
+                    fprintf(1, ['Switching to %s.\n\n   If you get a ', ...
+                        '''not clearing java'' warning, please make ', ...
+                        'sure to clear() any\n   IceImarisConnector ', ...
+                        'object before recreating it.\n\n', ...
+                        '  For example:\n', ...
+                        '      >> clear(''conn'');\n', ...
+                        '      >> conn = IceImarisConnector();\n\n'], ...
+                        strrep(this.mImarisLibPath, '\', '/'));
+                    javarmpath(jcp{indxJcp});
+                    javaaddpath(this.mImarisLibPath);
+                end
             end
             
             % Create and store an ImarisLib instance
@@ -255,8 +276,8 @@ classdef IceImarisConnector < handle
             deltaTime, addToImaris)
  
 
-        % cloneDataSet
-        dataset = cloneDataSet(this, iDataSet)
+        % cloneDataset
+        dataset = cloneDataset(this, iDataSet)
 
         % closeImaris
         success = closeImaris(this, varargin)
