@@ -82,6 +82,7 @@ nSpots = size(coords, 1);
 if numel(timeIndices) ~= nSpots
     error('Wrong number of time indices.');
 end
+radii = radii(:);
 if size(radii, 1) ~= nSpots
     error('Wrong number of radii.');
 end
