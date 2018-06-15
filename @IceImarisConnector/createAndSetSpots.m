@@ -82,7 +82,9 @@ nSpots = size(coords, 1);
 if numel(timeIndices) ~= nSpots
     error('Wrong number of time indices.');
 end
-radii = radii(:);
+if ~(size(radii, 2) == 1 || size(radii, 2) == 3)
+    error('''radii'' must be an Nx1 or Nx3 matrix.');
+end
 if size(radii, 1) ~= nSpots
     error('Wrong number of radii.');
 end
