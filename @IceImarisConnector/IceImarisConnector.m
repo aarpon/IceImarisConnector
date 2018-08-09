@@ -390,6 +390,9 @@ classdef IceImarisConnector < handle
         % normalize
         v = normalize(v, epsilon)
 
+        % quaternionConjugate
+        qc = quaternionConjugate(q)
+        
         % version
         v = version();
 

@@ -113,7 +113,7 @@ elseif factory.IsImageProcessing(IDataItem)
     
 else
     
-    % The Reference Frame object oes not has an Is...() method
+    % The Reference Frame object does not have an Is...() method
     if ~isempty(factory.ToReferenceFrames(IDataItem))
         derivedType = factory.ToReferenceFrames(IDataItem);
     else
