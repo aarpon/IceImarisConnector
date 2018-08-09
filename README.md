@@ -7,7 +7,7 @@ using the [Imaris XT interface](http://www.bitplane.com/go/products/imarisxt).
 
 Installation
 ============
-[Download](http://www.scs2.net/next/index.php?id=110) or
+[Download](https://github.com/aarpon/IceImarisConnector/releases/latest) or
 [clone](https://github.com/aarpon/IceImarisConnector) IceImarisConnector to your
 computer.
 
