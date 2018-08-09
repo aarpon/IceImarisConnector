@@ -1,14 +1,13 @@
-function type = getMatlabDatatype(this)
-% IceImarisConnector:  getMatlabDatatype (public method)
+function channelNames = getChannelNames(this)
+% IceImarisConnector:  getChannelNames (public method)
 %
 % DESCRIPTION
 % 
-%   This method returns the datatype of the dataset as a MATLAB type 
-%   (e.g. one of 'uint8', 'uint16', 'single').
+%   This method returns the channel names.
 % 
 % SYNOPSIS
 % 
-%   type = conn.getMatlabDatatype()
+%   channelNames = conn.getChannelNames()
 % 
 % INPUT
 % 
@@ -16,8 +15,7 @@ function type = getMatlabDatatype(this)
 % 
 % OUTPUT
 % 
-%   type : datatype of the dataset as a MATLAB type: one of one of 'uint8',
-%          'uint16', 'single', or '' if the type is unknown in Imaris.
+%   channelNames: cell array of channels names
 
 % AUTHORS
 %
@@ -43,20 +41,29 @@ function type = getMatlabDatatype(this)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-type = '';
+% Initialize output
+channelNames = {};
 
 % Is Imaris running?
 if this.isAlive() == 0
     return
 end
 
-% Which datatype?
-switch char(this.mImarisApplication.GetDataSet().GetType())
-    case 'eTypeUInt8',   type  = 'uint8';
-    case 'eTypeUInt16',  type  = 'uint16';
-    case 'eTypeFloat',   type  = 'single';
-    case 'eTypeUnknown', type = '';
-    otherwise,           type = '';
+% Is there a Dataset?
+iDataSet = this.mImarisApplication.GetDataSet();
+if isempty(iDataSet)
+    return
 end
 
+% Number of channels
+nChannels = iDataSet.GetSizeC();
+
+% Initialize channelNames cell array
+channelNames = cell(1, nChannels);
+
+% Return the channel names
+for c = 1 : nChannels
+    
+    channelNames{c} = char(iDataSet.GetChannelName(c - 1));
+    
 end

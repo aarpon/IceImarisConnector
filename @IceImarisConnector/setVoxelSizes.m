@@ -1,23 +1,22 @@
-function type = getMatlabDatatype(this)
-% IceImarisConnector:  getMatlabDatatype (public method)
+function setVoxelSizes(this, voxelSizes)
+% IceImarisConnector:  setVoxelSizes (public method)
 %
 % DESCRIPTION
 % 
-%   This method returns the datatype of the dataset as a MATLAB type 
-%   (e.g. one of 'uint8', 'uint16', 'single').
+%   This method sets the X, Y, and Z voxel sizes of the dataset. It does 
+%   not move the min extends.
 % 
 % SYNOPSIS
-% 
-%   type = conn.getMatlabDatatype()
+%
+%   conn.setVoxelSizes(voxelSizex)
 % 
 % INPUT
 % 
-%   None
+%   voxelSizes : voxel sizes in dataset units: [voxelSizeX voxelSizeY voxelSizeZ]
 % 
 % OUTPUT
-% 
-%   type : datatype of the dataset as a MATLAB type: one of one of 'uint8',
-%          'uint16', 'single', or '' if the type is unknown in Imaris.
+%
+%   None
 
 % AUTHORS
 %
@@ -43,20 +42,33 @@ function type = getMatlabDatatype(this)
 % along with this program; if not, write to the Free Software
 % Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-type = '';
+if nargin ~=2
+    error('One input parameter expected.');
+end
+
+if any(size(voxelSizes) ~= [1 3])
+    error('voxelSizes must be in the form [voxelSizeX voxelSizeY voxelSizeZ].');
+end
 
 % Is Imaris running?
 if this.isAlive() == 0
     return
 end
 
-% Which datatype?
-switch char(this.mImarisApplication.GetDataSet().GetType())
-    case 'eTypeUInt8',   type  = 'uint8';
-    case 'eTypeUInt16',  type  = 'uint16';
-    case 'eTypeFloat',   type  = 'single';
-    case 'eTypeUnknown', type = '';
-    otherwise,           type = '';
+% Check whether we have a dataset at all
+aDataSet = this.mImarisApplication.GetDataSet();
+if isempty(aDataSet)
+    return;
 end
 
-end
+% Voxel size X
+aDataSet.SetExtendMaxX(...
+    voxelSizes(1) * aDataSet.GetSizeX() + aDataSet.GetExtendMinX());
+
+% Voxel size Y
+aDataSet.SetExtendMaxY(...
+    voxelSizes(2) * aDataSet.GetSizeY() + aDataSet.GetExtendMinY());
+
+% Voxel size Z
+aDataSet.SetExtendMaxZ(...
+    voxelSizes(3) * aDataSet.GetSizeZ() + aDataSet.GetExtendMinZ());

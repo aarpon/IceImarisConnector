@@ -60,6 +60,10 @@ end
 
 try
     if quiet
+        iDataSet = this.mImarisApplication.GetDataSet();
+        if ~isempty(iDataSet)
+            iDataSet.SetModified(0);
+        end
         this.mImarisApplication.SetVisible(false);
     end
     this.mImarisApplication.Quit();

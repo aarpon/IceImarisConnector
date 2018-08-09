@@ -26,6 +26,7 @@ function selection = getSurpassSelection(this, type)
 %               'Frame'
 %               'LightSource'
 %               'MeasurementPoints'
+%               'ReferenceFrames'
 %               'Spots'
 %               'Surfaces'
 %               'SurpassCamera'

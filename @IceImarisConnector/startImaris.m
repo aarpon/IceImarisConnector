@@ -110,16 +110,19 @@ try
     end
     
     % Try getting the application over a certain time period in case it
-    % takes to long for Imaris to be registered.
-    for trial = 1 : 200
+    % takes to long for Imaris to be registered. Since Imaris 8, a license
+    % selection dialog will open that can make the time it takes for Imaris
+    % to be ready to connect quite long. So, we give enough time to the
+    % user to pick the licenses...
+    for trial = 1 : 500
         try
-            % A too quick call to mImarisLib.GetApplication() could potentially
-            % throw an exception and leave the mImarisLib object in an unusable
-            % state. As a workaround, we reinstantiate ImarisLib() at 
-            % every iteration. This will make sure that sooner or later 
-            % we will get the application. The exception is not
-            % automatically casted to a MATLAB exception, se we cannot 
-            % really catch it...
+            % A too quick call to mImarisLib.GetApplication() could
+            % potentially throw an exception and leave the mImarisLib
+            % object in an unusable state. As a workaround, we 
+            % reinstantiate ImarisLib() at every iteration. This will
+            % make sure that sooner or later we will get the application.
+            % The exception is not automatically casted to a MATLAB 
+            % exception, se we cannot really catch it...
             this.mImarisLib = ImarisLib();
             vImaris = this.mImarisLib.GetApplication(this.mImarisObjectID);
         catch ex %#ok<NASGU>

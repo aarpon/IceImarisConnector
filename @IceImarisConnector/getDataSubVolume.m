@@ -152,7 +152,7 @@ switch char(iDataSet.GetType())
     case 'eTypeUInt8',   datatype = 'uint8';
     case 'eTypeUInt16',  datatype = 'uint16';
     case 'eTypeFloat',   datatype = 'single';
-    otherwise,
+    otherwise
         error('Bad value for IDataSet::GetType().');
 end
 
@@ -161,21 +161,21 @@ stack = zeros([dX, dY, dZ], datatype);
 
 % Get the stack
 switch char(iDataSet.GetType())
-    case 'eTypeUInt8',   
+    case 'eTypeUInt8'
         % Java does not have unsigned ints
         arr = iDataSet.GetDataSubVolumeAs1DArrayBytes(x0, y0, z0, ...
             channel, timepoint, dX, dY, dZ);
         stack(:) = typecast(arr, 'uint8');
-    case 'eTypeUInt16',
+    case 'eTypeUInt16'
         % Java does not have unsigned ints
         arr = iDataSet.GetDataSubVolumeAs1DArrayShorts(x0, y0, z0, ...
             channel, timepoint, dX, dY, dZ);
         stack(:) = typecast(arr, 'uint16');
-    case 'eTypeFloat',
+    case 'eTypeFloat'
         stack(:) = ...
             iDataSet.GetDataSubVolumeAs1DArrayFloats(x0, y0, z0, ...
             channel, timepoint, dX, dY, dZ);
-    otherwise,
+    otherwise
         error('Bad value for iDataSet.GetType().');
 end
 

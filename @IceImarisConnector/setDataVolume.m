@@ -99,7 +99,7 @@ switch char(iDataSet.GetType())
     case 'eTypeUInt8',  outDatatype = 'uint8';
     case 'eTypeUInt16', outDatatype = 'uint16';
     case 'eTypeFloat',  outDatatype = 'single';
-    otherwise,
+    otherwise
         error('Bad value for iDataSet.GetType().');
 end
 
@@ -121,13 +121,13 @@ end
 
 % Set the stack
 switch char(iDataSet.GetType())
-    case 'eTypeUInt8',   
+    case 'eTypeUInt8'
         iDataSet.SetDataVolumeAs1DArrayBytes(stack(:), channel, timepoint);
-    case 'eTypeUInt16',
+    case 'eTypeUInt16'
         iDataSet.SetDataVolumeAs1DArrayShorts(stack(:), channel, timepoint);
-    case 'eTypeFloat',
+    case 'eTypeFloat'
         iDataSet.SetDataVolumeAs1DArrayFloats(stack(:), channel, timepoint);
-    otherwise,
+    otherwise
         error('Bad value for iDataSet.GetType().');
 end
 

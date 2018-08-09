@@ -3,7 +3,7 @@
 % DESCRIPTION
 %
 %   IceImarisConnector is a simple commodity class that eases communication
-%   between Imaris and MATLAB using the Imaris XT interface.
+%   between Imaris and MATLAB using the ImarisXT interface.
 %
 % SYNOPSIS
 %
@@ -104,6 +104,7 @@ classdef IceImarisConnector < handle
         
         % Constructor
         function this = IceImarisConnector(imarisApplication, indexingStart)
+            % IceImarisConnector constructor
 
             % First, we prepare everything we need
             % Store the Imaris and ImarisLib path
@@ -113,17 +114,39 @@ classdef IceImarisConnector < handle
             end
             
             % Add the ImarisLib.jar package to the java class path
-            % (if not there yet)
-            if all(cellfun(...
-                    @isempty, strfind(javaclasspath, 'ImarisLib.jar')))
+            % (if not there yet). Make sure that the version already 
+            % in the path is the same as the one returned by
+            % findImaris. A discrepancy could occur if
+            % IMARISPATH is set manually from the MATLAB
+            % console using setenv().
+            jcp = javaclasspath();
+            indxJcp = find(contains(jcp, 'ImarisLib.jar'));
+            if isempty(indxJcp)
                 javaaddpath(this.mImarisLibPath);
+            else
+                % Do we have the same version? It it is the case,
+                % we do not need to do anything. % If not, we try to 
+                % replace the old with the new.
+                if strcmp(jcp{indxJcp}, this.mImarisLibPath) == 0
+                    fprintf(1, ['Switching to %s.\n\n   If you get a ', ...
+                        '''not clearing java'' warning, please make ', ...
+                        'sure to clear() any\n   IceImarisConnector ', ...
+                        'object before recreating it.\n\n', ...
+                        '  For example:\n', ...
+                        '      >> clear(''conn'');\n', ...
+                        '      >> conn = IceImarisConnector();\n\n'], ...
+                        strrep(this.mImarisLibPath, '\', '/'));
+                    javarmpath(jcp{indxJcp});
+                    javaaddpath(this.mImarisLibPath);
+                end
             end
             
             % Create and store an ImarisLib instance
             this.mImarisLib = ImarisLib();
 
-            % Assign a random id
-            this.mImarisObjectID = randi(100000);
+            % Assign a random id. We reserve the first 1000 to manually
+            % started Imaris instances.
+            this.mImarisObjectID = 1000 + randi(100000);
 
             % Now we check the (optional) input parameter.
             % If the constructor is called without parameters, we just
@@ -157,7 +180,8 @@ classdef IceImarisConnector < handle
                 elseif isa(imarisApplication, ...
                         'Imaris.IApplicationPrxHelper')
                     
-                    % This is an Imaris application object - we store it
+                    % This is an Imaris application object - we store it.
+                    % We leave the ID to the randomly generated one.
                     this.mImarisApplication = imarisApplication;
                     
                 elseif isscalar(imarisApplication)
@@ -193,6 +217,9 @@ classdef IceImarisConnector < handle
                     else
                         this.mImarisApplication = imarisApplicationObj;
                     end
+                    
+                    % We also update the id
+                    this.mImarisObjectID = imarisApplication;
                 
                 else
                 
@@ -242,15 +269,36 @@ classdef IceImarisConnector < handle
         % createAndSetSpots
         newSpots = createAndSetSpots(this, coords, timeIndices, radii, ...
             name, color, container)
-        
-        % close Imaris
+
+        % createDataset
+        iDataset = createDataset(this, datatype, sizeX, sizeY, ...
+            sizeZ, sizeC, sizeT, voxelSizeX, voxelSizeY, voxelSizeZ, ...
+            deltaTime, addToImaris)
+ 
+
+        % cloneDataset
+        dataset = cloneDataset(this, iDataSet)
+
+        % closeImaris
         success = closeImaris(this, varargin)
+
+        % copyChannels
+        copyChannels(this, channelIndices)
         
         % display
         display(this)        
 
         % getAllSurpassChildren
         children = getAllSurpassChildren(this, recursive, filter)
+
+        % getChannelNames
+        channelNames = getChannelNames(this)
+
+        % getDataSlice
+        slice = getDataSlice(this, plane, channel, timepoint, iDataset)
+
+        % getDataSliceRM
+        slice = getDataSliceRM(this, plane, channel, timepoint, iDataset)
 
         % getDataSubVolume
         stack = getDataSubVolume(this, x0, y0, z0, channel, timepoint, ...
@@ -263,7 +311,7 @@ classdef IceImarisConnector < handle
         % getDataVolume
         stack = getDataVolume(this, channel, timepoint, iDataset)
 
-        % getDataVolume
+        % getDataVolumeRM
         stack = getDataVolumeRM(this, channel, timepoint, iDataset)
         
         % getExtends
@@ -284,6 +332,9 @@ classdef IceImarisConnector < handle
         % getSurpassCameraRotationMatrix
         [R, isI] = getSurpassCameraRotationMatrix(this)
         
+        % getTracks
+        [tracks, startTimes] = getTracks(this, iSpots)
+        
         % indexingStart
         n = indexingStart(this)
         
@@ -302,22 +353,46 @@ classdef IceImarisConnector < handle
         % setDataVolume
         setDataVolume(this, stack, channel, timepoint)
         
+        % setVoxelSizes
+        setVoxelSizes(this, voxelSizes)
+        
         % startImaris
         success = startImaris(this, userControl)
 
     end
 
     methods (Access = public, Static = true)
+
+        % calcRotationBetweenVectors3D
+        q = calcRotationBetweenVectors3D(start, dest)
         
         % isSupportedPlatform
         b = isSupportedPlatform()
-		
+
         % mapRgbaScalarToVector
         rgbaVector = mapRgbaScalarToVector(rgbaScalar)
 
         % mapRgbaVectorToScalar
         rgbaScalar = mapRgbaVectorToScalar(rgbaVector)
-		
+
+        % mapAxisAngleToQuaternion
+        q = mapAxisAngleToQuaternion(r_axis, r_angle)
+
+        % mapAxisAngleToRotationMatrix
+        [R, x_axis, y_axis, z_axis] = mapAxisAngleToRotationMatrix(r_axis, r_angle)
+        
+        % mapQuaternionToRotationMatrix
+        [R, x_axis, y_axis, z_axis] = mapQuaternionToRotationMatrix(quaternion)
+        
+        % multiplyQuaternions
+        q = multiplyQuaternions(q1, q2)
+        
+        % normalize
+        v = normalize(v, epsilon)
+
+        % quaternionConjugate
+        qc = quaternionConjugate(q)
+        
         % version
         v = version();
 

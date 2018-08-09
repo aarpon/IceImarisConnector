@@ -226,6 +226,11 @@ assert(strcmp(type, 'uint8') == 1);
 disp('Get the data volume...');
 stack = conn.getDataVolume(0, 0);
 
+% Get a slice
+disp('Get and check a data slice...');
+slice = conn.getDataSlice(34, 0, 0);
+assert(all(all(stack(:, :, 35) == slice)))
+
 disp('Check the data volume type...');
 assert(isa(stack, type) == 1);
 
@@ -238,7 +243,12 @@ assert(size(stack, 3) == DATASETSIZE(3));
 % Get the data volume by explicitly passing an iDataSet object
 % =========================================================================
 disp('Get the data volume by explicitly passing an iDataSet object...');
-stack = conn.getDataVolume(0, 0, conn.mImarisApplication.GetDataSet);
+stack = conn.getDataVolume(0, 0, conn.mImarisApplication.GetDataSet());
+
+% Get a slice
+disp('Get and check a data slice by explicitly passing an iDataSet object...');
+slice = conn.getDataSlice(34, 0, 0, conn.mImarisApplication.GetDataSet());
+assert(all(all(stack(:, :, 35) == slice)))
 
 disp('Check the data volume type...');
 assert(isa(stack, type) == 1);
@@ -248,6 +258,24 @@ disp('Check the data volume size...');
 assert(size(stack, 1) == DATASETSIZE(1) == 1);
 assert(size(stack, 2) == DATASETSIZE(2) == 1);
 assert(size(stack, 3) == DATASETSIZE(3) == 1);
+
+% Check the get data RM methods
+% =========================================================================
+disp('Get the data volume in row-major order...');
+stackRM = conn.getDataVolumeRM(0, 0);
+
+% Get a slice
+disp('Get and check a data slice in row-major order...');
+sliceRM = conn.getDataSliceRM(34, 0, 0);
+assert(all(all(stackRM(:, :, 35) == sliceRM)))
+
+disp('Get the data volume in row-major order by explicitly passing an iDataSet object...');
+stackRM = conn.getDataVolumeRM(0, 0, conn.mImarisApplication.GetDataSet());
+
+% Get a slice
+disp('Get and check a data slice in row-major order by explicitly passing an iDataSet object...');
+sliceRM = conn.getDataSliceRM(34, 0, 0, conn.mImarisApplication.GetDataSet());
+assert(all(all(stackRM(:, :, 35) == sliceRM)))
 
 % Check the getDataSubVolume{RM}() methods
 % =========================================================================
@@ -324,7 +352,24 @@ for i = 1 : size(clr, 1)
     assert(abs(all(clr(i, :) - current)) < 1e-2);
 
 end
-    
+ 
+% Copy channel a couple of times
+% =========================================================================
+disp('Test copying channels...');
+conn.mImarisApplication.GetDataSet().SetChannelName(0, 'One');
+conn.copyChannels(0);
+conn.copyChannels([0 1]);
+conn.copyChannels([0 2]);
+conn.copyChannels(3);
+channelNames = conn.getChannelNames();
+assert(strcmp(channelNames{1}, 'One'));
+assert(strcmp(channelNames{2}, 'Copy of One'));
+assert(strcmp(channelNames{3}, 'Copy of One'));
+assert(strcmp(channelNames{4}, 'Copy of Copy of One'));
+assert(strcmp(channelNames{5}, 'Copy of One'));
+assert(strcmp(channelNames{6}, 'Copy of Copy of One'));
+assert(strcmp(channelNames{7}, 'Copy of Copy of Copy of One'));
+
 % Close imaris
 % =========================================================================
 disp('Close Imaris...');
@@ -421,6 +466,18 @@ stack(:, :, 3) = [13, 14, 15; 16, 17, 18];
 stack = cast(stack, 'uint16');
 conn.setDataVolume(stack, 0, 0)
 
+% Test retrieving volume and slice for a non 8-bit dataset
+disp('Test retrieving volume and slice for a non 8-bit dataset...')
+volume16 = conn.getDataVolume(0, 0);
+slice16 = conn.getDataSlice(1, 0, 0);
+assert(all(all(volume16(:, :, 2) == slice16)))
+
+% Test retrieving volume and slice for a non 8-bit dataset in RM order
+disp('Test retrieving volume and slice for a non 8-bit dataset in row-major order...')
+volume16RM = conn.getDataVolumeRM(0, 0);
+slice16RM = conn.getDataSliceRM(1, 0, 0);
+assert(all(all(volume16RM(:, :, 2) == slice16RM)))
+
 % Create a dataset
 % =========================================================================
 disp('Create a dataset');
@@ -469,7 +526,69 @@ assert(all(r(:)));
 disp('Close Imaris...');
 assert(conn.closeImaris(1) == 1)
 
+% Start Imaris
+% =========================================================================
+disp('Start Imaris...');
+assert(conn.startImaris() == 1)
+
+% Open a file
+% =========================================================================
+disp('Load file...');
+filename = fullfile(fileparts(which(mfilename)), 'SwimmingAlgae.ims');
+conn.mImarisApplication.FileOpen(filename, '');
+
+% Get the Spots object
+iSpots = conn.getAllSurpassChildren(0, 'Spots');
+assert(~isempty(iSpots))
+
+% Get the tracks
+[tracks, startTimes] = conn.getTracks(iSpots{1});
+
+% Compare
+TRACKS_1 = [
+    257.0569  158.0890    0.5000
+    258.2019  160.3281    0.5000
+    258.6424  161.7611    0.5000
+    257.0615  162.8971    0.5000
+    254.7822  163.0764    0.5000
+    252.9628  162.2183    0.5000
+    251.9430  160.6685    0.5000
+    252.0315  159.2506    0.5000
+    252.5433  157.9091    0.5000
+    254.0479  156.8815    0.5000
+    255.7876  156.3626    0.5000
+    257.4710  156.3670    0.5000];
+
+TRACKS_2 = [
+    245.0000  125.4513    0.5000
+    248.0088  127.2925    0.5000
+    251.1482  128.9230    0.5000
+    254.2048  130.3164    0.5000
+    257.1553  132.4333    0.5000
+    259.4069  134.9209    0.5000
+    261.9462  137.7944    0.5000
+    264.0524  140.6828    0.5000];
+  
+TRACKS_3 = [
+    284.0000  128.0667    0.5000
+    281.3237  130.0378    0.5000
+    278.5699  131.9248    0.5000
+    275.9659  133.9807    0.5000];
+      
+% Check spot coordinates
+assert(all(all(abs(tracks{1} - TRACKS_1) < 1e-4)) == 1);
+assert(all(all(abs(tracks{2} - TRACKS_2) < 1e-4)) == 1);
+assert(all(all(abs(tracks{3} - TRACKS_3) < 1e-4)) == 1);
+
+% Check start time points
+assert(all(startTimes == [0 4 8]));
+
+% Close imaris
+% =========================================================================
+disp('Close Imaris...');
+assert(conn.closeImaris(1) == 1)
+
 % All done
 % =========================================================================
 disp('');
-disp('All test succesfully run.');
+disp('All test successfully run.');
