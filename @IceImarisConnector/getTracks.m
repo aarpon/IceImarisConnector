@@ -106,15 +106,15 @@ end
 % Now extract the tracks
 
 % Get the IDs of the tracks
-ids     = iObject.GetTrackIds();
+ids = iObject.GetTrackIds();
 if isempty(ids)
     return;
 end
-uids    = unique(ids);
+uids = unique(ids);
 nTracks = numel(uids);
 
 % Get all spot positions and the track edges
-positions  = getPositions(iObject);
+positions = getPositions(iObject);
 timeIndices = getTimeIndices(iObject);
 trackEdges = iObject.GetTrackEdges();
 
@@ -153,7 +153,7 @@ if isa(iObject, 'Imaris.ISurfacesPrxHelper')
 elseif isa(iObject, 'Imaris.ISpotsPrxHelper')
     
     % This is an ISPots object. We can get all positions in one shot.
-    positions  = iObject.GetPositionsXYZ();
+    positions = iObject.GetPositionsXYZ();
     
 else
     
@@ -182,7 +182,7 @@ if isa(iObject, 'Imaris.ISurfacesPrxHelper')
 elseif isa(iObject, 'Imaris.ISpotsPrxHelper')
     
     % This is an ISPots object. We can get all time indices in one shot.
-    timeIndices  = iObject.GetIndicesT();
+    timeIndices = iObject.GetIndicesT();
     
 else
     
